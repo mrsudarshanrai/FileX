@@ -1,0 +1,14 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  user-select: none;
+}
+
+body,
+html {
+  background-color: #242424;
+  color: #bbb;
+  height: 100vh;
+  overflow: hidden;
+}
