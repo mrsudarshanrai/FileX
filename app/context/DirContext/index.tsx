@@ -1,7 +1,7 @@
 import { useDir } from '@/app/hooks/useDir'
 import { IDir } from '@/app/lib/types/dir'
 import { getLastItemFromArray } from '@/app/utils'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 type IinitialDirContext = {
   dirs: IDir.IDirs[]
@@ -10,7 +10,9 @@ type IinitialDirContext = {
   currentPath: string
   forwardStack: string[]
   backwardStack: string[]
-  navigate: (step: number | string) => void
+  navigate: (step: number | string) => void,
+  isForwardDisabled: boolean,
+  isBackDisabled: boolean
 }
 
 const initialDirContext: IinitialDirContext = {
@@ -21,6 +23,8 @@ const initialDirContext: IinitialDirContext = {
   forwardStack: [],
   backwardStack: [],
   navigate: (step) => {},
+  isForwardDisabled: false,
+  isBackDisabled: false
 }
 
 const DirContext = React.createContext<IinitialDirContext>(initialDirContext)
@@ -32,8 +36,22 @@ export function DirContextProvider({ children }: { children: React.ReactNode }) 
   const [forwardStack, setForwardStack] = useState(initialDirContext.forwardStack)
   const [backwardStack, setBackwardStack] = useState(initialDirContext.backwardStack)
 
+  const [navigationBtnStatus, setNavigationBtnStatus] = useState({
+    isForwardDisabled: initialDirContext.isForwardDisabled,
+    isBackDisabled: initialDirContext.isBackDisabled,
+  })
+
   const pushToBackwardStack = (path: string) => setBackwardStack((stack) => [...stack, path])
   const pushToForwardStack = (path: string) => setForwardStack((stack) => [...stack, path])
+
+  const disableForwardNavigation = () =>
+    setNavigationBtnStatus((status) => ({ ...status, isForwardDisabled: true }))
+  const disableBackNavigation = () =>
+    setNavigationBtnStatus((status) => ({ ...status, isBackDisabled: true }))
+  const enableForwardNavigation = () =>
+    setNavigationBtnStatus((status) => ({ ...status, isForwardDisabled: false }))
+  const enableBackNavigation = () =>
+    setNavigationBtnStatus((status) => ({ ...status, isBackDisabled: false }))
 
   const navigate = (path: number | string) => {
     switch (path) {
@@ -78,7 +96,23 @@ export function DirContextProvider({ children }: { children: React.ReactNode }) 
     }
   }
 
-  const contextValue = { dirs, isLoading, fetch, currentPath, navigate }
+  useEffect(() => {
+    if (forwardStack.length === 0) disableForwardNavigation()
+    else enableForwardNavigation()
+
+    if (backwardStack.length === 0) disableBackNavigation()
+    else enableBackNavigation()
+  }, [forwardStack.length, backwardStack.length])
+
+  const contextValue = {
+    dirs,
+    isLoading,
+    fetch,
+    currentPath,
+    navigate,
+    isForwardDisabled: navigationBtnStatus.isForwardDisabled,
+    isBackDisabled: navigationBtnStatus.isBackDisabled,
+  }
 
   return <DirContext.Provider value={contextValue}>{children}</DirContext.Provider>
 }

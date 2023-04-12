@@ -5,7 +5,7 @@ import Path from '@/app/components/Path'
 import { useDirRoute } from '@/app/hooks/useDirRoute'
 
 const Header = () => {
-  const { navigate, currentPath } = useContext(DirContext)
+  const { navigate, currentPath, isBackDisabled, isForwardDisabled } = useContext(DirContext)
   const { changeDir } = useDirRoute()
 
   const onClick = (path: string, dir: string) => {
@@ -26,7 +26,13 @@ const Header = () => {
 
   return (
     <HeaderContainer>
-      <Path path={currentPath} onClick={onClick} routeDir={handleNavigation} />
+      <Path
+        path={currentPath}
+        onClick={onClick}
+        routeDir={handleNavigation}
+        isBackBtnDisabled={isBackDisabled}
+        isForwardBtnDisabled={isForwardDisabled}
+      />
     </HeaderContainer>
   )
 }
