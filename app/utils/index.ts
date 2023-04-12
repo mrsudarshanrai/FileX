@@ -15,4 +15,7 @@ const getFileIcon = (extension: string) => {
   } else return '/assets/file.svg'
 }
 
-export { getFileIcon }
+const getLastItemFromArray = (array: any[]) => array[array.length - 1]
+
+
+export { getFileIcon, getLastItemFromArray }

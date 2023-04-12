@@ -1,6 +1,7 @@
 import { useDir } from '@/app/hooks/useDir'
 import { IDir } from '@/app/lib/types/dir'
-import React, { useEffect, useState } from 'react'
+import { getLastItemFromArray } from '@/app/utils'
+import React, { useState } from 'react'
 
 type IinitialDirContext = {
   dirs: IDir.IDirs[]
@@ -21,8 +22,6 @@ const initialDirContext: IinitialDirContext = {
   backwardStack: [],
   navigate: (step) => {},
 }
-
-const getLastItemFromArray = (array: any[]) => array[array.length - 1]
 
 const DirContext = React.createContext<IinitialDirContext>(initialDirContext)
 
