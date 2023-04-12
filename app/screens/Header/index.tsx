@@ -5,15 +5,26 @@ import Path from '@/app/components/Path'
 import { useDirRoute } from '@/app/hooks/useDirRoute'
 
 const Header = () => {
-  const { fetch, setPath, currentPath } = useContext(DirContext)
+  const { fetch, navigate, currentPath } = useContext(DirContext)
   const { changeDir } = useDirRoute()
 
   const onClick = (path: string, dir: string) => {
     const pathToRoute = changeDir(path, dir)
 
     /** TODO: maybe do change & fetch in 1 function */
-    setPath(pathToRoute) // set new active path
+    navigate(pathToRoute) // set new active path
     fetch(pathToRoute, 'get_files_in_path') // fetch files in this path
+  }
+
+  const handleNavigation = (type: string) => {
+    switch(type){
+      case "BACK":
+        navigate(-1)
+        break;
+      case "FORWARD":
+        navigate(1)
+        break;
+    }
   }
 
   return (
@@ -21,9 +32,7 @@ const Header = () => {
       <Path
         path={currentPath}
         onClick={onClick}
-        routeDir={(path) => {
-          console.log(path)
-        }}
+        routeDir={handleNavigation}
       />
     </HeaderContainer>
   )

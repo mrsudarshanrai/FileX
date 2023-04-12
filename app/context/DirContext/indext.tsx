@@ -1,39 +1,82 @@
 import { useDir } from '@/app/hooks/useDir'
 import { IDir } from '@/app/lib/types/dir'
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useState } from 'react'
 
-type IinitialsDirContext = {
+type IinitialDirContext = {
   dirs: IDir.IDirs[]
   isLoading: boolean
   fetch: (path: string, funcName: string) => Promise<unknown>
   currentPath: string
-  setPath: (path: string) => void
+  forwardStack: string[]
+  backwardStack: string[]
+  navigate: (step: number | string) => void
 }
 
-const initialDirContext: IinitialsDirContext = {
+const initialDirContext: IinitialDirContext = {
   dirs: [],
   isLoading: false,
   fetch: (path: string, funcName: string): Promise<unknown> => Promise.resolve(),
   currentPath: '/home/popbob',
-  setPath: (path: string) => {},
+  forwardStack: [],
+  backwardStack: [],
+  navigate: (step) => {},
 }
 
-const DirContext = React.createContext<IinitialsDirContext>(initialDirContext)
+const getLastItemFromArray = (array: any[]) => array[array.length - 1]
+
+const DirContext = React.createContext<IinitialDirContext>(initialDirContext)
 
 export function DirContextProvider({ children }: { children: React.ReactNode }) {
   const { dirs, isLoading, fetch } = useDir()
 
   const [currentPath, setCurrentPath] = useState(initialDirContext.currentPath)
+  const [forwardStack, setForwardStack] = useState(initialDirContext.forwardStack)
+  const [backwardStack, setBackwardStack] = useState(initialDirContext.backwardStack)
 
-  /** sets current active path */
-  const setPath = useCallback((path: string) => {
-    setCurrentPath(path)
-  }, [])
+  const pushToBackwardStack = (path: string) => setBackwardStack((stack) => [...stack, path])
+  const pushToForwardStack = (path: string) => setForwardStack((stack) => [...stack, path])
 
-  const contextValue = useMemo(
-    () => ({ dirs, isLoading, fetch, currentPath, setPath }),
-    [dirs, isLoading, fetch, currentPath, setPath],
-  )
+  const navigate = (path: number | string) => {
+    switch (path) {
+      // backward navigation
+      case -1: {
+        if (backwardStack.length === 0 || currentPath === getLastItemFromArray(backwardStack)) {
+          return
+        }
+        const backwardStackCopy = [...backwardStack]
+        const poppedItem = backwardStackCopy.pop()
+        setBackwardStack(backwardStackCopy)
+        if (poppedItem) {
+          pushToForwardStack(currentPath)
+          setCurrentPath(poppedItem)
+        }
+        break
+      }
+      // forward navigation
+      case 1: {
+        if (forwardStack.length === 0 || currentPath === getLastItemFromArray(forwardStack)) {
+          return
+        }
+        const forwardStackCopy = [...forwardStack]
+        const poppedItem = forwardStackCopy.pop()
+        setForwardStack(forwardStackCopy)
+        if (poppedItem) {
+          pushToBackwardStack(currentPath)
+          setCurrentPath(poppedItem)
+        }
+        break
+      }
+      // default navigates to provided path string
+      default:
+        if (typeof path === 'string') {
+          pushToBackwardStack(currentPath)
+          setCurrentPath(path)
+        }
+        break
+    }
+  }
+
+  const contextValue = { dirs, isLoading, fetch, currentPath, navigate }
 
   return <DirContext.Provider value={contextValue}>{children}</DirContext.Provider>
 }
