@@ -17,23 +17,19 @@ const Header = () => {
   }
 
   const handleNavigation = (type: string) => {
-    switch(type){
-      case "BACK":
+    switch (type) {
+      case 'BACK':
         navigate(-1)
-        break;
-      case "FORWARD":
+        break
+      case 'FORWARD':
         navigate(1)
-        break;
+        break
     }
   }
 
   return (
     <HeaderContainer>
-      <Path
-        path={currentPath}
-        onClick={onClick}
-        routeDir={handleNavigation}
-      />
+      <Path path={currentPath} onClick={onClick} routeDir={handleNavigation} />
     </HeaderContainer>
   )
 }
