@@ -1,29 +1,24 @@
-
 # FileX
-This is a file manager built with Tauri, Next.js and Rust.
 
+This is a file manager built with Tauri, Next.js and Rust.
 
 ## Requirements
 
--   Node.js (v14 or higher)
--   Rust
--   Tauri CLI (`yarn global add tauri`)
-
+- Node.js (v14 or higher)
+- Rust
+- Tauri CLI (`yarn global add tauri`)
 
 ## Installation
 
-
     git clone https://github.com/your-username/file-manager.git
     cd file-manager
-    yarn install 
+    yarn install
 
 ## Usage
 
 To start the development server, run:
 
-
     yarn tauri dev
-    
 
 This will start the application in development mode.
 

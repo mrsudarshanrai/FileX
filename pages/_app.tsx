@@ -5,7 +5,7 @@ import Head from 'next/head'
 import styled from 'styled-components'
 import AppContainer from '@/app/screens/AppContainer'
 import Header from '@/app/screens/Header'
-import { DirContextProvider } from '@/app/context/DirContext/indext'
+import { DirContextProvider } from '@/app/context/DirContext'
 import { ContextMenuProvider } from '@/app/context/ContextMenu'
 
 const App = ({ Component, pageProps }: AppProps) => {

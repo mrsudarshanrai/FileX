@@ -28,7 +28,11 @@ const Paths = styled.div<IPaths>`
   }
 `
 
-const ArrowIcon = styled.div`
+interface IArrowIcon {
+  disabled?: boolean
+}
+
+const ArrowIcon = styled.button<IArrowIcon>`
   width: 36px;
   min-width: 36px;
   border: 1px solid #8d8f9257;
@@ -39,6 +43,9 @@ const ArrowIcon = styled.div`
   align-items: center;
   border-radius: 3px;
   cursor: pointer;
+  background: transparent;
+  opacity: ${(props) => (props.disabled ? 0.5 : 1)};
+  cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
 `
 
 export { PathContainer, Paths, ArrowIcon }

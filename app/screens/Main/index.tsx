@@ -2,15 +2,14 @@ import React, { useContext } from 'react'
 import styled from 'styled-components'
 import Image from 'next/image'
 import { getFileIcon } from '@/app/utils'
-import DirContext from '@/app/context/DirContext/indext'
+import DirContext from '@/app/context/DirContext'
 import { IDir } from '@/app/lib/types/dir'
 
 const Home = () => {
-  const { dirs, isLoading, fetch, setPath } = useContext(DirContext)
+  const { dirs, isLoading, navigate } = useContext(DirContext)
 
   const onFClick = async (path: string) => {
-    fetch(path, 'get_files_in_path')
-    setPath(path)
+    navigate(path)
   }
 
   return (
