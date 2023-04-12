@@ -1,8 +1,7 @@
 import { invoke } from '@tauri-apps/api/tauri'
 import { useEffect, useState } from 'react'
 import { IDir } from '../lib/types/dir'
-
-const sortArrayByBoolean = (x: IDir.IDirs, y: IDir.IDirs) => +y.is_dir - +x.is_dir
+import { sortArrayByBoolean } from '../utils'
 
 const useDir = (funcName?: string) => {
   const [dirs, setDirs] = useState<IDir.IDirs[]>([])
