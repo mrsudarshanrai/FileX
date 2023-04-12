@@ -1,5 +1,8 @@
 import styled from 'styled-components'
 
+type ISidebarItem = {
+  isActive: boolean
+}
 const SidebarContainer = styled.div`
   padding: 15px 0;
 
@@ -14,7 +17,7 @@ const SidebarItems = styled.div`
   margin: 24px 0 0 0;
 `
 
-const SidebarItem = styled.p`
+const SidebarItem = styled.p<ISidebarItem>`
   /* margin: 6px 0; */
   /* background-color: red; */
   padding: 0 0 0 15px;
@@ -23,6 +26,7 @@ const SidebarItem = styled.p`
   align-items: center;
   cursor: pointer;
   color: #bbb;
+  background-color: ${(props) => (props.isActive ? '#8d8f9257' : 'transparent')};
   &:hover {
     background-color: #8d8f9257;
     transition: 0.2s;

@@ -6,7 +6,7 @@ import { getSidebarDirs } from './helper'
 import { IDir } from '@/app/lib/types/dir'
 
 const Sidebar = () => {
-  const { dirs, navigate } = useContext(DirContext)
+  const { dirs, navigate, currentPath } = useContext(DirContext)
   const [sideBarDirs, setSideBarDirs] = useState<IDir.IDirs[]>([])
 
   useEffect(() => {
@@ -21,10 +21,10 @@ const Sidebar = () => {
     <SidebarContainer>
       <h4>Places</h4>
       <SidebarItems>
-        {sideBarDirs.map((dir: IDir.IDirs, index: number) => (
-          <SidebarItem key={index} onClick={() => onDirClick(dir.path)}>
-            {getIcons(dir.folder_name.toLowerCase() as keyof typeof icons)}
-            {dir.folder_name}
+        {sideBarDirs.map(({ folder_name, path }: IDir.IDirs, index: number) => (
+          <SidebarItem key={index} onClick={() => onDirClick(path)} isActive={path === currentPath}>
+            {getIcons(folder_name.toLowerCase() as keyof typeof icons)}
+            {folder_name}
           </SidebarItem>
         ))}
       </SidebarItems>
