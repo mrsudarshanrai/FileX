@@ -1,62 +1,30 @@
 import { getIcons, icons } from '@/app/components/Icon/icon'
 import { SidebarContainer, SidebarItem, SidebarItems } from './SidebarStyled'
-
-type ISidebarsContent = {
-  label: string
-  icon: keyof typeof icons
-  path: string
-  isVisible: boolean
-}
-
-const places: ISidebarsContent[] = [
-  {
-    label: 'Home',
-    icon: 'home',
-    path: '',
-    isVisible: true,
-  },
-  {
-    label: 'Desktop',
-    icon: 'desktop',
-    path: '',
-    isVisible: true,
-  },
-  {
-    label: 'Documents',
-    icon: 'document',
-    path: '',
-    isVisible: true,
-  },
-  {
-    label: 'Music',
-    icon: 'music',
-    path: '',
-    isVisible: true,
-  },
-  {
-    label: 'Pictures',
-    icon: 'image',
-    path: '',
-    isVisible: true,
-  },
-  {
-    label: 'Videos',
-    icon: 'video',
-    path: '',
-    isVisible: true,
-  },
-  // "Trash",
-]
+import { useContext, useEffect, useState } from 'react'
+import DirContext from '@/app/context/DirContext'
+import { getSidebarDirs } from './helper'
+import { IDir } from '@/app/lib/types/dir'
 
 const Sidebar = () => {
+  const { dirs, navigate } = useContext(DirContext)
+  const [sideBarDirs, setSideBarDirs] = useState<IDir.IDirs[]>([])
+
+  useEffect(() => {
+    if (!sideBarDirs.length) setSideBarDirs(getSidebarDirs(dirs))
+  }, [dirs, sideBarDirs.length])
+
+  const onDirClick = (path: string) => {
+    navigate(path)
+  }
+
   return (
     <SidebarContainer>
       <h4>Places</h4>
       <SidebarItems>
-        {places.map((place: ISidebarsContent, index: number) => (
-          <SidebarItem key={index}>
-            {getIcons(place.icon)}
-            {place.label}
+        {sideBarDirs.map((dir: IDir.IDirs, index: number) => (
+          <SidebarItem key={index} onClick={() => onDirClick(dir.path)}>
+            {getIcons(dir.folder_name.toLowerCase() as keyof typeof icons)}
+            {dir.folder_name}
           </SidebarItem>
         ))}
       </SidebarItems>
