@@ -17,7 +17,7 @@ const Header = () => {
   }
 
   return (
-    <HeadrContainer>
+    <HeaderContainer>
       <Path
         path={currentPath}
         onClick={onClick}
@@ -25,13 +25,13 @@ const Header = () => {
           console.log(path)
         }}
       />
-    </HeadrContainer>
+    </HeaderContainer>
   )
 }
 
 export default Header
 
-const HeadrContainer = styled.div`
+const HeaderContainer = styled.div`
   background-color: #242424;
   height: 50px;
   border: 0;
