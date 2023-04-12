@@ -1,19 +1,16 @@
 import styled from 'styled-components'
-import DirContext from '@/app/context/DirContext/indext'
+import DirContext from '@/app/context/DirContext'
 import { useContext } from 'react'
 import Path from '@/app/components/Path'
 import { useDirRoute } from '@/app/hooks/useDirRoute'
 
 const Header = () => {
-  const { fetch, navigate, currentPath } = useContext(DirContext)
+  const { navigate, currentPath } = useContext(DirContext)
   const { changeDir } = useDirRoute()
 
   const onClick = (path: string, dir: string) => {
     const pathToRoute = changeDir(path, dir)
-
-    /** TODO: maybe do change & fetch in 1 function */
     navigate(pathToRoute) // set new active path
-    fetch(pathToRoute, 'get_files_in_path') // fetch files in this path
   }
 
   const handleNavigation = (type: string) => {

@@ -1,6 +1,6 @@
 import { useDir } from '@/app/hooks/useDir'
 import { IDir } from '@/app/lib/types/dir'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 type IinitialDirContext = {
   dirs: IDir.IDirs[]
@@ -49,6 +49,7 @@ export function DirContextProvider({ children }: { children: React.ReactNode }) 
         if (poppedItem) {
           pushToForwardStack(currentPath)
           setCurrentPath(poppedItem)
+          fetch(poppedItem, 'get_files_in_path')
         }
         break
       }
@@ -63,6 +64,7 @@ export function DirContextProvider({ children }: { children: React.ReactNode }) 
         if (poppedItem) {
           pushToBackwardStack(currentPath)
           setCurrentPath(poppedItem)
+          fetch(poppedItem, 'get_files_in_path')
         }
         break
       }
@@ -71,6 +73,7 @@ export function DirContextProvider({ children }: { children: React.ReactNode }) 
         if (typeof path === 'string') {
           pushToBackwardStack(currentPath)
           setCurrentPath(path)
+          fetch(path, 'get_files_in_path')
         }
         break
     }
