@@ -2,7 +2,6 @@ import styled from 'styled-components'
 
 const SidebarContainer = styled.div`
   padding: 15px 0;
-  min-width: 300px;
 
   h4 {
     padding: 0 0 0 15px;
