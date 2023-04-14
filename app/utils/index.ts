@@ -1,4 +1,5 @@
 import files from '@/app/lib/files.json'
+import { IDir } from '../lib/types/dir'
 
 const searchExtension = (extension: string) => {
   const fileInfo = files.filter((x) => {
@@ -17,5 +18,7 @@ const getFileIcon = (extension: string) => {
 
 const getLastItemFromArray = (array: any[]) => array[array.length - 1]
 
+// true...false
+const sortArrayByBoolean = (x: IDir.IDirs, y: IDir.IDirs) => +y.is_dir - +x.is_dir
 
-export { getFileIcon, getLastItemFromArray }
+export { getFileIcon, getLastItemFromArray, sortArrayByBoolean }

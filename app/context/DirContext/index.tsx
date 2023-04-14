@@ -8,10 +8,8 @@ type IinitialDirContext = {
   isLoading: boolean
   fetch: (path: string, funcName: string) => Promise<unknown>
   currentPath: string
-  forwardStack: string[]
-  backwardStack: string[]
-  navigate: (step: number | string) => void,
-  isForwardDisabled: boolean,
+  navigate: (step: number | string) => void
+  isForwardDisabled: boolean
   isBackDisabled: boolean
 }
 
@@ -20,11 +18,9 @@ const initialDirContext: IinitialDirContext = {
   isLoading: false,
   fetch: (path: string, funcName: string): Promise<unknown> => Promise.resolve(),
   currentPath: '/home/popbob',
-  forwardStack: [],
-  backwardStack: [],
   navigate: (step) => {},
   isForwardDisabled: false,
-  isBackDisabled: false
+  isBackDisabled: false,
 }
 
 const DirContext = React.createContext<IinitialDirContext>(initialDirContext)
@@ -33,8 +29,8 @@ export function DirContextProvider({ children }: { children: React.ReactNode }) 
   const { dirs, isLoading, fetch } = useDir()
 
   const [currentPath, setCurrentPath] = useState(initialDirContext.currentPath)
-  const [forwardStack, setForwardStack] = useState(initialDirContext.forwardStack)
-  const [backwardStack, setBackwardStack] = useState(initialDirContext.backwardStack)
+  const [forwardStack, setForwardStack] = useState<string[]>([])
+  const [backwardStack, setBackwardStack] = useState<string[]>([])
 
   const [navigationBtnStatus, setNavigationBtnStatus] = useState({
     isForwardDisabled: initialDirContext.isForwardDisabled,
