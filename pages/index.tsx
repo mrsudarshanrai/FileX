@@ -1,2 +1,2 @@
-import Index from '../app/screens/Main'
-export default Index
+import Dir from '../app/screens/Dir'
+export default Dir
