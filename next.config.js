@@ -8,7 +8,7 @@ const nextConfig = {
     styledComponents: true,
   },
   experimental: {
-    appDir: true,
+    appDir: false,
   },
 }
 
