@@ -19,7 +19,6 @@ const Sidebar = () => {
 
   return (
     <SidebarContainer>
-      <h4>Places</h4>
       <SidebarItems>
         {sideBarDirs.map(({ folder_name, path }: IDir.IDirs, index: number) => (
           <SidebarItem key={index} onClick={() => onDirClick(path)} isActive={path === currentPath}>

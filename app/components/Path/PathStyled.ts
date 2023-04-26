@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
 const PathContainer = styled.div`
-  padding: 15px 3px;
+  padding: 15px;
   display: flex;
   align-items: center;
   column-gap: 0.3em;
