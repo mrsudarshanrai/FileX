@@ -16,14 +16,18 @@ const splitPath = (path: string) => {
 }
 
 const Path = (props: IPath) => {
-  const { path, onClick, routeDir, isBackBtnDisabled, isForwardBtnDisabled} = props
+  const { path, onClick, routeDir, isBackBtnDisabled, isForwardBtnDisabled } = props
 
   return (
     <PathContainer>
       <ArrowIcon title='back' onClick={() => routeDir('BACK')} disabled={isBackBtnDisabled}>
         {getIcons('arrowLeft')}
       </ArrowIcon>
-      <ArrowIcon title='forward' onClick={() => routeDir('FORWARD')} disabled={isForwardBtnDisabled}>
+      <ArrowIcon
+        title='forward'
+        onClick={() => routeDir('FORWARD')}
+        disabled={isForwardBtnDisabled}
+      >
         {getIcons('arrowRight')}
       </ArrowIcon>
       {splitPath(path).map((dir, index) => {
