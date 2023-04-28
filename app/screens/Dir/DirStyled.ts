@@ -1,4 +1,8 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
+
+type FileName = {
+  isSelected: boolean
+}
 
 const DirContainer = styled.div`
   display: flex;
@@ -22,9 +26,16 @@ const File = styled.div`
   height: 150px;
 `
 
-const FileName = styled.div`
-  font-weight: 300;
+const FileNameWrapper = styled.div`
   width: 100px;
+  margin: 7px 0 0 0;
+  display: flex;
+  justify-content: center;
+`
+
+const FileName = styled.span<FileName>`
+  font-size: 15px;
+  /* font-weight: 300; */
   display: -webkit-box;
   max-width: 200px;
   -webkit-line-clamp: 3;
@@ -32,9 +43,17 @@ const FileName = styled.div`
   overflow: hidden;
   text-align: center;
   word-break: break-all;
-  margin: 7px 0 0 0;
-  height: 100%;
-  font-size: 15px;
+  height: fit-content;
+  padding: 2px 4px;
+  width: fit-content;
+
+  ${(props) =>
+    props &&
+    props.isSelected &&
+    css`
+      background-color: #007acc;
+      border-radius: 3px;
+    `}
 `
 
-export { DirContainer, File, FileName }
+export { DirContainer, File, FileNameWrapper, FileName }
