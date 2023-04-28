@@ -20,10 +20,17 @@ const Sidebar = () => {
   return (
     <SidebarContainer>
       <SidebarItems>
+        <SidebarItem
+          onClick={() => onDirClick('/home/popbob')}
+          isActive={'/home/popbob' === currentPath}
+        >
+          {getIcons('home')}
+          <span>Home</span>
+        </SidebarItem>
         {sideBarDirs.map(({ folder_name, path }: IDir.IDirs, index: number) => (
           <SidebarItem key={index} onClick={() => onDirClick(path)} isActive={path === currentPath}>
             {getIcons(folder_name.toLowerCase() as keyof typeof icons)}
-            {folder_name}
+            <span>{folder_name}</span>
           </SidebarItem>
         ))}
       </SidebarItems>
