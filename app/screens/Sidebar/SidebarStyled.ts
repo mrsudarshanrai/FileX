@@ -24,6 +24,10 @@ const SidebarItem = styled.p<ISidebarItem>`
     background-color: #8d8f9257;
     transition: 0.2s;
   }
+  span {
+    font-size: 15px;
+    font-weight: 300;
+  }
 
   svg {
     margin: 0 6px 0 0;

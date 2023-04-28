@@ -2,11 +2,14 @@ import styled from 'styled-components'
 
 const DirContainer = styled.div`
   display: flex;
-  gap: 3em;
   align-items: center;
+  justify-content: flex-start;
   flex-wrap: wrap;
-  padding: 10px 15px;
   row-gap: 1em;
+  column-gap: calc(100vw / 150px);
+  width: 100%;
+  margin: 0 auto;
+  padding-bottom: 50px;
 `
 
 const File = styled.div`
@@ -15,8 +18,8 @@ const File = styled.div`
   align-items: center;
   flex-direction: column;
   cursor: pointer;
-  height: 125px;
-  margin: 0 0 5px 0;
+  width: 150px;
+  height: 150px;
 `
 
 const FileName = styled.div`
@@ -30,8 +33,8 @@ const FileName = styled.div`
   text-align: center;
   word-break: break-all;
   margin: 7px 0 0 0;
-  height: 70px;
-  font-size: 16px;
+  height: 100%;
+  font-size: 15px;
 `
 
 export { DirContainer, File, FileName }
