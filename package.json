@@ -34,5 +34,5 @@
     "hooks": {
       "pre-commit": "npm run format"
     }
-  },
+  }
 }
