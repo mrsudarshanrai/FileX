@@ -15,5 +15,5 @@ export default AppContainer
 
 const AppWrapper = styled.div`
   display: grid;
-  grid-template-columns: 190px 100%;
+  grid-template-columns: 190px calc(100vw - 190px);
 `

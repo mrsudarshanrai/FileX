@@ -20,9 +20,9 @@ const Home = () => {
         return (
           <File key={index} draggable={true} onDoubleClick={() => onFClick(path)}>
             {is_dir ? (
-              <Image alt='folder' src={'/assets/folder.svg'} width={60} height={60} />
+              <Image alt='folder' src={'/assets/folder.svg'} width={80} height={80} />
             ) : (
-              <Image alt='file' src={getFileIcon(extension)} width={60} height={60} />
+              <Image alt='file' src={getFileIcon(extension)} width={80} height={80} />
             )}
             <FileName title={folder_name}>{folder_name}</FileName>
           </File>
