@@ -47,7 +47,7 @@ const MainContainer = styled.div`
   overflow-y: scroll;
   color: white;
   padding: 15px 0;
-  width: calc(100vw - 190px);
+  width: 100%;
 `
 
 export default App

@@ -1,15 +1,19 @@
-import React, { useContext } from 'react'
-import Image from 'next/image'
-import { getFileIcon } from '@/app/utils'
+import React, { useContext, useState } from 'react'
 import DirContext from '@/app/context/DirContext'
 import { IDir } from '@/app/lib/types/dir'
-import { DirContainer, File, FileName } from './DirStyled'
+import { DirContainer, File, FileName, FileNameWrapper } from './DirStyled'
+import FileIcon from '@/app/components/FileIcon'
 
 const Home = () => {
   const { dirs, isLoading, navigate } = useContext(DirContext)
+  const [selectedFile, setSelectedFile] = useState<null | number>(null)
 
-  const onFClick = async (path: string) => {
+  const onFileDoubleClick = async (path: string) => {
     navigate(path)
+  }
+
+  const onFileClick = (fileIndex: number) => {
+    setSelectedFile(() => fileIndex)
   }
 
   return (
@@ -18,13 +22,16 @@ const Home = () => {
       {dirs.map(({ folder_name, path, is_dir, is_visible, extension }: IDir.IDirs, index) => {
         if (!is_visible) return null
         return (
-          <File key={index} draggable={true} onDoubleClick={() => onFClick(path)}>
-            {is_dir ? (
-              <Image alt='folder' src={'/assets/folder.svg'} width={80} height={80} />
-            ) : (
-              <Image alt='file' src={getFileIcon(extension)} width={80} height={80} />
-            )}
-            <FileName title={folder_name}>{folder_name}</FileName>
+          <File
+            key={index}
+            draggable={true}
+            onDoubleClick={() => onFileDoubleClick(path)}
+            onClick={() => onFileClick(index)}
+          >
+            <FileIcon isDir={is_dir} extension={extension} />
+            <FileNameWrapper title={folder_name}>
+              <FileName isSelected={selectedFile === index}>{folder_name}</FileName>
+            </FileNameWrapper>
           </File>
         )
       })}
