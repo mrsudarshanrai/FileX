@@ -6,7 +6,7 @@ type Props = {
   children: React.ReactNode
 }
 
-type InitialContext = {
+type NavigationContextType = {
   navigate: (path: number | string) => void
   currentPath: string
   setCurrentPath: React.Dispatch<React.SetStateAction<string>>
@@ -14,21 +14,13 @@ type InitialContext = {
   isBackDisabled: boolean
 }
 
-const initialContext: InitialContext = {
-  navigate() {},
-  currentPath: '/home/popbob',
-  setCurrentPath: () => {},
-  isForwardDisabled: false,
-  isBackDisabled: false,
-}
-
-const NavigationContext = React.createContext<InitialContext>(initialContext)
+const NavigationContext = React.createContext<NavigationContextType | undefined>(undefined)
 
 const NavigationContextProvider = (props: Props) => {
   const { children } = props
   const { fetch } = useContext(DirContext)
 
-  const [currentPath, setCurrentPath] = useState(initialContext.currentPath)
+  const [currentPath, setCurrentPath] = useState('/home/popbob')
   /** all forward and backward paths */
   const [forwardStack, setForwardStack] = useState<string[]>([])
   const [backwardStack, setBackwardStack] = useState<string[]>([])
@@ -37,21 +29,11 @@ const NavigationContextProvider = (props: Props) => {
   const pushToForwardStack = (path: string) => setForwardStack((stack) => [...stack, path])
 
   const [navigationBtnStatus, setNavigationBtnStatus] = useState({
-    isForwardDisabled: initialContext.isForwardDisabled,
-    isBackDisabled: initialContext.isBackDisabled,
+    isForwardDisabled: false,
+    isBackDisabled: false,
   })
 
-  const disableForwardNavigation = () =>
-    setNavigationBtnStatus((status) => ({ ...status, isForwardDisabled: true }))
-  const disableBackNavigation = () =>
-    setNavigationBtnStatus((status) => ({ ...status, isBackDisabled: true }))
-  const enableForwardNavigation = () =>
-    setNavigationBtnStatus((status) => ({ ...status, isForwardDisabled: false }))
-  const enableBackNavigation = () =>
-    setNavigationBtnStatus((status) => ({ ...status, isBackDisabled: false }))
-
   const navigate = (path: number | string) => {
-    console.log(path)
     switch (path) {
       // backward navigation
       case -1: {
@@ -95,11 +77,10 @@ const NavigationContextProvider = (props: Props) => {
   }
 
   useEffect(() => {
-    if (forwardStack.length === 0) disableForwardNavigation()
-    else enableForwardNavigation()
-
-    if (backwardStack.length === 0) disableBackNavigation()
-    else enableBackNavigation()
+    setNavigationBtnStatus({
+      isForwardDisabled: forwardStack.length === 0,
+      isBackDisabled: backwardStack.length === 0,
+    })
   }, [forwardStack.length, backwardStack.length])
 
   const contextValue = {
