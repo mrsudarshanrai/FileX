@@ -1,11 +1,11 @@
 import styled from 'styled-components'
-import DirContext from '@/app/context/DirContext'
 import { useContext } from 'react'
 import Path from '@/app/components/Path'
 import { useDirRoute } from '@/app/hooks/useDirRoute'
+import { NavigationContext } from '@/app/context/NavigationContext'
 
 const Header = () => {
-  const { navigate, currentPath, isBackDisabled, isForwardDisabled } = useContext(DirContext)
+  const { navigate, currentPath, isBackDisabled, isForwardDisabled } = useContext(NavigationContext)
   const { changeDir } = useDirRoute()
 
   const onClick = (path: string, dir: string) => {

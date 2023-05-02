@@ -3,9 +3,11 @@ import DirContext from '@/app/context/DirContext'
 import { IDir } from '@/app/lib/types/dir'
 import { DirContainer, File, FileName, FileNameWrapper } from './DirStyled'
 import FileIcon from '@/app/components/FileIcon'
+import { NavigationContext } from '@/app/context/NavigationContext'
 
 const Home = () => {
-  const { dirs, isLoading, navigate } = useContext(DirContext)
+  const { dirs, isLoading } = useContext(DirContext)
+  const { navigate } = useContext(NavigationContext)
   const [selectedFile, setSelectedFile] = useState<null | number>(null)
 
   const onFileDoubleClick = async (path: string) => {
