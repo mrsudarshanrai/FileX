@@ -7,6 +7,7 @@ import AppContainer from '@/app/screens/AppContainer'
 import Header from '@/app/screens/Header'
 import { DirContextProvider } from '@/app/context/DirContext'
 import { ContextMenuProvider } from '@/app/context/ContextMenu'
+import NavigationContextProvider from '@/app/context/NavigationContext'
 
 const App = ({ Component, pageProps }: AppProps) => {
   return (
@@ -17,17 +18,19 @@ const App = ({ Component, pageProps }: AppProps) => {
         <link rel='icon' href='/favicon.ico' />
       </Head>
       <DirContextProvider>
-        <ContextMenuProvider>
-          <Header />
-          <AppContainer>
-            <SidebarContainer>
-              <Sidebar />
-            </SidebarContainer>
-            <MainContainer>
-              <Component {...pageProps} />
-            </MainContainer>
-          </AppContainer>
-        </ContextMenuProvider>
+        <NavigationContextProvider>
+          <ContextMenuProvider>
+            <Header />
+            <AppContainer>
+              <SidebarContainer>
+                <Sidebar />
+              </SidebarContainer>
+              <MainContainer>
+                <Component {...pageProps} />
+              </MainContainer>
+            </AppContainer>
+          </ContextMenuProvider>
+        </NavigationContextProvider>
       </DirContextProvider>
     </>
   )

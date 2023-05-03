@@ -4,9 +4,11 @@ import { useContext, useEffect, useState } from 'react'
 import DirContext from '@/app/context/DirContext'
 import { getSidebarDirs } from './helper'
 import { IDir } from '@/app/lib/types/dir'
+import { NavigationContext } from '@/app/context/NavigationContext'
 
 const Sidebar = () => {
-  const { dirs, navigate, currentPath } = useContext(DirContext)
+  const { dirs } = useContext(DirContext)
+  const { navigate, currentPath } = useContext(NavigationContext)
   const [sideBarDirs, setSideBarDirs] = useState<IDir.IDirs[]>([])
 
   useEffect(() => {
