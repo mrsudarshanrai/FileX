@@ -22,15 +22,21 @@ const Home = () => {
       {dirs.map(({ folder_name, path, is_dir, is_visible, extension }: IDir.IDirs, index) => {
         if (!is_visible) return null
         return (
-          <File
-            key={index}
-            draggable={true}
-            onDoubleClick={() => onFileDoubleClick(path)}
-            onClick={() => onFileClick(index)}
-          >
-            <FileIcon isDir={is_dir} extension={extension} />
+          <File key={index} draggable={true}>
+            <FileIcon
+              isDir={is_dir}
+              extension={extension}
+              onClick={() => onFileClick(index)}
+              onDoubleClick={() => onFileDoubleClick(path)}
+            />
             <FileNameWrapper title={folder_name}>
-              <FileName isSelected={selectedFile === index}>{folder_name}</FileName>
+              <FileName
+                onClick={() => onFileClick(index)}
+                onDoubleClick={() => onFileDoubleClick(path)}
+                isSelected={selectedFile === index}
+              >
+                {folder_name}
+              </FileName>
             </FileNameWrapper>
           </File>
         )
