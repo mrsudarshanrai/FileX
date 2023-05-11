@@ -8,7 +8,11 @@ type DirContextType = {
   fetch: (path: string, funcName: string) => Promise<unknown>
 }
 
-const DirContext = createContext<DirContextType | undefined>(undefined)
+const DirContext = createContext<DirContextType>({
+  dirs: [],
+  isLoading: false,
+  fetch: () => Promise.resolve(undefined),
+})
 
 export function DirContextProvider({ children }: { children: ReactNode }) {
   const { dirs, isLoading, fetch } = useDir()

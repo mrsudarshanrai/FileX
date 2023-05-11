@@ -14,7 +14,13 @@ type NavigationContextType = {
   isBackDisabled: boolean
 }
 
-const NavigationContext = React.createContext<NavigationContextType | undefined>(undefined)
+const NavigationContext = React.createContext<NavigationContextType>({
+  navigate: () => {},
+  currentPath: '/',
+  setCurrentPath: () => {},
+  isForwardDisabled: false,
+  isBackDisabled: false,
+})
 
 const NavigationContextProvider = (props: Props) => {
   const { children } = props
