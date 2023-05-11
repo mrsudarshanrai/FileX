@@ -5,6 +5,7 @@ import { sortArrayByBoolean } from '../utils'
 
 const useDir = (funcName?: string) => {
   const [dirs, setDirs] = useState<IDir.IDirs[]>([])
+  const [homePath, setHomePath] = useState('/')
   const [isLoading, setIsLoading] = useState(false)
 
   const getFile = async (path: string, funcName = 'get_all_dir'): Promise<unknown> =>
@@ -17,9 +18,16 @@ const useDir = (funcName?: string) => {
       })
       .finally(() => setIsLoading(false))
 
+  const getHomePath = async () => {
+    await invoke('get_home', {}).then((path: string | unknown) => {
+      if (typeof path === 'string') setHomePath(path)
+    })
+  }
+
   useEffect(() => {
     setIsLoading(true)
     getFile('null', funcName)
+    getHomePath()
   }, [funcName])
 
   const fetch = (path: string, funcName: string) => {
@@ -29,6 +37,7 @@ const useDir = (funcName?: string) => {
     dirs,
     isLoading,
     fetch,
+    homePath,
   }
 }
 
