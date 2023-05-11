@@ -1,5 +1,6 @@
 use std::env;
 
+#[tauri::command]
 pub fn get_home()-> String{
     let home_dir = match env::var("HOME") {
         Ok(val) => val,

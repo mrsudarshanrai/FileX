@@ -5,9 +5,9 @@ mod command;
 mod utils;
 
 fn main() {
-    command::get_home();
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![
+    .invoke_handler(tauri::generate_handler![
+            command::get_home,
             files::get_all_dir,
             files::get_files_in_path
         ])
