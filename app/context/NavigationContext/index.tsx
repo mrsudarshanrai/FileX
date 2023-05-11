@@ -24,9 +24,9 @@ const NavigationContext = React.createContext<NavigationContextType>({
 
 const NavigationContextProvider = (props: Props) => {
   const { children } = props
-  const { fetch } = useContext(DirContext)
+  const { fetch, homePath } = useContext(DirContext)
 
-  const [currentPath, setCurrentPath] = useState('/home/popbob')
+  const [currentPath, setCurrentPath] = useState(homePath)
   /** all forward and backward paths */
   const [forwardStack, setForwardStack] = useState<string[]>([])
   const [backwardStack, setBackwardStack] = useState<string[]>([])
@@ -88,6 +88,10 @@ const NavigationContextProvider = (props: Props) => {
       isBackDisabled: backwardStack.length === 0,
     })
   }, [forwardStack.length, backwardStack.length])
+
+  useEffect(() => {
+    setCurrentPath(homePath)
+  }, [homePath])
 
   const contextValue = {
     navigate,

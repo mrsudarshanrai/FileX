@@ -7,7 +7,7 @@ import { IDir } from '@/app/lib/types/dir'
 import { NavigationContext } from '@/app/context/NavigationContext'
 
 const Sidebar = () => {
-  const { dirs } = useContext(DirContext)
+  const { dirs, homePath } = useContext(DirContext)
   const { navigate, currentPath } = useContext(NavigationContext)
   const [sideBarDirs, setSideBarDirs] = useState<IDir.IDirs[]>([])
 
@@ -22,10 +22,7 @@ const Sidebar = () => {
   return (
     <SidebarContainer>
       <SidebarItems>
-        <SidebarItem
-          onClick={() => onDirClick('/home/popbob')}
-          isActive={'/home/popbob' === currentPath}
-        >
+        <SidebarItem onClick={() => onDirClick(homePath)} isActive={'/home/popbob' === currentPath}>
           {getIcons('home')}
           <span>Home</span>
         </SidebarItem>
