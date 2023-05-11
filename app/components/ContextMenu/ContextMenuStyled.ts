@@ -8,7 +8,7 @@ const ContextMenuWrapper = styled.div<ContextMenuModal>`
     height: 240px;
     position: fixed;
     z-index: 999999999;
-    display: ${props.display}px;
+    display: ${props.display};
     top: ${props.top}px;
     left: ${props.left}px;
   `}

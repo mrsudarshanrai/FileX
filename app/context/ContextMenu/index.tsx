@@ -1,27 +1,36 @@
 import React, { useState } from 'react'
 import ContextMenuComponent, { Display } from '@/app/components/ContextMenu'
 
-const ContextMenu = React.createContext<undefined>(undefined)
+type ContextMenuT = {
+  onContextMenu: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
+  show: Display
+  setShow: (show: Display) => void
+}
+const ContextMenu = React.createContext<ContextMenuT>({
+  onContextMenu() {},
+  show: 'none',
+  setShow() {},
+})
 
 export function ContextMenuProvider({ children }: { children: React.ReactNode }) {
   const [top, setTop] = useState(0)
   const [left, setLeft] = useState(0)
-  const [display, setDisplay] = useState<Display>('none')
+  const [show, setShow] = useState<Display>('none')
 
   const onContextMenu = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    setDisplay(() => 'none')
+    setShow((prev) => (prev === 'none' ? 'block' : 'none'))
+    if (show !== 'none') return null
     event.preventDefault()
 
     const { clientX, clientY } = event
 
     setTop(clientY)
     setLeft(clientX)
-    setDisplay(() => 'block')
   }
-
+  const contextValue = { onContextMenu, show, setShow }
   return (
-    <ContextMenu.Provider value={undefined}>
-      <ContextMenuComponent top={top} left={left} display={display} />
+    <ContextMenu.Provider value={contextValue}>
+      <ContextMenuComponent top={top} left={left} display={show} />
       <div onContextMenu={(event) => onContextMenu(event)}>{children}</div>
     </ContextMenu.Provider>
   )
