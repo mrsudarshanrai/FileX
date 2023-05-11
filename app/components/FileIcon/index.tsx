@@ -8,12 +8,20 @@ type FileIconWrapper = {
 interface Props extends FileIconWrapper {
   isDir: boolean
   extension: string
+  onClick: () => void
+  onDoubleClick: () => void
+  onContextMenu: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
 }
 
 const FileIcon = (props: Props) => {
-  const { isDir, extension, disableHover = false } = props
+  const { isDir, extension, disableHover = false, onClick, onDoubleClick, onContextMenu } = props
   return (
-    <FileIconWrapper disableHover={disableHover}>
+    <FileIconWrapper
+      disableHover={disableHover}
+      onClick={onClick}
+      onDoubleClick={onDoubleClick}
+      onContextMenu={onContextMenu}
+    >
       {isDir ? (
         <Image alt='folder' src={'/assets/folder.svg'} width={80} height={80} />
       ) : (

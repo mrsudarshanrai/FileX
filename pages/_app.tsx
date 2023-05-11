@@ -19,17 +19,17 @@ const App = ({ Component, pageProps }: AppProps) => {
       </Head>
       <DirContextProvider>
         <NavigationContextProvider>
-          <ContextMenuProvider>
-            <Header />
-            <AppContainer>
-              <SidebarContainer>
-                <Sidebar />
-              </SidebarContainer>
+          <Header />
+          <AppContainer>
+            <SidebarContainer>
+              <Sidebar />
+            </SidebarContainer>
+            <ContextMenuProvider>
               <MainContainer>
                 <Component {...pageProps} />
               </MainContainer>
-            </AppContainer>
-          </ContextMenuProvider>
+            </ContextMenuProvider>
+          </AppContainer>
         </NavigationContextProvider>
       </DirContextProvider>
     </>

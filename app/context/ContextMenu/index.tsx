@@ -1,9 +1,39 @@
-import React from 'react'
+import React, { useState } from 'react'
+import ContextMenuComponent, { Display } from '@/app/components/ContextMenu'
 
-const ContextMenu = React.createContext({})
+type ContextMenuT = {
+  onContextMenu: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
+  show: Display
+  setShow: (show: Display) => void
+}
+const ContextMenu = React.createContext<ContextMenuT>({
+  onContextMenu() {},
+  show: 'none',
+  setShow() {},
+})
 
 export function ContextMenuProvider({ children }: { children: React.ReactNode }) {
-  return <ContextMenu.Provider value={'sddd'}>{children}</ContextMenu.Provider>
+  const [top, setTop] = useState(0)
+  const [left, setLeft] = useState(0)
+  const [show, setShow] = useState<Display>('none')
+
+  const onContextMenu = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    setShow((prev) => (prev === 'none' ? 'block' : 'none'))
+    if (show !== 'none') return null
+    event.preventDefault()
+
+    const { clientX, clientY } = event
+
+    setTop(clientY)
+    setLeft(clientX)
+  }
+  const contextValue = { onContextMenu, show, setShow }
+  return (
+    <ContextMenu.Provider value={contextValue}>
+      <ContextMenuComponent top={top} left={left} display={show} />
+      <div onContextMenu={(event) => onContextMenu(event)}>{children}</div>
+    </ContextMenu.Provider>
+  )
 }
 
 export default ContextMenu

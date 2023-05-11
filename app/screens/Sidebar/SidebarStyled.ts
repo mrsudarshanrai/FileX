@@ -26,7 +26,7 @@ const SidebarItem = styled.p<ISidebarItem>`
   }
   span {
     font-size: 15px;
-    font-weight: 300;
+    /* font-weight: 300; */
   }
 
   svg {
