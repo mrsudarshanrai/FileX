@@ -17,17 +17,17 @@ const App = ({ Component, pageProps }: AppProps) => {
         <link rel='icon' href='/favicon.ico' />
       </Head>
       <DirContextProvider>
-        <ContextMenuProvider>
-          <Header />
-          <AppContainer>
-            <SidebarContainer>
-              <Sidebar />
-            </SidebarContainer>
+        <Header />
+        <AppContainer>
+          <SidebarContainer>
+            <Sidebar />
+          </SidebarContainer>
+          <ContextMenuProvider>
             <MainContainer>
               <Component {...pageProps} />
             </MainContainer>
-          </AppContainer>
-        </ContextMenuProvider>
+          </ContextMenuProvider>
+        </AppContainer>
       </DirContextProvider>
     </>
   )
