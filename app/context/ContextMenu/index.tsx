@@ -27,11 +27,18 @@ export function ContextMenuProvider({ children }: { children: React.ReactNode })
     setTop(clientY)
     setLeft(clientX)
   }
+
+  const onClick = () => {
+    setShow(() => 'none')
+  }
+
   const contextValue = { onContextMenu, show, setShow }
   return (
     <ContextMenu.Provider value={contextValue}>
       <ContextMenuComponent top={top} left={left} display={show} />
-      <div onContextMenu={(event) => onContextMenu(event)}>{children}</div>
+      <div onContextMenu={(event) => onContextMenu(event)} onClick={() => onClick()}>
+        {children}
+      </div>
     </ContextMenu.Provider>
   )
 }

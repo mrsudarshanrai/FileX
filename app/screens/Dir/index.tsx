@@ -31,7 +31,7 @@ const Home = () => {
   }
 
   return (
-    <DirContainer>
+    <DirContainer onContextMenu={(e) => e.preventDefault()}>
       {isLoading && <p>Fetching files</p>}
       {dirs.map(({ folder_name, path, is_dir, is_visible, extension }: IDir.IDirs, index) => {
         if (!is_visible) return null
