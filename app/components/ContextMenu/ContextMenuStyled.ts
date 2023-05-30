@@ -1,12 +1,18 @@
 import styled, { css } from 'styled-components'
 import { ContextMenuModal } from '.'
 
+type ContextMenuItem = {
+  disabled: boolean | undefined
+}
+
+const CONTEXT_MENU_ITEM_HEIGHT = 47
+
 const ContextMenuWrapper = styled.div<ContextMenuModal>`
   ${(props) => css`
     background-color: #3a3746;
     border-radius: 14px;
-    width: 230px;
-    height: 240px;
+    width: 260px;
+    height: ${props.itemCount * CONTEXT_MENU_ITEM_HEIGHT}px;
     position: fixed;
     z-index: 999999999;
     display: ${props.display};
@@ -17,17 +23,39 @@ const ContextMenuWrapper = styled.div<ContextMenuModal>`
   `}
 `
 
-const ContextMenuItem = styled.div`
-  height: 40px;
+const ContextMenuItem = styled.div<ContextMenuItem>`
+  height: ${CONTEXT_MENU_ITEM_HEIGHT}px;
   padding: 0 21px;
   /* background-color: red; */
   display: flex;
   align-items: center;
+  justify-content: space-between;
   border-bottom: 1px solid rgba(119, 119, 119, 0.17);
   font-size: 15px;
+  color: #fff;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 15px;
   &:hover {
     background-color: #8d8f9257;
   }
 `
 
-export { ContextMenuWrapper, ContextMenuItem }
+const Item = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  column-gap: 8px;
+`
+
+const ContentMenuItemShortcut = styled.div`
+  font-style: normal;
+  font-weight: 500;
+  font-size: 11px;
+  line-height: 12px;
+  word-spacing: -3px;
+  color: #767676;
+`
+
+export { ContextMenuWrapper, ContextMenuItem, Item, ContentMenuItemShortcut }

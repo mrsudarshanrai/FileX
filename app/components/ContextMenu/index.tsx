@@ -1,37 +1,56 @@
-import { ContextMenuItem, ContextMenuWrapper } from './ContextMenuStyled'
+import { getIcons, icons } from '@/app/components/Icon/icon'
+import {
+  ContextMenuItem,
+  ContextMenuWrapper,
+  ContentMenuItemShortcut,
+  Item,
+} from './ContextMenuStyled'
 
 export type Display = 'none' | 'block'
 export type ContextMenuModal = {
   top: number
   left: number
   display: Display
+  itemCount: number
 }
 
-export type ContextMenuItem = {
+export type ContextMenuItemT = {
   label: string
   icon: string
   shortcut: string
+  disabled?: boolean
 }
-const contextMenuItems: ContextMenuItem[] = [
+const contextMenuItems: ContextMenuItemT[] = [
   {
     label: 'New Folder',
-    icon: '',
-    shortcut: '',
+    icon: 'newFolder',
+    shortcut: 'Shift + Ctrl + N',
+  },
+  {
+    label: 'Copy',
+    icon: 'copy',
+    shortcut: 'Ctrl + C',
+    disabled: true,
   },
   {
     label: 'Paste',
-    icon: '',
-    shortcut: '',
+    icon: 'paste',
+    shortcut: 'Ctrl + P',
   },
   {
     label: 'Select All',
-    icon: '',
-    shortcut: '',
+    icon: 'selectAll',
+    shortcut: 'Ctrl + A',
   },
   {
     label: 'Properties',
-    icon: '',
-    shortcut: '',
+    icon: 'properties',
+    shortcut: 'Ctrl + I',
+  },
+  {
+    label: 'Properties',
+    icon: 'properties',
+    shortcut: 'Ctrl + I',
   },
 ]
 
@@ -43,10 +62,19 @@ const ContextMenuModal = (props: ContextMenuModal) => {
       top={top}
       left={left}
       display={display}
+      itemCount={contextMenuItems.length}
     >
-      {contextMenuItems.map((contextMenu: ContextMenuItem, index: number) => (
-        <ContextMenuItem key={index}>{contextMenu.label}</ContextMenuItem>
-      ))}
+      {contextMenuItems.map(
+        ({ icon, label, shortcut, disabled }: ContextMenuItemT, index: number) => (
+          <ContextMenuItem key={index} disabled={disabled}>
+            <Item>
+              {getIcons(icon as keyof typeof icons)}
+              {label}
+            </Item>
+            <ContentMenuItemShortcut>{shortcut}</ContentMenuItemShortcut>
+          </ContextMenuItem>
+        ),
+      )}
     </ContextMenuWrapper>
   )
 }
