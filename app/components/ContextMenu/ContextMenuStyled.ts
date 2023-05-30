@@ -5,9 +5,13 @@ type ContextMenuItem = {
   disabled: boolean | undefined
 }
 
+interface ContextMenuWrapper extends ContextMenuModal {
+  itemCount: number
+}
+
 const CONTEXT_MENU_ITEM_HEIGHT = 47
 
-const ContextMenuWrapper = styled.div<ContextMenuModal>`
+const ContextMenuWrapper = styled.div<ContextMenuWrapper>`
   ${(props) => css`
     background-color: #3a3746;
     border-radius: 14px;

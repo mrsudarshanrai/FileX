@@ -11,7 +11,6 @@ export type ContextMenuModal = {
   top: number
   left: number
   display: Display
-  itemCount: number
 }
 
 export type ContextMenuItemT = {
