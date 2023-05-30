@@ -47,11 +47,6 @@ const contextMenuItems: ContextMenuItemT[] = [
     icon: 'properties',
     shortcut: 'Ctrl + I',
   },
-  {
-    label: 'Properties',
-    icon: 'properties',
-    shortcut: 'Ctrl + I',
-  },
 ]
 
 const ContextMenuModal = (props: ContextMenuModal) => {
