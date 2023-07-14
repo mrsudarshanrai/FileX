@@ -35,7 +35,8 @@ interface IArrowIcon {
 const ArrowIcon = styled.button<IArrowIcon>`
   width: 36px;
   min-width: 36px;
-  border: 1px solid #8d8f9257;
+  border: 0;
+  /* border: 1px solid #8d8f9257; */
   padding: 3px;
   height: 30px;
   display: flex;
