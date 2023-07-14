@@ -40,7 +40,7 @@ const Header = () => {
 export default Header
 
 const HeaderContainer = styled.div`
-  background-color: #242424;
+  background-color: #131212;
   height: 50px;
   border: 0;
   border-bottom: 1px solid #8d8f9257;
