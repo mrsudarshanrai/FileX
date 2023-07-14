@@ -1,13 +1,13 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 mod files;
-mod command;
+mod helper;
 mod utils;
 
 fn main() {
     tauri::Builder::default()
     .invoke_handler(tauri::generate_handler![
-            command::get_home,
+            helper::get_home,
             files::get_all_dir,
             files::get_files_in_path
         ])
