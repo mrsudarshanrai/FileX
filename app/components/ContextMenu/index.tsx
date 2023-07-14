@@ -5,6 +5,8 @@ import {
   ContentMenuItemShortcut,
   Item,
 } from './ContextMenuStyled'
+import { useContext } from 'react'
+import { NavigationContext } from '@/app/context/NavigationContext'
 
 export type Display = 'none' | 'block'
 export type ContextMenuModal = {
@@ -49,7 +51,9 @@ const contextMenuItems: ContextMenuItemT[] = [
 ]
 
 const ContextMenuModal = (props: ContextMenuModal) => {
+  const { currentPath } = useContext(NavigationContext)
   const { top, left, display } = props
+  const onContextItemClick = async () => {}
   return (
     <ContextMenuWrapper
       onContextMenu={(e) => e.preventDefault()}
@@ -60,7 +64,7 @@ const ContextMenuModal = (props: ContextMenuModal) => {
     >
       {contextMenuItems.map(
         ({ icon, label, shortcut, disabled }: ContextMenuItemT, index: number) => (
-          <ContextMenuItem key={index} disabled={disabled}>
+          <ContextMenuItem key={index} disabled={disabled} onClick={() => onContextItemClick()}>
             <Item>
               {getIcons(icon as keyof typeof icons)}
               {label}

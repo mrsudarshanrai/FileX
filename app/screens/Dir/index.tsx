@@ -25,7 +25,11 @@ const Home = () => {
     if (isContextMenuOpen(show)) setSelectedFile(() => fileIndex)
   }
 
-  const onContextMenu = (index: number, event?: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
+  const onContextMenu = async (
+    index: number,
+    event?: React.MouseEvent<HTMLSpanElement, MouseEvent>,
+    path?: string,
+  ) => {
     event?.preventDefault()
     if (isContextMenuOpen(show)) setSelectedFile(() => index)
   }
@@ -42,13 +46,15 @@ const Home = () => {
               extension={extension}
               onClick={() => onFileClick(index)}
               onDoubleClick={() => onFileDoubleClick(path)}
-              onContextMenu={(event) => onContextMenu(index, event)}
+              onContextMenu={(event) => {
+                onContextMenu(index, event, path)
+              }}
             />
             <FileNameWrapper title={folder_name}>
               <FileName
                 onClick={() => onFileClick(index)}
                 onDoubleClick={() => onFileDoubleClick(path)}
-                onContextMenu={(event) => onContextMenu(index, event)}
+                onContextMenu={(event) => onContextMenu(index, event, path)}
                 isSelected={selectedFile === index}
               >
                 {folder_name}
