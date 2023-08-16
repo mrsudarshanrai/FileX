@@ -6,7 +6,7 @@ mod utils;
 
 fn main() {
     tauri::Builder::default()
-    .invoke_handler(tauri::generate_handler![
+        .invoke_handler(tauri::generate_handler![
             helper::get_home,
             files::get_all_dir,
             files::get_files_in_path
@@ -14,4 +14,3 @@ fn main() {
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
-    
