@@ -5,6 +5,11 @@
     "thumbnail": "/extensions/javascript.svg"
   },
   {
+    "extensions": ["rs"],
+    "type": "Rust",
+    "thumbnail": "/extensions/rust.svg"
+  },
+  {
     "extensions": ["ts"],
     "type": "TypeScript",
     "thumbnail": "/extensions/typescript.svg"
