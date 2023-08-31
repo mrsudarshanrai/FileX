@@ -1,13 +1,14 @@
 import Sidebar from '@/app/screens/Sidebar'
-import '@/styles/globals.css'
 import type { AppProps } from 'next/app'
 import Head from 'next/head'
-import styled from 'styled-components'
+import styled, { ThemeProvider } from 'styled-components'
 import AppContainer from '@/app/screens/AppContainer'
 import Header from '@/app/screens/Header'
 import { DirContextProvider } from '@/app/context/DirContext'
 import { ContextMenuProvider } from '@/app/context/ContextMenu'
 import NavigationContextProvider from '@/app/context/NavigationContext'
+import { colors } from '@/app/theme/colors'
+import { GlobalStyles } from '@/styles/GlobalStyles'
 
 const App = ({ Component, pageProps }: AppProps) => {
   return (
@@ -17,32 +18,25 @@ const App = ({ Component, pageProps }: AppProps) => {
         <meta name='viewport' content='width=device-width, initial-scale=1' />
         <link rel='icon' href='/favicon.ico' />
       </Head>
-      <DirContextProvider>
-        <NavigationContextProvider>
-          <Header />
-          <AppContainer>
-            <SidebarContainer>
+      <ThemeProvider theme={colors}>
+        <GlobalStyles />
+        <DirContextProvider>
+          <NavigationContextProvider>
+            <Header />
+            <AppContainer>
               <Sidebar />
-            </SidebarContainer>
-            <ContextMenuProvider>
-              <MainContainer>
-                <Component {...pageProps} />
-              </MainContainer>
-            </ContextMenuProvider>
-          </AppContainer>
-        </NavigationContextProvider>
-      </DirContextProvider>
+              <ContextMenuProvider>
+                <MainContainer>
+                  <Component {...pageProps} />
+                </MainContainer>
+              </ContextMenuProvider>
+            </AppContainer>
+          </NavigationContextProvider>
+        </DirContextProvider>
+      </ThemeProvider>
     </>
   )
 }
-
-const SidebarContainer = styled.div`
-  border: 0;
-  border-right: 1px solid #8d8f9257;
-  height: 100vh;
-  background-color: #131212;
-  color: #fff;
-`
 
 const MainContainer = styled.div`
   border: 0;

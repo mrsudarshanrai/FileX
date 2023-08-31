@@ -1,8 +1,9 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import { useContext } from 'react'
 import Path from '@/app/components/Path'
 import { useDirRoute } from '@/app/hooks/useDirRoute'
 import { NavigationContext } from '@/app/context/NavigationContext'
+import { Theme } from '@/styles/GlobalStyles'
 
 const Header = () => {
   const { navigate, currentPath, isBackDisabled, isForwardDisabled } = useContext(NavigationContext)
@@ -39,9 +40,11 @@ const Header = () => {
 
 export default Header
 
-const HeaderContainer = styled.div`
-  background-color: #131212;
-  height: 50px;
-  border: 0;
-  border-bottom: 1px solid #8d8f9257;
+const HeaderContainer = styled.div<Theme>`
+  ${({ theme }) => css`
+    background-color: ${theme.grey.grey100};
+    height: 50px;
+    border: 0;
+    border-bottom: 1px solid ${({ theme }) => theme.grey.grey50};
+  `}
 `

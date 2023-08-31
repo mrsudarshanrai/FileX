@@ -13,7 +13,7 @@ const CONTEXT_MENU_ITEM_HEIGHT = 47
 
 const ContextMenuWrapper = styled.div<ContextMenuWrapper>`
   ${(props) => css`
-    background-color: #3a3746;
+    background-color: ${props.theme.grey.grey90};
     border-radius: 14px;
     width: 260px;
     height: ${props.itemCount * CONTEXT_MENU_ITEM_HEIGHT}px;
@@ -42,7 +42,7 @@ const ContextMenuItem = styled.div<ContextMenuItem>`
   font-size: 14px;
   line-height: 15px;
   &:hover {
-    background-color: #8d8f9257;
+    background-color: ${({ theme }) => theme.grey.grey50};
   }
 `
 
