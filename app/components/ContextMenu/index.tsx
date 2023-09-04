@@ -9,36 +9,8 @@ import { useContext } from 'react'
 import { NavigationContext } from '@/app/context/NavigationContext'
 import { invoke } from '@tauri-apps/api/tauri'
 import DirContext from '@/app/context/DirContext'
-import { ContextMenuModalProps, IContextMenuItem } from './contextmenu.types'
-
-const contextMenuItems: IContextMenuItem[] = [
-  {
-    label: 'New Folder',
-    name: 'newFolder',
-    shortcut: 'Shift + Ctrl + N',
-  },
-  {
-    label: 'Copy',
-    name: 'copy',
-    shortcut: 'Ctrl + C',
-    disabled: true,
-  },
-  {
-    label: 'Paste',
-    name: 'paste',
-    shortcut: 'Ctrl + P',
-  },
-  {
-    label: 'Select All',
-    name: 'selectAll',
-    shortcut: 'Ctrl + A',
-  },
-  {
-    label: 'Properties',
-    name: 'properties',
-    shortcut: 'Ctrl + I',
-  },
-]
+import { ContextMenuModalProps, IContextMenuItem, IContextMenuItemEnum } from './contextmenu.types'
+import { contextMenuItems } from './contextMenuItems'
 
 const ContextMenuModal = (props: ContextMenuModalProps) => {
   const { currentPath } = useContext(NavigationContext)
@@ -46,7 +18,7 @@ const ContextMenuModal = (props: ContextMenuModalProps) => {
   const { top, left, display } = props
 
   const onContextItemClick = async (name: string) => {
-    if (name === 'newFolder') {
+    if (name === IContextMenuItemEnum.newFolder) {
       await invoke('create_folder', {
         folderPath: currentPath + '/',
       })
