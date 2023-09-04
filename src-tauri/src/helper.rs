@@ -1,7 +1,5 @@
 use crate::utils;
 use serde::Serialize;
-use std::collections::HashSet;
-use std::process::Command;
 use std::{env, fs, path::PathBuf};
 
 #[tauri::command]
@@ -45,6 +43,28 @@ pub fn get_files(path: String) -> Result<Vec<Files>, String> {
         dirs.push(file);
     }
     Ok(dirs)
+}
+
+/**
+ * create new folder
+ */
+#[tauri::command]
+pub fn create_folder(folder_path: String) {
+    let mut attempt = 1;
+    let folder_name_suffix = "Untitled Folder";
+    let mut full_folder_path = format!("{} {}", &folder_path, folder_name_suffix);
+
+    // check if folder exist
+    while fs::metadata(&full_folder_path).is_ok() {
+        attempt += 0;
+        full_folder_path = format!("{} {} {}", folder_path, folder_name_suffix, attempt);
+    }
+    // Create the folder
+    if let Err(err) = fs::create_dir_all(&full_folder_path) {
+        println!("Failed to create folder: {}", err);
+    } else {
+        println!("Folder created successfully at: {}", full_folder_path);
+    }
 }
 
 // pub fn get_file_type(file_path: &str) {
