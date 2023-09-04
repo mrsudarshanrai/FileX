@@ -13,50 +13,49 @@ const Home = () => {
   const { dirs, isLoading } = useContext(DirContext)
   const { navigate } = useContext(NavigationContext)
   const { show, setShow, setTargetPath } = useContext(ContextMenu)
-  const [selectedFile, setSelectedFile] = useState<null | number>(null)
+  const [selectedFile, setSelectedFile] = useState<undefined | string>(undefined)
 
   const onFileDoubleClick = async (path: string) => {
     setShow(DisplayEnum.none)
     if (isContextMenuOpen(show)) navigate(path)
   }
 
-  const onFileClick = (fileIndex: number) => {
+  const onFileClick = (filePath: string) => {
     setShow(DisplayEnum.none)
-    if (isContextMenuOpen(show)) setSelectedFile(() => fileIndex)
+    if (isContextMenuOpen(show)) setSelectedFile(() => filePath)
   }
 
   const onContextMenu = async (
-    index: number,
     event?: React.MouseEvent<HTMLSpanElement, MouseEvent>,
     path?: string,
   ) => {
     event?.preventDefault()
-    if (isContextMenuOpen(show)) setSelectedFile(() => index)
+    if (isContextMenuOpen(show)) setSelectedFile(() => path)
     setTargetPath(path)
   }
 
   return (
     <DirContainer onContextMenu={(e) => e.preventDefault()}>
       {isLoading && <p>Fetching files</p>}
-      {dirs.map(({ folder_name, path, is_dir, is_visible, extension }: IDir.IDirs, index) => {
+      {dirs.map(({ folder_name, path, is_dir, is_visible, extension }: IDir.IDirs) => {
         if (!is_visible) return null
         return (
-          <File key={index} draggable={true}>
+          <File key={path} draggable={true}>
             <FileIcon
               isDir={is_dir}
               extension={extension}
-              onClick={() => onFileClick(index)}
+              onClick={() => onFileClick(path)}
               onDoubleClick={() => onFileDoubleClick(path)}
               onContextMenu={(event) => {
-                onContextMenu(index, event, path)
+                onContextMenu(event, path)
               }}
             />
             <FileNameWrapper title={folder_name}>
               <FileName
-                onClick={() => onFileClick(index)}
+                onClick={() => onFileClick(path)}
                 onDoubleClick={() => onFileDoubleClick(path)}
-                onContextMenu={(event) => onContextMenu(index, event, path)}
-                isSelected={selectedFile === index}
+                onContextMenu={(event) => onContextMenu(event, path)}
+                isSelected={selectedFile === path}
               >
                 {folder_name}
               </FileName>
