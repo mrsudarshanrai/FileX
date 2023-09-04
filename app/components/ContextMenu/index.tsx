@@ -7,6 +7,8 @@ import {
 } from './ContextMenuStyled'
 import { useContext } from 'react'
 import { NavigationContext } from '@/app/context/NavigationContext'
+import { invoke } from '@tauri-apps/api/tauri'
+import DirContext from '@/app/context/DirContext'
 
 export type Display = 'none' | 'block'
 export type ContextMenuModal = {
@@ -17,43 +19,56 @@ export type ContextMenuModal = {
 
 export type ContextMenuItemT = {
   label: string
-  icon: string
+  name: string
   shortcut: string
   disabled?: boolean
 }
 const contextMenuItems: ContextMenuItemT[] = [
   {
     label: 'New Folder',
-    icon: 'newFolder',
+    name: 'newFolder',
     shortcut: 'Shift + Ctrl + N',
   },
   {
     label: 'Copy',
-    icon: 'copy',
+    name: 'copy',
     shortcut: 'Ctrl + C',
     disabled: true,
   },
   {
     label: 'Paste',
-    icon: 'paste',
+    name: 'paste',
     shortcut: 'Ctrl + P',
   },
   {
     label: 'Select All',
-    icon: 'selectAll',
+    name: 'selectAll',
     shortcut: 'Ctrl + A',
   },
   {
     label: 'Properties',
-    icon: 'properties',
+    name: 'properties',
     shortcut: 'Ctrl + I',
   },
 ]
 
 const ContextMenuModal = (props: ContextMenuModal) => {
   const { currentPath } = useContext(NavigationContext)
+  const { fetch } = useContext(DirContext)
   const { top, left, display } = props
-  const onContextItemClick = async () => {}
+
+  const onContextItemClick = async (name: string) => {
+    if (name === 'newFolder') {
+      await invoke('create_folder', {
+        folderPath: currentPath + '/',
+      })
+        .then(() => {
+          fetch(currentPath, 'get_files_in_path')
+        })
+        .catch(console.error)
+    }
+  }
+
   return (
     <ContextMenuWrapper
       onContextMenu={(e) => e.preventDefault()}
@@ -63,10 +78,10 @@ const ContextMenuModal = (props: ContextMenuModal) => {
       itemCount={contextMenuItems.length}
     >
       {contextMenuItems.map(
-        ({ icon, label, shortcut, disabled }: ContextMenuItemT, index: number) => (
-          <ContextMenuItem key={index} disabled={disabled} onClick={() => onContextItemClick()}>
+        ({ name, label, shortcut, disabled }: ContextMenuItemT, index: number) => (
+          <ContextMenuItem key={index} disabled={disabled} onClick={() => onContextItemClick(name)}>
             <Item>
-              {getIcons(icon as keyof typeof icons)}
+              {getIcons(name as keyof typeof icons)}
               {label}
             </Item>
             <ContentMenuItemShortcut>{shortcut}</ContentMenuItemShortcut>
