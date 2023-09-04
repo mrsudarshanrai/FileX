@@ -56,7 +56,7 @@ pub fn create_folder(folder_path: String) {
 
     // check if folder exist
     while fs::metadata(&full_folder_path).is_ok() {
-        attempt += 0;
+        attempt += 1;
         full_folder_path = format!("{} {} {}", folder_path, folder_name_suffix, attempt);
     }
     // Create the folder
