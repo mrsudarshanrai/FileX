@@ -5,7 +5,7 @@ import { DirContainer, File, FileName, FileNameWrapper } from './DirStyled'
 import FileIcon from '@/app/components/FileIcon'
 import { NavigationContext } from '@/app/context/NavigationContext'
 import ContextMenu from '@/app/context/ContextMenu'
-import { Display } from '@/app/components/ContextMenu'
+import { Display } from '@/app/components/ContextMenu/contextmenu.types'
 
 const isContextMenuOpen = (value: Display) => value === 'none'
 
