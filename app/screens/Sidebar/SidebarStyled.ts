@@ -33,16 +33,20 @@ const SidebarItem = styled.p<ISidebarItem>`
       transition: 0.2s;
     }
     span {
-      font-size: 15px;
+      font-size: 16px;
       /* font-weight: 300; */
     }
 
     svg {
-      margin: 0 6px 0 0;
+      margin: 0 12px 0 0;
       width: 18px;
       height: 18px;
     }
   `}
 `
 
-export { SidebarContainer, SidebarItems, SidebarItem }
+const SidebarTitle = styled.h4`
+  padding: 10px;
+`
+
+export { SidebarContainer, SidebarItems, SidebarItem, SidebarTitle }

@@ -1,5 +1,5 @@
 import { getIcons, icons } from '@/app/components/Icon/icon'
-import { SidebarContainer, SidebarItem, SidebarItems } from './SidebarStyled'
+import { SidebarContainer, SidebarItem, SidebarItems, SidebarTitle } from './SidebarStyled'
 import { useContext, useEffect, useState } from 'react'
 import DirContext from '@/app/context/DirContext'
 import { getSidebarDirs } from './helper'
@@ -22,6 +22,7 @@ const Sidebar = () => {
   return (
     <SidebarContainer>
       <SidebarItems>
+        <SidebarTitle>This PC</SidebarTitle>
         <SidebarItem onClick={() => onDirClick(homePath)} isActive={'/home/popbob' === currentPath}>
           {getIcons('home')}
           <span>Home</span>
