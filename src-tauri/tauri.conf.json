@@ -17,6 +17,9 @@
         "execute":true,
         "open": "file://",
         "sidecar": true
+      },
+      "path": {
+        "all": true
       }
     },
     "bundle": {
