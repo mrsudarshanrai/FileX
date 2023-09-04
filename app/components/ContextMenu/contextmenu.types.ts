@@ -3,9 +3,13 @@ export type ContextMenuModalProps = {
   left: number
   display: Display
   setShow: React.Dispatch<React.SetStateAction<Display>>
+  targetPath: string | undefined
 }
-
-export type Display = 'none' | 'block'
+export enum DisplayEnum {
+  none = 'none',
+  block = 'block',
+}
+export type Display = keyof typeof DisplayEnum
 
 export type IContextMenuItem = {
   label: string
@@ -29,6 +33,7 @@ export enum IContextMenuItemEnum {
   paste = 'paste',
   selectAll = 'selectAll',
   properties = 'properties',
+  delete = 'delete',
 }
 
 export type ContextMenuItemUnion = keyof typeof IContextMenuItemEnum

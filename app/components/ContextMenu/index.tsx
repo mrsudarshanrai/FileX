@@ -5,17 +5,26 @@ import {
   ContentMenuItemShortcut,
   Item,
 } from './ContextMenuStyled'
-import { useContext } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { NavigationContext } from '@/app/context/NavigationContext'
 import { invoke } from '@tauri-apps/api/tauri'
 import DirContext from '@/app/context/DirContext'
-import { ContextMenuModalProps, IContextMenuItem, IContextMenuItemEnum } from './contextmenu.types'
+import {
+  ContextMenuModalProps,
+  DisplayEnum,
+  IContextMenuItem,
+  IContextMenuItemEnum,
+} from './contextmenu.types'
 import { contextMenuItems } from './contextMenuItems'
+
+const CONDITIONAL_ITEM = ['delete']
 
 const ContextMenuModal = (props: ContextMenuModalProps) => {
   const { currentPath } = useContext(NavigationContext)
   const { fetch } = useContext(DirContext)
-  const { top, left, display, setShow } = props
+  const { top, left, display, setShow, targetPath } = props
+
+  const [items, setItems] = useState<IContextMenuItem[]>([])
 
   const onContextItemClick = async (name: string) => {
     if (name === IContextMenuItemEnum.newFolder) {
@@ -24,11 +33,23 @@ const ContextMenuModal = (props: ContextMenuModalProps) => {
       })
         .then(() => {
           fetch(currentPath, 'get_files_in_path')
-          setShow('none')
+          setShow(DisplayEnum.none)
         })
         .catch(console.error)
     }
   }
+
+  useEffect(() => {
+    setItems(() => {
+      const filteredItems = contextMenuItems.filter((item) => {
+        if (CONDITIONAL_ITEM.includes(item.name) && typeof targetPath === 'undefined') {
+          return false
+        }
+        return true
+      })
+      return filteredItems
+    })
+  }, [targetPath])
 
   return (
     <ContextMenuWrapper
@@ -36,10 +57,10 @@ const ContextMenuModal = (props: ContextMenuModalProps) => {
       top={top}
       left={left}
       display={display}
-      itemCount={contextMenuItems.length}
+      itemCount={items.length}
     >
-      {contextMenuItems.map(
-        ({ name, label, shortcut, disabled }: IContextMenuItem, index: number) => (
+      {items.map(({ name, label, shortcut, disabled }: IContextMenuItem, index: number) => {
+        return (
           <ContextMenuItem key={index} disabled={disabled} onClick={() => onContextItemClick(name)}>
             <Item>
               {getIcons(name as keyof typeof icons)}
@@ -47,8 +68,8 @@ const ContextMenuModal = (props: ContextMenuModalProps) => {
             </Item>
             <ContentMenuItemShortcut>{shortcut}</ContentMenuItemShortcut>
           </ContextMenuItem>
-        ),
-      )}
+        )
+      })}
     </ContextMenuWrapper>
   )
 }

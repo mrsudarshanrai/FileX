@@ -18,6 +18,11 @@ const contextMenuItems: IContextMenuItem[] = [
     shortcut: 'Ctrl + P',
   },
   {
+    label: 'Delete',
+    name: IContextMenuItemEnum.delete,
+    shortcut: 'Ctrl + D',
+  },
+  {
     label: 'Select All',
     name: IContextMenuItemEnum.selectAll,
     shortcut: 'Ctrl + A',

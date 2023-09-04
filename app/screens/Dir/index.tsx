@@ -5,23 +5,23 @@ import { DirContainer, File, FileName, FileNameWrapper } from './DirStyled'
 import FileIcon from '@/app/components/FileIcon'
 import { NavigationContext } from '@/app/context/NavigationContext'
 import ContextMenu from '@/app/context/ContextMenu'
-import { Display } from '@/app/components/ContextMenu/contextmenu.types'
+import { Display, DisplayEnum } from '@/app/components/ContextMenu/contextmenu.types'
 
-const isContextMenuOpen = (value: Display) => value === 'none'
+const isContextMenuOpen = (value: Display) => value === DisplayEnum.none
 
 const Home = () => {
   const { dirs, isLoading } = useContext(DirContext)
   const { navigate } = useContext(NavigationContext)
-  const { show, setShow } = useContext(ContextMenu)
+  const { show, setShow, setTargetPath } = useContext(ContextMenu)
   const [selectedFile, setSelectedFile] = useState<null | number>(null)
 
   const onFileDoubleClick = async (path: string) => {
-    setShow('none')
+    setShow(DisplayEnum.none)
     if (isContextMenuOpen(show)) navigate(path)
   }
 
   const onFileClick = (fileIndex: number) => {
-    setShow('none')
+    setShow(DisplayEnum.none)
     if (isContextMenuOpen(show)) setSelectedFile(() => fileIndex)
   }
 
@@ -32,6 +32,7 @@ const Home = () => {
   ) => {
     event?.preventDefault()
     if (isContextMenuOpen(show)) setSelectedFile(() => index)
+    setTargetPath(path)
   }
 
   return (
