@@ -9,21 +9,9 @@ import { useContext } from 'react'
 import { NavigationContext } from '@/app/context/NavigationContext'
 import { invoke } from '@tauri-apps/api/tauri'
 import DirContext from '@/app/context/DirContext'
+import { ContextMenuModalProps, IContextMenuItem } from './contextmenu.types'
 
-export type Display = 'none' | 'block'
-export type ContextMenuModal = {
-  top: number
-  left: number
-  display: Display
-}
-
-export type ContextMenuItemT = {
-  label: string
-  name: string
-  shortcut: string
-  disabled?: boolean
-}
-const contextMenuItems: ContextMenuItemT[] = [
+const contextMenuItems: IContextMenuItem[] = [
   {
     label: 'New Folder',
     name: 'newFolder',
@@ -52,7 +40,7 @@ const contextMenuItems: ContextMenuItemT[] = [
   },
 ]
 
-const ContextMenuModal = (props: ContextMenuModal) => {
+const ContextMenuModal = (props: ContextMenuModalProps) => {
   const { currentPath } = useContext(NavigationContext)
   const { fetch } = useContext(DirContext)
   const { top, left, display } = props
@@ -78,7 +66,7 @@ const ContextMenuModal = (props: ContextMenuModal) => {
       itemCount={contextMenuItems.length}
     >
       {contextMenuItems.map(
-        ({ name, label, shortcut, disabled }: ContextMenuItemT, index: number) => (
+        ({ name, label, shortcut, disabled }: IContextMenuItem, index: number) => (
           <ContextMenuItem key={index} disabled={disabled} onClick={() => onContextItemClick(name)}>
             <Item>
               {getIcons(name as keyof typeof icons)}

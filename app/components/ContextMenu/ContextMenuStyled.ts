@@ -1,17 +1,9 @@
 import styled, { css } from 'styled-components'
-import { ContextMenuModal } from '.'
-
-type ContextMenuItem = {
-  disabled: boolean | undefined
-}
-
-interface ContextMenuWrapper extends ContextMenuModal {
-  itemCount: number
-}
+import { ContextMenuItemElement, ContextMenuWrapperProps } from './contextmenu.types'
 
 const CONTEXT_MENU_ITEM_HEIGHT = 47
 
-const ContextMenuWrapper = styled.div<ContextMenuWrapper>`
+const ContextMenuWrapper = styled.div<ContextMenuWrapperProps>`
   ${(props) => css`
     background-color: ${props.theme.grey.grey90};
     border-radius: 14px;
@@ -27,7 +19,7 @@ const ContextMenuWrapper = styled.div<ContextMenuWrapper>`
   `}
 `
 
-const ContextMenuItem = styled.div<ContextMenuItem>`
+const ContextMenuItem = styled.div<ContextMenuItemElement>`
   height: ${CONTEXT_MENU_ITEM_HEIGHT}px;
   padding: 0 21px;
   /* background-color: red; */
