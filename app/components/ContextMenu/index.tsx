@@ -15,7 +15,7 @@ import { contextMenuItems } from './contextMenuItems'
 const ContextMenuModal = (props: ContextMenuModalProps) => {
   const { currentPath } = useContext(NavigationContext)
   const { fetch } = useContext(DirContext)
-  const { top, left, display } = props
+  const { top, left, display, setShow } = props
 
   const onContextItemClick = async (name: string) => {
     if (name === IContextMenuItemEnum.newFolder) {
@@ -24,6 +24,7 @@ const ContextMenuModal = (props: ContextMenuModalProps) => {
       })
         .then(() => {
           fetch(currentPath, 'get_files_in_path')
+          setShow('none')
         })
         .catch(console.error)
     }

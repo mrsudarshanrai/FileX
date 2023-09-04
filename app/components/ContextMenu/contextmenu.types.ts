@@ -2,6 +2,7 @@ export type ContextMenuModalProps = {
   top: number
   left: number
   display: Display
+  setShow: React.Dispatch<React.SetStateAction<Display>>
 }
 
 export type Display = 'none' | 'block'

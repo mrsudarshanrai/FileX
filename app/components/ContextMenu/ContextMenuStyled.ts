@@ -3,7 +3,7 @@ import { ContextMenuItemElement, ContextMenuWrapperProps } from './contextmenu.t
 
 const CONTEXT_MENU_ITEM_HEIGHT = 47
 
-const ContextMenuWrapper = styled.div<ContextMenuWrapperProps>`
+const ContextMenuWrapper = styled.div<Omit<ContextMenuWrapperProps, 'setShow'>>`
   ${(props) => css`
     background-color: ${props.theme.grey.grey90};
     border-radius: 14px;

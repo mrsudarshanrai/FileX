@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-import ContextMenuComponent, { Display } from '@/app/components/ContextMenu'
+import ContextMenuComponent from '@/app/components/ContextMenu'
+import { Display } from '@/app/components/ContextMenu/contextmenu.types'
 
 type ContextMenuT = {
   onContextMenu: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
@@ -18,7 +19,7 @@ export function ContextMenuProvider({ children }: { children: React.ReactNode })
   const [show, setShow] = useState<Display>('none')
 
   const onContextMenu = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    setShow((prev) => (prev === 'none' ? 'block' : 'none'))
+    setShow((prev: Display) => (prev === 'none' ? 'block' : 'none'))
     if (show !== 'none') return null
     event.preventDefault()
 
@@ -35,7 +36,7 @@ export function ContextMenuProvider({ children }: { children: React.ReactNode })
   const contextValue = { onContextMenu, show, setShow }
   return (
     <ContextMenu.Provider value={contextValue}>
-      <ContextMenuComponent top={top} left={left} display={show} />
+      <ContextMenuComponent setShow={setShow} top={top} left={left} display={show} />
       <div onContextMenu={(event) => onContextMenu(event)} onClick={() => onClick()}>
         {children}
       </div>
