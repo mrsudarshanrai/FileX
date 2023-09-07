@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react'
 import DirContext from '@/app/context/DirContext'
 import { IDir } from '@/app/lib/types/dir'
-import { DirContainer, File, FileName, FileNameWrapper } from './DirStyled'
+import { DirContainer, File, FileGrid, FileName, FileNameWrapper } from './DirStyled'
 import FileIcon from '@/app/components/FileIcon'
 import { NavigationContext } from '@/app/context/NavigationContext'
 import ContextMenu from '@/app/context/ContextMenu'
@@ -35,32 +35,25 @@ const Home = () => {
   }
 
   return (
-    <DirContainer onContextMenu={(e) => e.preventDefault()}>
+    <DirContainer>
       {isLoading && <p>Fetching files</p>}
       {dirs.map(({ folder_name, path, is_dir, is_visible, extension }: IDir.IDirs) => {
         if (!is_visible) return null
         return (
-          <File key={path} draggable={true}>
-            <FileIcon
-              isDir={is_dir}
-              extension={extension}
-              onClick={() => onFileClick(path)}
-              onDoubleClick={() => onFileDoubleClick(path)}
+          <FileGrid key={path} draggable={true}>
+            <File
               onContextMenu={(event) => {
                 onContextMenu(event, path)
               }}
-            />
-            <FileNameWrapper title={folder_name}>
-              <FileName
-                onClick={() => onFileClick(path)}
-                onDoubleClick={() => onFileDoubleClick(path)}
-                onContextMenu={(event) => onContextMenu(event, path)}
-                isSelected={selectedFile === path}
-              >
-                {folder_name}
-              </FileName>
-            </FileNameWrapper>
-          </File>
+              onClick={() => onFileClick(path)}
+              onDoubleClick={() => onFileDoubleClick(path)}
+            >
+              <FileIcon isDir={is_dir} extension={extension} />
+              <FileNameWrapper title={folder_name}>
+                <FileName isSelected={selectedFile === path}>{folder_name}</FileName>
+              </FileNameWrapper>
+            </File>
+          </FileGrid>
         )
       })}
     </DirContainer>

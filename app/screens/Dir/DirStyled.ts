@@ -16,7 +16,7 @@ const DirContainer = styled.div`
   padding-bottom: 50px;
 `
 
-const File = styled.div`
+const FileGrid = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -24,6 +24,14 @@ const File = styled.div`
   cursor: pointer;
   width: 150px;
   height: 150px;
+`
+
+const File = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  cursor: pointer;
 `
 
 const FileNameWrapper = styled.div`
@@ -56,4 +64,4 @@ const FileName = styled.span<FileName>`
     `}
 `
 
-export { DirContainer, File, FileNameWrapper, FileName }
+export { DirContainer, FileGrid, File, FileNameWrapper, FileName }
