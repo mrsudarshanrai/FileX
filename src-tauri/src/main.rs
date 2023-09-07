@@ -8,7 +8,7 @@ fn main() {
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![
             helper::get_home,
-            helper::create_folder,
+            files::create_folder,
             files::get_all_dir,
             files::get_files_in_path
         ])
