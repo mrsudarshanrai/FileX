@@ -14,6 +14,8 @@ pub fn get_all_dir() -> Result<Vec<helper::Files>, String> {
 
 /**
  * create new folder
+ * creates a new folder called Untitled Folder in the path provided,
+ * if folder name exisit , it will create new Untitled Folder<with folder count>
  */
 #[tauri::command]
 pub fn create_folder(folder_path: String) {
