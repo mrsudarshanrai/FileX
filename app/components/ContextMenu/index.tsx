@@ -37,6 +37,17 @@ const ContextMenuModal = (props: ContextMenuModalProps) => {
         })
         .catch(console.error)
     }
+
+    if (name === IContextMenuItemEnum.delete) {
+      await invoke('delete_path', {
+        path: targetPath,
+      })
+        .then(() => {
+          fetch(currentPath, 'get_files_in_path')
+          setShow(DisplayEnum.none)
+        })
+        .catch(console.error)
+    }
   }
 
   useEffect(() => {
