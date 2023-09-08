@@ -4,6 +4,7 @@ type Color = {
     grey90: string
     grey50: string
     grey30: string
+    grey20: string
   }
 }
 export type { Color }
