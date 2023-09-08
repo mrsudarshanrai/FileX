@@ -45,6 +45,18 @@ pub fn get_files(path: String) -> Result<Vec<Files>, String> {
     Ok(dirs)
 }
 
+/** delete folder  */
+pub fn delete_file(path: &String) -> std::io::Result<()> {
+    fs::remove_file(path)?;
+    Ok(())
+}
+
+/** delete folder  */
+pub fn delete_folder(path: &String) -> std::io::Result<()> {
+    fs::remove_dir_all(path)?;
+    Ok(())
+}
+
 // pub fn get_file_type(file_path: &str) {
 //     let output = Command::new("xdg-mime")
 //         .arg("query")

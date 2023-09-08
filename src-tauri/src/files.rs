@@ -1,4 +1,4 @@
-use std::fs;
+use std::fs::{self};
 
 use crate::helper;
 
@@ -33,5 +33,31 @@ pub fn create_folder(folder_path: String) {
         println!("Failed to create folder: {}", err);
     } else {
         println!("Folder created successfully at: {}", full_folder_path);
+    }
+}
+
+/** */
+/**
+ * delete File/Folder
+ */
+#[tauri::command]
+pub fn delete_path(path: String) -> String {
+    let path_metadata = fs::metadata(&path);
+
+    match path_metadata {
+        Ok(metadata) => {
+            if metadata.is_file() {
+                match helper::delete_file(&path) {
+                    Ok(_) => String::from("File deleted"),
+                    Err(_) => String::from("Failed to delete file"),
+                }
+            } else {
+                match helper::delete_folder(&path) {
+                    Ok(_) => String::from("Folder deleted"),
+                    Err(_) => String::from("Failed to delete folder"),
+                }
+            }
+        }
+        Err(_) => String::from("Invalid path"),
     }
 }
