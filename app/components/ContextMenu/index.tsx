@@ -27,6 +27,7 @@ const ContextMenuModal = (props: ContextMenuModalProps) => {
   const [items, setItems] = useState<IContextMenuItem[]>([])
 
   const onContextItemClick = async (name: string) => {
+    /** on new folder click */
     if (name === IContextMenuItemEnum.newFolder) {
       await invoke('create_folder', {
         folderPath: currentPath + '/',
@@ -38,6 +39,7 @@ const ContextMenuModal = (props: ContextMenuModalProps) => {
         .catch(console.error)
     }
 
+    /** on new file/folder delete */
     if (name === IContextMenuItemEnum.delete) {
       await invoke('delete_path', {
         path: targetPath,
