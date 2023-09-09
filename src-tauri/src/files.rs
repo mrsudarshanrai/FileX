@@ -1,6 +1,7 @@
 use std::fs::{self};
 
 use crate::helper;
+use crate::utils;
 
 #[tauri::command]
 pub fn get_files_in_path(path: &str) -> Result<Vec<helper::Files>, String> {
@@ -13,7 +14,7 @@ pub fn get_all_dir() -> Result<Vec<helper::Files>, String> {
 }
 
 /**
- * create new folder
+ * Create new folder
  * creates a new folder called Untitled Folder in the path provided,
  * if folder name exisit , it will create new Untitled Folder<with folder count>
  */
@@ -38,7 +39,7 @@ pub fn create_folder(folder_path: String) {
 
 /** */
 /**
- * delete File/Folder
+ * Delete File/Folder
  */
 #[tauri::command]
 pub fn delete_path(path: String) -> String {
@@ -59,5 +60,27 @@ pub fn delete_path(path: String) -> String {
             }
         }
         Err(_) => String::from("Invalid path"),
+    }
+}
+
+/**
+ * Copy File/Folder
+ */
+
+#[tauri::command]
+pub fn copy_to_path(from: String, to: String) -> String {
+    if utils::has_valid_metadata(&from) {
+        if utils::is_file(&from) {
+            let new_destination_path =
+                format!("{}/{}", &to, utils::get_full_filename_from_path(&from));
+            match helper::copy_file(&from, &new_destination_path) {
+                Ok(_) => String::from("File copied"),
+                Err(_) => String::from("Failed to copy"),
+            }
+        } else {
+            String::from("Not a valid")
+        }
+    } else {
+        String::from("Not a valid path")
     }
 }

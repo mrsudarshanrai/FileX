@@ -56,6 +56,11 @@ pub fn delete_folder(path: &String) -> std::io::Result<()> {
     fs::remove_dir_all(path)?;
     Ok(())
 }
+/** copy file */
+pub fn copy_file(from: &String, to: &String) -> std::io::Result<()> {
+    fs::copy(from, to)?;
+    Ok(())
+}
 
 // pub fn get_file_type(file_path: &str) {
 //     let output = Command::new("xdg-mime")
