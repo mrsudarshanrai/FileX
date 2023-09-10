@@ -1,5 +1,6 @@
 import styled, { css } from 'styled-components'
 import { ContextMenuItemElement, ContextMenuWrapperProps } from './contextmenu.types'
+import { switchContextMenuItemDisabledStyle } from './utils'
 
 const CONTEXT_MENU_ITEM_HEIGHT = 47
 
@@ -20,22 +21,23 @@ const ContextMenuWrapper = styled.div<Omit<ContextMenuWrapperProps, 'setShow' | 
 `
 
 const ContextMenuItem = styled.div<ContextMenuItemElement>`
-  height: ${CONTEXT_MENU_ITEM_HEIGHT}px;
-  padding: 0 21px;
-  /* background-color: red; */
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid rgba(119, 119, 119, 0.17);
-  font-size: 15px;
-  color: #fff;
-  font-style: normal;
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 15px;
-  &:hover {
-    background-color: ${({ theme }) => theme.grey.grey50};
-  }
+  ${({ disabled, theme }) => css`
+    height: ${CONTEXT_MENU_ITEM_HEIGHT}px;
+    padding: 0 21px;
+    /* background-color: red; */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(119, 119, 119, 0.17);
+    font-size: 15px;
+    color: #fff;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 15px;
+
+    ${switchContextMenuItemDisabledStyle(disabled, theme)}
+  `}
 `
 
 const Item = styled.div`
