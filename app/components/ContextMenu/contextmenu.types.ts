@@ -4,6 +4,8 @@ export type ContextMenuModalProps = {
   display: Display
   setShow: React.Dispatch<React.SetStateAction<Display>>
   targetPath: string | undefined
+  setSorucePathToCopy: React.Dispatch<React.SetStateAction<string | undefined>>
+  sorucePathToCopy: string | undefined
 }
 export enum DisplayEnum {
   none = 'none',

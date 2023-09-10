@@ -20,6 +20,7 @@ export function ContextMenuProvider({ children }: { children: React.ReactNode })
   const [left, setLeft] = useState(0)
   const [show, setShow] = useState<Display>(DisplayEnum.none)
   const [targetPath, setTargetPath] = useState<undefined | string>(undefined)
+  const [sorucePathToCopy, setSorucePathToCopy] = useState<undefined | string>(undefined)
 
   const onContextMenu = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     setShow((prev: Display) => (prev === DisplayEnum.none ? DisplayEnum.block : DisplayEnum.none))
@@ -42,7 +43,15 @@ export function ContextMenuProvider({ children }: { children: React.ReactNode })
     }
   }, [show])
 
-  const contextValue = { onContextMenu, show, setShow, targetPath, setTargetPath }
+  const contextValue = {
+    onContextMenu,
+    show,
+    setShow,
+    targetPath,
+    setTargetPath,
+    sorucePathToCopy,
+    setSorucePathToCopy,
+  }
   return (
     <ContextMenu.Provider value={contextValue}>
       <ContextMenuComponent
@@ -51,6 +60,8 @@ export function ContextMenuProvider({ children }: { children: React.ReactNode })
         top={top}
         left={left}
         display={show}
+        setSorucePathToCopy={setSorucePathToCopy}
+        sorucePathToCopy={sorucePathToCopy}
       />
       <div onContextMenu={(event) => onContextMenu(event)} onClick={() => onClick()}>
         {children}

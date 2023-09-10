@@ -16,13 +16,14 @@ import {
   IContextMenuItemEnum,
 } from './contextmenu.types'
 import { contextMenuItems } from './contextMenuItems'
+import { isOptionDisabled } from './utils'
 
-const CONDITIONAL_ITEM = ['delete']
+const CONDITIONAL_ITEM = ['delete', 'copy']
 
 const ContextMenuModal = (props: ContextMenuModalProps) => {
   const { currentPath } = useContext(NavigationContext)
   const { fetch } = useContext(DirContext)
-  const { top, left, display, setShow, targetPath } = props
+  const { top, left, display, setShow, targetPath, setSorucePathToCopy, sorucePathToCopy } = props
 
   const [items, setItems] = useState<IContextMenuItem[]>([])
 
@@ -39,7 +40,7 @@ const ContextMenuModal = (props: ContextMenuModalProps) => {
         .catch(console.error)
     }
 
-    /** on new file/folder delete */
+    /** on file/folder delete */
     if (name === IContextMenuItemEnum.delete) {
       await invoke('delete_path', {
         path: targetPath,
@@ -49,6 +50,26 @@ const ContextMenuModal = (props: ContextMenuModalProps) => {
           setShow(DisplayEnum.none)
         })
         .catch(console.error)
+    }
+
+    /**  on file/folder copy */
+    if (name === IContextMenuItemEnum.copy) {
+      setSorucePathToCopy(targetPath)
+      setShow(DisplayEnum.none)
+    }
+
+    /**  on file/folder copy */
+    if (name === IContextMenuItemEnum.paste) {
+      await invoke('copy_to_path', {
+        from: sorucePathToCopy,
+        to: currentPath,
+      })
+        .then(() => {
+          fetch(currentPath, 'get_files_in_path')
+          setShow(DisplayEnum.none)
+        })
+        .catch(console.error)
+      setShow(DisplayEnum.none)
     }
   }
 
@@ -72,9 +93,13 @@ const ContextMenuModal = (props: ContextMenuModalProps) => {
       display={display}
       itemCount={items.length}
     >
-      {items.map(({ name, label, shortcut, disabled }: IContextMenuItem, index: number) => {
+      {items.map(({ name, label, shortcut }: IContextMenuItem, index: number) => {
         return (
-          <ContextMenuItem key={index} disabled={disabled} onClick={() => onContextItemClick(name)}>
+          <ContextMenuItem
+            key={index}
+            disabled={isOptionDisabled(name, sorucePathToCopy)}
+            onClick={() => onContextItemClick(name)}
+          >
             <Item>
               {getIcons(name as keyof typeof icons)}
               {label}

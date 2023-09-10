@@ -4,7 +4,12 @@ import { switchContextMenuItemDisabledStyle } from './utils'
 
 const CONTEXT_MENU_ITEM_HEIGHT = 47
 
-const ContextMenuWrapper = styled.div<Omit<ContextMenuWrapperProps, 'setShow' | 'targetPath'>>`
+const ContextMenuWrapper = styled.div<
+  Omit<
+    ContextMenuWrapperProps,
+    'setShow' | 'targetPath' | 'setSorucePathToCopy' | 'sorucePathToCopy'
+  >
+>`
   ${(props) => css`
     background-color: ${props.theme.grey.grey90};
     border-radius: 14px;
