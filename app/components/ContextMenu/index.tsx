@@ -17,6 +17,7 @@ import {
 } from './contextmenu.types'
 import { contextMenuItems } from './contextMenuItems'
 import { isOptionDisabled } from './utils'
+import { toast } from 'react-hot-toast'
 
 const CONDITIONAL_ITEM = ['delete', 'copy']
 
@@ -60,15 +61,22 @@ const ContextMenuModal = (props: ContextMenuModalProps) => {
 
     /**  on file/folder copy */
     if (name === IContextMenuItemEnum.paste) {
+      const toastId = toast.loading('Copying')
+      setShow(DisplayEnum.none)
+
       await invoke('copy_to_path', {
         from: sorucePathToCopy,
         to: currentPath,
       })
         .then(() => {
           fetch(currentPath, 'get_files_in_path')
-          setShow(DisplayEnum.none)
         })
         .catch(console.error)
+        .finally(() =>
+          toast.success('The file has been successfully copied.', {
+            id: toastId,
+          }),
+        )
       setShow(DisplayEnum.none)
     }
   }
