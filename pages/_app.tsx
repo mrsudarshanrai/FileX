@@ -9,6 +9,7 @@ import { ContextMenuProvider } from '@/app/context/ContextMenu'
 import NavigationContextProvider from '@/app/context/NavigationContext'
 import { colors } from '@/app/theme/colors'
 import { GlobalStyles } from '@/styles/GlobalStyles'
+import { Toaster } from 'react-hot-toast'
 
 const App = ({ Component, pageProps }: AppProps) => {
   return (
@@ -20,6 +21,7 @@ const App = ({ Component, pageProps }: AppProps) => {
       </Head>
       <ThemeProvider theme={colors}>
         <GlobalStyles />
+        <Toaster position='top-right' />
         <DirContextProvider>
           <NavigationContextProvider>
             <Header />
