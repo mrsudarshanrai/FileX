@@ -68,12 +68,13 @@ pub fn delete_path(path: String) -> String {
  */
 
 #[tauri::command]
-pub fn copy_to_path(from: String, to: String) -> String {
+pub async fn copy_to_path(from: String, to: String) -> String {
     if utils::has_valid_metadata(&from) && utils::has_valid_metadata(&to) {
         if utils::is_file(&from) && !utils::is_file(&to) {
             let new_destination_path =
                 format!("{}/{}", &to, utils::get_full_filename_from_path(&from));
-            match helper::copy_file(&from, &new_destination_path) {
+            let result = helper::copy_file(&from, &new_destination_path).await;
+            match result {
                 Ok(_) => String::from("File copied"),
                 Err(_) => String::from("Failed to copy"),
             }

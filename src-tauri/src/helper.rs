@@ -57,7 +57,7 @@ pub fn delete_folder(path: &String) -> std::io::Result<()> {
     Ok(())
 }
 /** copy file */
-pub fn copy_file(from: &String, to: &String) -> std::io::Result<()> {
+pub async fn copy_file(from: &String, to: &String) -> std::io::Result<()> {
     fs::copy(from, to)?;
     Ok(())
 }
