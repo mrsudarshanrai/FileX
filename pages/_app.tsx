@@ -1,14 +1,14 @@
 import Sidebar from '@/app/screens/Sidebar'
 import type { AppProps } from 'next/app'
 import Head from 'next/head'
-import styled, { ThemeProvider } from 'styled-components'
+import { ThemeProvider } from 'styled-components'
 import AppContainer from '@/app/screens/AppContainer'
 import Header from '@/app/screens/Header'
 import { DirContextProvider } from '@/app/context/DirContext'
 import { ContextMenuProvider } from '@/app/context/ContextMenu'
 import NavigationContextProvider from '@/app/context/NavigationContext'
 import { colors } from '@/app/theme/colors'
-import { GlobalStyles } from '@/styles/GlobalStyles'
+import { GlobalStyles, MainContainer } from '@/styles/GlobalStyles'
 import { Toaster } from 'react-hot-toast'
 
 const App = ({ Component, pageProps }: AppProps) => {
@@ -39,14 +39,5 @@ const App = ({ Component, pageProps }: AppProps) => {
     </>
   )
 }
-
-const MainContainer = styled.div`
-  border: 0;
-  height: 100vh;
-  overflow-y: scroll;
-  color: white;
-  padding: 15px 0;
-  width: 100%;
-`
 
 export default App

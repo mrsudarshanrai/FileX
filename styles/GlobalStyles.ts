@@ -1,9 +1,18 @@
 import { Color } from '@/app/theme/colorsType'
-import { createGlobalStyle, css } from 'styled-components'
+import styled, { createGlobalStyle, css } from 'styled-components'
 
 export type Theme = {
   theme: Color
 }
+const MainContainer = styled.div`
+  border: 0;
+  height: 100vh;
+  overflow-y: scroll;
+  color: white;
+  padding: 15px 0;
+  width: 100%;
+`
+
 const GlobalStyles = createGlobalStyle<Theme>`
 ${({ theme }) =>
   css`
@@ -21,4 +30,5 @@ ${({ theme }) =>
       overflow: hidden;
   `}}
 `
-export { GlobalStyles }
+
+export { GlobalStyles, MainContainer }
