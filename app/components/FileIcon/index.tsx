@@ -1,16 +1,9 @@
 import { getFileIcon } from '@/app/utils'
 import Image from 'next/image'
-import styled, { css } from 'styled-components'
+import { FileIconType } from './fileIcon.type'
+import { FileIconWrapper } from './fileIconStyled'
 
-type FileIconWrapper = {
-  disableHover?: boolean
-}
-interface Props extends FileIconWrapper {
-  isDir: boolean
-  extension: string
-}
-
-const FileIcon = (props: Props) => {
+const FileIcon = (props: FileIconType.Props) => {
   const { isDir, extension, disableHover = false } = props
   return (
     <FileIconWrapper disableHover={disableHover}>
@@ -22,18 +15,5 @@ const FileIcon = (props: Props) => {
     </FileIconWrapper>
   )
 }
-
-const FileIconWrapper = styled.div<FileIconWrapper>`
-  filter: brightness(100%);
-
-  ${(props) =>
-    props &&
-    !props.disableHover &&
-    css`
-      &:hover {
-        filter: brightness(90%);
-      }
-    `}
-`
 
 export default FileIcon
