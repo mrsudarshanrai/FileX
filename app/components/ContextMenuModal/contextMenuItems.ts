@@ -1,4 +1,4 @@
-import { IContextMenuItem, IContextMenuItemEnum } from './contextmenu.types'
+import { IContextMenuItem, IContextMenuItemEnum } from './contextmenu.type'
 
 const contextMenuItems: IContextMenuItem[] = [
   {

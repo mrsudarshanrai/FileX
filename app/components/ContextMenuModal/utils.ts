@@ -1,6 +1,6 @@
 import { css } from 'styled-components'
 import { Item } from './contextMenuStyled'
-import { ContextMenuItemUnion, IContextMenuItemEnum } from './contextmenu.types'
+import { ContextMenuItemUnion, IContextMenuItemEnum } from './contextmenu.type'
 import { Color } from '@/app/theme/colorsType'
 
 const isOptionDisabled = (name: ContextMenuItemUnion, targetPath: string | undefined) => {

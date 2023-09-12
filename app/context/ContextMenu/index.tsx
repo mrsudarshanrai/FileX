@@ -1,14 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import ContextMenuModal from '@/app/components/ContextMenuModal'
-import { Display, DisplayEnum } from '@/app/components/ContextMenuModal/contextmenu.types'
+import { Display, DisplayEnum } from '@/app/components/ContextMenuModal/contextmenu.type'
+import { ContextMenuType } from './ContextMenu.type'
 
-type ContextMenuT = {
-  onContextMenu: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
-  show: Display
-  setShow: (show: Display) => void
-  setTargetPath: (path?: string) => void
-}
-const ContextMenu = React.createContext<ContextMenuT>({
+const ContextMenu = React.createContext<ContextMenuType>({
   onContextMenu() {},
   show: DisplayEnum.none,
   setShow() {},
