@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import ContextMenuComponent from '@/app/components/ContextMenu'
-import { Display, DisplayEnum } from '@/app/components/ContextMenu/contextmenu.types'
+import ContextMenuModal from '@/app/components/ContextMenuModal'
+import { Display, DisplayEnum } from '@/app/components/ContextMenuModal/contextmenu.types'
 
 type ContextMenuT = {
   onContextMenu: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
@@ -54,7 +54,7 @@ export function ContextMenuProvider({ children }: { children: React.ReactNode })
   }
   return (
     <ContextMenu.Provider value={contextValue}>
-      <ContextMenuComponent
+      <ContextMenuModal
         targetPath={targetPath}
         setShow={setShow}
         top={top}
