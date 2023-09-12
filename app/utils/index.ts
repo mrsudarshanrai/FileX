@@ -21,4 +21,9 @@ const getLastItemFromArray = (array: any[]) => array[array.length - 1]
 // true...false
 const sortArrayByBoolean = (x: IDir.IDirs, y: IDir.IDirs) => +y.is_dir - +x.is_dir
 
-export { getFileIcon, getLastItemFromArray, sortArrayByBoolean }
+const splitByslash = (path: string) => {
+  if (typeof path === 'string') return path.split('/')
+  else throw `Invalid path provided splitPath(path:string), found ${typeof path}`
+}
+
+export { getFileIcon, getLastItemFromArray, sortArrayByBoolean, splitByslash }

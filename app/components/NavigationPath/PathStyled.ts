@@ -1,11 +1,9 @@
 import styled from 'styled-components'
 
 const PathContainer = styled.div`
-  padding: 15px;
   display: flex;
   align-items: center;
   column-gap: 0.3em;
-  height: 50px;
 `
 
 type IPaths = {

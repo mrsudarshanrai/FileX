@@ -3,7 +3,7 @@ import type { AppProps } from 'next/app'
 import Head from 'next/head'
 import { ThemeProvider } from 'styled-components'
 import AppContainer from '@/app/screens/AppContainer'
-import Header from '@/app/screens/Header'
+import Topbar from '@/app/screens/Topbar'
 import { DirContextProvider } from '@/app/context/DirContext'
 import { ContextMenuProvider } from '@/app/context/ContextMenu'
 import NavigationContextProvider from '@/app/context/NavigationContext'
@@ -27,7 +27,7 @@ const App = ({ Component, pageProps }: AppProps) => {
         <Toaster position='top-right' />
         <DirContextProvider>
           <NavigationContextProvider>
-            <Header />
+            <Topbar />
             <AppContainer>
               <Sidebar />
               <ContextMenuProvider>

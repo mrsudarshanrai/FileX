@@ -1,8 +1,3 @@
-const BACK = 'BACK'
-const FORWARD = 'FORWARD'
-
-export type IRouteDir = typeof BACK | typeof FORWARD
-
 const useDirRoute = () => {
   const changeDir = (path: string, dir: string) => {
     const pathArr = path.split('/')
