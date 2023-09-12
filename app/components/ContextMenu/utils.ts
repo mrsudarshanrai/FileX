@@ -1,5 +1,5 @@
 import { css } from 'styled-components'
-import { Item } from './ContextMenuStyled'
+import { Item } from './contextMenuStyled'
 import { ContextMenuItemUnion, IContextMenuItemEnum } from './contextmenu.types'
 import { Color } from '@/app/theme/colorsType'
 

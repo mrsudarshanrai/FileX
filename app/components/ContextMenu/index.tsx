@@ -4,7 +4,7 @@ import {
   ContextMenuWrapper,
   ContentMenuItemShortcut,
   Item,
-} from './ContextMenuStyled'
+} from './contextMenuStyled'
 import { useContext, useEffect, useState } from 'react'
 import { NavigationContext } from '@/app/context/NavigationContext'
 import { invoke } from '@tauri-apps/api/tauri'
