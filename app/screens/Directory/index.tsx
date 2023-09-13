@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react'
 import DirContext from '@/app/context/DirectoryContext'
 import { IDir } from '@/app/lib/types/dir'
-import { DirContainer, File, FileGrid, FileName, FileNameWrapper } from './DirStyled'
+import { DirContainer, File, FileGrid, FileName, FileNameWrapper } from './DirectoryStyled'
 import FileIcon from '@/app/components/FileIcon'
 import { NavigationContext } from '@/app/context/NavigationContext'
 import ContextMenu from '@/app/context/ContextMenu'
@@ -9,7 +9,7 @@ import { Display, DisplayEnum } from '@/app/components/ContextMenuModal/contextm
 
 const isContextMenuOpen = (value: Display) => value === DisplayEnum.none
 
-const Home = () => {
+const Directory = () => {
   const { dirs, isLoading } = useContext(DirContext)
   const { navigate } = useContext(NavigationContext)
   const { show, setShow, setTargetPath } = useContext(ContextMenu)
@@ -60,4 +60,4 @@ const Home = () => {
   )
 }
 
-export default Home
+export default Directory
