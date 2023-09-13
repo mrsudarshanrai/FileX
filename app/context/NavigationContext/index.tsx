@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { getLastItemFromArray } from '@/app/utils'
-import DirContext from '../DirContext'
+import DirContext from '../DirectoryContext'
 
 type Props = {
   children: React.ReactNode

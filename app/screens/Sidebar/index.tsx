@@ -1,7 +1,7 @@
 import { getIcons, icons } from '@/app/components/Icon/icon'
 import { SidebarContainer, SidebarItem, SidebarItems, SidebarTitle } from './SidebarStyled'
 import { useContext, useEffect, useState } from 'react'
-import DirContext from '@/app/context/DirContext'
+import DirContext from '@/app/context/DirectoryContext'
 import { getSidebarDirs } from './helper'
 import { IDir } from '@/app/lib/types/dir'
 import { NavigationContext } from '@/app/context/NavigationContext'

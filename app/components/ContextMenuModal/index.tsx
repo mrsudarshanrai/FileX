@@ -8,7 +8,7 @@ import {
 import { useContext, useEffect, useState } from 'react'
 import { NavigationContext } from '@/app/context/NavigationContext'
 import { invoke } from '@tauri-apps/api/tauri'
-import DirContext from '@/app/context/DirContext'
+import DirContext from '@/app/context/DirectoryContext'
 import {
   ContextMenuModalProps,
   DisplayEnum,

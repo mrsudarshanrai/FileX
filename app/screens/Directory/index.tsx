@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react'
-import DirContext from '@/app/context/DirContext'
+import DirContext from '@/app/context/DirectoryContext'
 import { IDir } from '@/app/lib/types/dir'
 import { DirContainer, File, FileGrid, FileName, FileNameWrapper } from './DirStyled'
 import FileIcon from '@/app/components/FileIcon'
