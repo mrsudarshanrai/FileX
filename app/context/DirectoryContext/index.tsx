@@ -1,13 +1,6 @@
 import { useDir } from '@/app/hooks/useDir'
-import { IDir } from '@/app/lib/types/dir'
 import React, { createContext, ReactNode } from 'react'
-
-type DirContextType = {
-  dirs: IDir.IDirs[]
-  isLoading: boolean
-  fetch: (path: string, funcName: string) => Promise<unknown>
-  homePath: string
-}
+import { DirContextType } from './DirectoryContext.type'
 
 const DirContext = createContext<DirContextType>({
   dirs: [],
