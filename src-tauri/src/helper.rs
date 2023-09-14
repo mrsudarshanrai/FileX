@@ -1,6 +1,10 @@
 use crate::utils;
 use serde::Serialize;
-use std::{env, fs, path::PathBuf};
+use std::{
+    env,
+    fs::{self, Metadata},
+    path::PathBuf,
+};
 
 #[tauri::command]
 pub fn get_home() -> String {
@@ -60,6 +64,11 @@ pub fn delete_folder(path: &String) -> std::io::Result<()> {
 pub async fn copy_file(from: &String, to: &String) -> std::io::Result<()> {
     fs::copy(from, to)?;
     Ok(())
+}
+
+/** Ensure this function is called after validating the metadata using 'metadata.is_ok()' */
+pub fn get_metadata(path: &String) -> Metadata {
+    fs::metadata(&path).unwrap()
 }
 
 // pub fn get_file_type(file_path: &str) {
