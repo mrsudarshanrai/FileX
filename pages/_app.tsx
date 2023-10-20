@@ -10,6 +10,7 @@ import NavigationContextProvider from '@/app/context/NavigationContext'
 import { colors } from '@/app/theme/colors'
 import { GlobalStyles, MainContainer } from '@/styles/GlobalStyles'
 import { Toaster } from 'react-hot-toast'
+import Modal from '@/app/components/Modal/Modal'
 
 const App = ({ Component, pageProps }: AppProps) => {
   return (
@@ -30,6 +31,7 @@ const App = ({ Component, pageProps }: AppProps) => {
             <Topbar />
             <AppContainer>
               <Sidebar />
+              <Modal />
               <ContextMenuProvider>
                 <MainContainer>
                   <Component {...pageProps} />
