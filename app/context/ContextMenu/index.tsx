@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from 'react'
+import { createContext, useEffect, useState } from 'react'
 import ContextMenuModal from '@/app/components/ContextMenuModal'
 import { Display, DisplayEnum } from '@/app/components/ContextMenuModal/contextmenu.type'
 import { ContextMenuType } from './ContextMenu.type'
 
-const ContextMenu = React.createContext<ContextMenuType>({
+const ContextMenu = createContext<ContextMenuType>({
   onContextMenu() {},
   show: DisplayEnum.none,
   setShow() {},
   setTargetPath() {},
 })
 
-export function ContextMenuProvider({ children }: { children: React.ReactNode }) {
+const ContextMenuProvider = ({ children }: { children: React.ReactNode }) => {
   const [top, setTop] = useState(0)
   const [left, setLeft] = useState(0)
   const [show, setShow] = useState<Display>(DisplayEnum.none)
@@ -65,4 +65,5 @@ export function ContextMenuProvider({ children }: { children: React.ReactNode })
   )
 }
 
+export { ContextMenuProvider }
 export default ContextMenu
