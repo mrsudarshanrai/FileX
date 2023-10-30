@@ -6,15 +6,9 @@ const useDraggable = <T extends HTMLElement>(ref: RefObject<T>) => {
 
     if (element) {
       let isDragging = false
-      let offsetX = 0
-      let offsetY = 0
 
       const handleMouseDown = (e: MouseEvent) => {
         isDragging = true
-        offsetX = e.clientX - element.getBoundingClientRect().left
-        offsetY = e.clientY - element.getBoundingClientRect().top
-        element.style.zIndex = '999'
-        element.style.position = 'absolute'
         element.style.cursor = 'move'
 
         document.addEventListener('mousemove', handleMouseMove)
@@ -23,16 +17,9 @@ const useDraggable = <T extends HTMLElement>(ref: RefObject<T>) => {
 
       const handleMouseMove = (e: MouseEvent) => {
         if (isDragging) {
-          const maxX = window.innerWidth - element.offsetWidth
-          const maxY = window.innerHeight - element.offsetHeight
-          let newX = e.clientX - offsetX
-          let newY = e.clientY - offsetY
-
-          newX = Math.min(Math.max(newX, 0), maxX)
-          newY = Math.min(Math.max(newY, 0), maxY)
-
-          element.style.left = newX + 'px'
-          element.style.top = newY + 'px'
+          element.style.left = e.clientX + 'px'
+          element.style.top = e.clientY + 'px'
+          element.style.transform = `translate(-${e.clientX}, -${e.clientY})`
         }
       }
 

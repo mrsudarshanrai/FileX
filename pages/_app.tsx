@@ -10,7 +10,7 @@ import NavigationContextProvider from '@/app/context/NavigationContext'
 import { colors } from '@/app/theme/colors'
 import { GlobalStyles, MainContainer } from '@/styles/GlobalStyles'
 import { Toaster } from 'react-hot-toast'
-import Modal from '@/app/components/Modal/Modal'
+import { ModalContextProvider } from '@/app/context/ModalContext'
 
 const App = ({ Component, pageProps }: AppProps) => {
   return (
@@ -28,16 +28,17 @@ const App = ({ Component, pageProps }: AppProps) => {
         <Toaster position='top-right' />
         <DirContextProvider>
           <NavigationContextProvider>
-            <Topbar />
-            <AppContainer>
-              <Sidebar />
-              <Modal />
-              <ContextMenuProvider>
-                <MainContainer>
-                  <Component {...pageProps} />
-                </MainContainer>
-              </ContextMenuProvider>
-            </AppContainer>
+            <ModalContextProvider>
+              <Topbar />
+              <AppContainer>
+                <Sidebar />
+                <ContextMenuProvider>
+                  <MainContainer>
+                    <Component {...pageProps} />
+                  </MainContainer>
+                </ContextMenuProvider>
+              </AppContainer>
+            </ModalContextProvider>
           </NavigationContextProvider>
         </DirContextProvider>
       </ThemeProvider>

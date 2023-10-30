@@ -1,15 +1,16 @@
-import { useEffect, useRef } from 'react'
-import { ModalContent, ModalWrapper } from './ModalStyled'
+import { useRef } from 'react'
+import { ModalContainer, ModalContent, ModalWrapper } from './ModalStyled'
 import { useDraggable } from '@/app/hooks/useDraggable'
 
 const Modal = () => {
   const modalContentRef = useRef<HTMLDivElement>(null)
   const draggable = useDraggable(modalContentRef)
 
-  useEffect(() => {}, [])
   return (
     <ModalWrapper>
-      <ModalContent ref={modalContentRef}></ModalContent>
+      <ModalContainer>
+        <ModalContent ref={modalContentRef}></ModalContent>
+      </ModalContainer>
     </ModalWrapper>
   )
 }

@@ -18,12 +18,14 @@ import {
 import { contextMenuItems } from './contextMenuItems'
 import { isOptionDisabled } from './utils'
 import { toast } from 'react-hot-toast'
+import ModalContext from '@/app/context/ModalContext'
 
 const CONDITIONAL_ITEM = ['delete', 'copy']
 
 const ContextMenuModal = (props: ContextMenuModalProps) => {
   const { currentPath } = useContext(NavigationContext)
   const { fetch } = useContext(DirContext)
+  const { show } = useContext(ModalContext)
   const { top, left, display, setShow, targetPath, setSorucePathToCopy, sorucePathToCopy } = props
 
   const [items, setItems] = useState<IContextMenuItem[]>([])
@@ -77,6 +79,15 @@ const ContextMenuModal = (props: ContextMenuModalProps) => {
             id: toastId,
           }),
         )
+      setShow(DisplayEnum.none)
+    }
+
+    if (name === IContextMenuItemEnum.properties) {
+      show({
+        options: {
+          open: true,
+        },
+      })
       setShow(DisplayEnum.none)
     }
   }

@@ -1,6 +1,12 @@
 import styled from 'styled-components'
 
 const ModalWrapper = styled.div`
+  position: fixed;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+`
+const ModalContainer = styled.div`
   position: relative;
   z-index: 2;
   width: 100%;
@@ -25,4 +31,4 @@ const ModalContent = styled.div`
   background-color: ${({ theme }) => theme.grey.grey100};
 `
 
-export { ModalWrapper, ModalContent }
+export { ModalWrapper, ModalContent, ModalContainer }
