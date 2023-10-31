@@ -7,6 +7,7 @@ const colors: Color = {
     grey50: '#8d8f9257',
     grey30: '#4a4a4a57',
     grey20: '#8F8F8F',
+    grey10: '#ccc',
   },
 }
 
