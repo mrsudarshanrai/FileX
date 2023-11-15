@@ -16,11 +16,13 @@ const MainContainer = styled.div`
 const GlobalStyles = createGlobalStyle<Theme>`
 ${({ theme }) =>
   css`
+  
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
       user-select: none;
+      font-family: 'Poppins', sans-serif;
     }
 
     html {
@@ -28,6 +30,7 @@ ${({ theme }) =>
       color: #bbb;
       height: 100vh;
       overflow: hidden;
+      font-family: 'Poppins', sans-serif;
   `}}
 `
 

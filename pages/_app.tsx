@@ -11,7 +11,7 @@ import { colors } from '@/app/theme/colors'
 import { GlobalStyles, MainContainer } from '@/styles/GlobalStyles'
 import { Toaster } from 'react-hot-toast'
 import { ModalContextProvider } from '@/app/context/ModalContext'
-
+import '../styles/index.css'
 const App = ({ Component, pageProps }: AppProps) => {
   return (
     <>
