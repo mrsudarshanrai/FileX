@@ -12,13 +12,19 @@ import {
 import { useDraggable } from '@/app/hooks/useDraggable'
 import { getIcons } from '../Icon/icon'
 import ModalContext from '@/app/context/ModalContext'
+import { isString } from '@/app/utils'
 
 const Modal_HEADER_ID = 'modal_header'
+
+const renderContent = (content: React.ReactNode | string) => {
+  if (isString(content)) return <p>{content}</p>
+  return content
+}
 
 const Modal = () => {
   const modalContentRef = useRef<HTMLDivElement>(null)
   const modalHeaderRef = useRef<HTMLDivElement>(null)
-  const { show } = useContext(ModalContext)
+  const { show, modalFooter, modalHeader, modalBody } = useContext(ModalContext)
   const _ = useDraggable(modalContentRef, modalHeaderRef, Modal_HEADER_ID)
 
   return (
@@ -26,16 +32,12 @@ const Modal = () => {
       <ModalContainer>
         <ModalContent ref={modalContentRef}>
           <ModalHeader id={Modal_HEADER_ID} ref={modalHeaderRef}>
-            <ModalHeaderLeftContainer>
-              <p>Lorem</p>
-            </ModalHeaderLeftContainer>
+            <ModalHeaderLeftContainer>{renderContent(modalHeader)}</ModalHeaderLeftContainer>
             <ModalHeaderRightContainer>
               <div
                 onClick={() =>
                   show({
-                    options: {
-                      open: false,
-                    },
+                    open: false,
                   })
                 }
               >
@@ -43,12 +45,8 @@ const Modal = () => {
               </div>
             </ModalHeaderRightContainer>
           </ModalHeader>
-          <ModalBody>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Ullam illo saepe eligendi
-            debitis neque voluptatibus sint autem laborum nisi ea hic, harum omnis? Eaque natus
-            rerum expedita quibusdam impedit! Suscipit.
-          </ModalBody>
-          <ModalFooter></ModalFooter>
+          <ModalBody>{renderContent(modalBody)}</ModalBody>
+          <ModalFooter>{renderContent(modalFooter)}</ModalFooter>
         </ModalContent>
       </ModalContainer>
     </ModalWrapper>

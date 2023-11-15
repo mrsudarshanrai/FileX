@@ -26,4 +26,6 @@ const splitByslash = (path: string) => {
   else throw `Invalid path provided splitPath(path:string), found ${typeof path}`
 }
 
-export { getFileIcon, getLastItemFromArray, sortArrayByBoolean, splitByslash }
+const isString = (value: unknown) => typeof value === 'string'
+
+export { getFileIcon, getLastItemFromArray, sortArrayByBoolean, splitByslash, isString }
