@@ -2,17 +2,23 @@ import { createContext, useState } from 'react'
 import { ModalContextProviderPropsType, ModalContextType, ModalOptions } from './ModalContextType'
 
 const ModalContext = createContext<ModalContextType>({
-  options: {
-    open: false,
-  },
+  open: false,
+  modalHeader: 'Title',
+  modalBody: 'Modal Body',
+  modalFooter: <p>footer</p>,
   show(options) {},
 })
 
 const ModalContextProvider = ({ children }: ModalContextProviderPropsType) => {
   const [modalOptions, setModalOptions] = useState<ModalOptions>({
-    options: {
-      open: false,
-    },
+    open: false,
+    modalFooter: (
+      <p>
+        <b>
+          <mark>footer</mark>
+        </b>
+      </p>
+    ),
   })
 
   const show = (options: ModalOptions) => {

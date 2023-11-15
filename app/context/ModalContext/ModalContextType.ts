@@ -1,11 +1,14 @@
+import React from 'react'
+
 export type ModalContextType = ModalOptions & {
   show: (options: ModalOptions) => void
 }
 
 export type ModalOptions = {
-  options: {
-    open: boolean
-  }
+  open: boolean
+  modalHeader?: React.ReactNode | string
+  modalBody?: React.ReactNode | string
+  modalFooter?: React.ReactNode
 }
 
 export type ModalContextProviderPropsType = {
