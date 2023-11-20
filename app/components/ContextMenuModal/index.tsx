@@ -81,15 +81,6 @@ const ContextMenuModal = (props: ContextMenuModalProps) => {
         )
       setShow(DisplayEnum.none)
     }
-
-    if (name === IContextMenuItemEnum.properties) {
-      show({
-        options: {
-          open: true,
-        },
-      })
-      setShow(DisplayEnum.none)
-    }
   }
 
   useEffect(() => {
