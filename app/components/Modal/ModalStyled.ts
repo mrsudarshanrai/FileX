@@ -1,3 +1,4 @@
+import { colors } from '@/app/theme/colors'
 import styled from 'styled-components'
 
 const ModalWrapper = styled.div`
@@ -59,13 +60,36 @@ const ModalHeaderRightContainer = styled.div`
 `
 const ModalHeaderLeftContainer = styled.div``
 
+const ModalBodySection = styled.section`
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+`
+
 const ModalBody = styled.div`
   padding: 10px 15px;
+  min-height: 100px;
 `
 
 const ModalFooter = styled.div`
-  padding: 10px 15px;
-  height: 200px;
+  padding: 10px 15px 5px 15px;
+  width: 100%;
+`
+
+const ModalFooterButtonContainer = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  column-gap: 10px;
+`
+
+const ModalBodyMessage = styled.div`
+  font-size: 16px;
+  font-weight: 500;
+  margin: 10px 0;
+`
+
+const Mark = styled.mark`
+  background-color: transparent;
+  color: ${colors.red.red200};
 `
 
 export {
@@ -77,4 +101,8 @@ export {
   ModalHeaderLeftContainer,
   ModalBody,
   ModalFooter,
+  ModalFooterButtonContainer,
+  ModalBodySection,
+  ModalBodyMessage,
+  Mark,
 }
