@@ -16,7 +16,7 @@ const getFileIcon = (extension: string) => {
   } else return '/assets/file.svg'
 }
 
-const getLastItemFromArray = (array: any[]) => array[array.length - 1]
+const getLastItemFromArray = <T>(array: Array<T>) => array[array.length - 1]
 
 // true...false
 const sortArrayByBoolean = (x: IDir.IDirs, y: IDir.IDirs) => +y.is_dir - +x.is_dir
@@ -28,4 +28,16 @@ const splitByslash = (path: string) => {
 
 const isString = (value: unknown) => typeof value === 'string'
 
-export { getFileIcon, getLastItemFromArray, sortArrayByBoolean, splitByslash, isString }
+const getFileNameFromPath = (path: string) => {
+  if (path && path.split('/').length > 0) {
+    return getLastItemFromArray<string>(path.split('/'))
+  }
+}
+export {
+  getFileIcon,
+  getLastItemFromArray,
+  sortArrayByBoolean,
+  splitByslash,
+  isString,
+  getFileNameFromPath,
+}

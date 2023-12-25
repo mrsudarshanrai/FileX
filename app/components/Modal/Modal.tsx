@@ -1,6 +1,7 @@
 import { useContext, useRef } from 'react'
 import {
   ModalBody,
+  ModalBodySection,
   ModalContainer,
   ModalContent,
   ModalFooter,
@@ -45,8 +46,10 @@ const Modal = () => {
               </div>
             </ModalHeaderRightContainer>
           </ModalHeader>
-          <ModalBody>{renderContent(modalBody)}</ModalBody>
-          <ModalFooter>{renderContent(modalFooter)}</ModalFooter>
+          <ModalBodySection>
+            <ModalBody>{renderContent(modalBody)}</ModalBody>
+            <ModalFooter>{renderContent(modalFooter)}</ModalFooter>
+          </ModalBodySection>
         </ModalContent>
       </ModalContainer>
     </ModalWrapper>
