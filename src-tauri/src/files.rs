@@ -71,18 +71,7 @@ pub fn delete_path(path: String) -> String {
 pub async fn copy_to_path(from: String, to: String) -> String {
     if utils::has_valid_metadata(&from) && utils::has_valid_metadata(&to) {
         if utils::is_file(&from) && !utils::is_file(&to) {
-            let full_filename = utils::get_full_filename_from_path(&from);
-            let mut attempt = 1;
-            let filename = full_filename.rsplitn(2, ".").nth(1).unwrap();
-            let file_extension = full_filename.rsplitn(2, ".").next().unwrap();
-            let mut new_destination_path = format!("{}/{}", &to, full_filename);
-
-            while fs::metadata(&new_destination_path).is_ok() {
-                attempt += 1;
-                new_destination_path = format!("{}/{}{}.{}", to, filename, attempt, file_extension);
-            }
-
-            let result = helper::copy_file(&from, &new_destination_path).await;
+            let result = helper::copy_file(&from, &to).await;
             match result {
                 Ok(_) => String::from("File copied"),
                 Err(_) => String::from("Failed to copy"),
