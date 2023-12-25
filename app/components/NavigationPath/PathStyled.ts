@@ -4,6 +4,9 @@ const PathContainer = styled.div`
   display: flex;
   align-items: center;
   column-gap: 0.3em;
+  background-color: #13141b;
+  border-radius: 8px;
+  padding: 3px 10px;
 `
 
 type IPaths = {
@@ -14,6 +17,7 @@ const Paths = styled.div<IPaths>`
   display: flex;
   align-items: center;
   flex-wrap: nowrap;
+  min-width: fit-content;
   span {
     cursor: pointer;
     color: ${(props) => (props.isActive && props.isActive ? '#fff' : '#aeaeae')};
