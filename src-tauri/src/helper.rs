@@ -60,27 +60,31 @@ pub fn delete_folder(path: &String) -> std::io::Result<()> {
     fs::remove_dir_all(path)?;
     Ok(())
 }
+
 /** copy file */
 pub async fn copy_file(from: &String, to: &String) -> std::io::Result<()> {
-    let full_filename = utils::get_full_filename_from_path(&from);
+    let full_filename = utils::get_full_filename_from_path(from);
     let mut attempt = 1;
-    let filename = full_filename
-        .rsplitn(2, ".")
-        .nth(1)
-        .unwrap_or(&full_filename);
-    let file_extension = full_filename.rsplitn(2, ".").next().unwrap();
-    let mut new_destination_path = format!("{}/{}", &to, full_filename);
+
+    let (filename, file_extension) = get_filename_and_extension(&full_filename);
+
+    let mut new_destination_path = format!("{}/{}", to, full_filename);
+
     while fs::metadata(&new_destination_path).is_ok() {
         attempt += 1;
-        if full_filename == file_extension {
-            new_destination_path = format!("{}/{}-{}(Copy)", to, filename, attempt);
-        } else {
-            new_destination_path =
-                format!("{}/{}-{}(Copy).{}", to, filename, attempt, file_extension);
-        }
+        new_destination_path = format!("{}/{}-{}(Copy){}", to, filename, attempt, file_extension);
     }
-    fs::copy(from, new_destination_path)?;
+
+    fs::copy(from, &new_destination_path)?;
     Ok(())
+}
+
+fn get_filename_and_extension(full_filename: &str) -> (&str, &str) {
+    let parts: Vec<&str> = full_filename.rsplitn(2, ".").collect();
+    match parts.len() {
+        2 => (parts[1], parts[0]), // filename and extension
+        _ => (full_filename, ""),  // no extension found
+    }
 }
 
 /** Ensure this function is called after validating the metadata using 'metadata.is_ok()' */
