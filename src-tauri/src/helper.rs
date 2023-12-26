@@ -64,12 +64,20 @@ pub fn delete_folder(path: &String) -> std::io::Result<()> {
 pub async fn copy_file(from: &String, to: &String) -> std::io::Result<()> {
     let full_filename = utils::get_full_filename_from_path(&from);
     let mut attempt = 1;
-    let filename = full_filename.rsplitn(2, ".").nth(1).unwrap();
+    let filename = full_filename
+        .rsplitn(2, ".")
+        .nth(1)
+        .unwrap_or(&full_filename);
     let file_extension = full_filename.rsplitn(2, ".").next().unwrap();
     let mut new_destination_path = format!("{}/{}", &to, full_filename);
     while fs::metadata(&new_destination_path).is_ok() {
         attempt += 1;
-        new_destination_path = format!("{}/{}{}.{}", to, filename, attempt, file_extension);
+        if full_filename == file_extension {
+            new_destination_path = format!("{}/{}-{}(Copy)", to, filename, attempt);
+        } else {
+            new_destination_path =
+                format!("{}/{}-{}(Copy).{}", to, filename, attempt, file_extension);
+        }
     }
     fs::copy(from, new_destination_path)?;
     Ok(())
