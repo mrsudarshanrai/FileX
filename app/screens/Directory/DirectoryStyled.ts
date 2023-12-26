@@ -18,8 +18,6 @@ const DirContainer = styled.div`
 
 const FileGrid = styled.div`
   display: flex;
-  justify-content: center;
-  align-items: center;
   flex-direction: column;
   cursor: pointer;
   width: 150px;
