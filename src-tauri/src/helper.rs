@@ -1,4 +1,5 @@
 use crate::utils;
+use async_recursion::async_recursion;
 use serde::Serialize;
 use std::{
     env,
@@ -62,6 +63,7 @@ pub fn delete_folder(path: &String) -> std::io::Result<()> {
 }
 
 /** copy file */
+#[async_recursion]
 pub async fn copy_file(from: &String, to: &String) -> std::io::Result<()> {
     let full_filename = utils::get_full_filename_from_path(from);
     let mut attempt = 1;
@@ -76,6 +78,29 @@ pub async fn copy_file(from: &String, to: &String) -> std::io::Result<()> {
     }
 
     fs::copy(from, &new_destination_path)?;
+    Ok(())
+}
+
+/** copy file */
+#[async_recursion]
+pub async fn copy_folder(from: &String, to: &String) -> std::io::Result<()> {
+    fs::create_dir_all(to)?;
+
+    for entry in fs::read_dir(from)? {
+        let entry = entry?;
+        let entry_path = entry.path();
+        let entry_dest_path = format!("{}/{}", to, entry.file_name().to_string_lossy());
+        if entry_path.is_dir() {
+            copy_folder(&entry_path.to_string_lossy().to_string(), &entry_dest_path).await?
+        } else {
+            let file_dest_path = entry_dest_path.rsplitn(2, "/").nth(1).unwrap();
+            copy_file(
+                &entry_path.to_string_lossy().to_string(),
+                &file_dest_path.to_string(),
+            )
+            .await?
+        }
+    }
     Ok(())
 }
 
