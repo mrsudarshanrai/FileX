@@ -77,7 +77,12 @@ pub async fn copy_to_path(from: String, to: String) -> String {
                 Err(_) => String::from("Failed to copy"),
             }
         } else {
-            String::from("Not a valid")
+            let dest_path = format!("{}/{}", to, utils::get_full_filename_from_path(&from));
+            let result = helper::copy_folder(&from, &dest_path).await;
+            match result {
+                Ok(_) => String::from("Folder copied"),
+                Err(_) => String::from("Failed to copy Folder"),
+            }
         }
     } else {
         String::from("Not a valid path")

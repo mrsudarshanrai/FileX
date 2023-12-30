@@ -1,4 +1,5 @@
 use crate::utils;
+use async_recursion::async_recursion;
 use serde::Serialize;
 use std::{
     env,
@@ -60,19 +61,55 @@ pub fn delete_folder(path: &String) -> std::io::Result<()> {
     fs::remove_dir_all(path)?;
     Ok(())
 }
+
 /** copy file */
+#[async_recursion]
 pub async fn copy_file(from: &String, to: &String) -> std::io::Result<()> {
-    let full_filename = utils::get_full_filename_from_path(&from);
+    let full_filename = utils::get_full_filename_from_path(from);
     let mut attempt = 1;
-    let filename = full_filename.rsplitn(2, ".").nth(1).unwrap();
-    let file_extension = full_filename.rsplitn(2, ".").next().unwrap();
-    let mut new_destination_path = format!("{}/{}", &to, full_filename);
+
+    let (filename, file_extension) = get_filename_and_extension(&full_filename);
+
+    let mut new_destination_path = format!("{}/{}", to, full_filename);
+
     while fs::metadata(&new_destination_path).is_ok() {
         attempt += 1;
-        new_destination_path = format!("{}/{}{}.{}", to, filename, attempt, file_extension);
+        new_destination_path = format!("{}/{}-{}(Copy){}", to, filename, attempt, file_extension);
     }
-    fs::copy(from, new_destination_path)?;
+
+    fs::copy(from, &new_destination_path)?;
     Ok(())
+}
+
+/** copy file */
+#[async_recursion]
+pub async fn copy_folder(from: &String, to: &String) -> std::io::Result<()> {
+    fs::create_dir_all(to)?;
+
+    for entry in fs::read_dir(from)? {
+        let entry = entry?;
+        let entry_path = entry.path();
+        let entry_dest_path = format!("{}/{}", to, entry.file_name().to_string_lossy());
+        if entry_path.is_dir() {
+            copy_folder(&entry_path.to_string_lossy().to_string(), &entry_dest_path).await?
+        } else {
+            let file_dest_path = entry_dest_path.rsplitn(2, "/").nth(1).unwrap();
+            copy_file(
+                &entry_path.to_string_lossy().to_string(),
+                &file_dest_path.to_string(),
+            )
+            .await?
+        }
+    }
+    Ok(())
+}
+
+fn get_filename_and_extension(full_filename: &str) -> (&str, &str) {
+    let parts: Vec<&str> = full_filename.rsplitn(2, ".").collect();
+    match parts.len() {
+        2 => (parts[1], parts[0]), // filename and extension
+        _ => (full_filename, ""),  // no extension found
+    }
 }
 
 /** Ensure this function is called after validating the metadata using 'metadata.is_ok()' */
