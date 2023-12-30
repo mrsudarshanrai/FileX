@@ -19,17 +19,17 @@
     "styled-components": "^5.3.9"
   },
   "devDependencies": {
-    "eslint": "8.36.0",
-    "@tauri-apps/api": "^1.4.0",
+    "@tauri-apps/api": "^1.5.3",
+    "@tauri-apps/cli": "^1.5.9",
     "@types/node": "18.15.5",
     "@types/react": "18.0.28",
     "@types/react-dom": "18.0.11",
-    "eslint-config-next": "13.2.4",
-    "typescript": "5.0.2",
-    "@tauri-apps/cli": "^1.4.0",
     "@types/styled-components": "^5.1.26",
+    "eslint": "8.36.0",
+    "eslint-config-next": "13.2.4",
     "husky": "^8.0.3",
-    "prettier": "2.8.7"
+    "prettier": "2.8.7",
+    "typescript": "5.0.2"
   },
   "husky": {
     "hooks": {
