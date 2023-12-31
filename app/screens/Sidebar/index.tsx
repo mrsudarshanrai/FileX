@@ -23,7 +23,7 @@ const Sidebar = () => {
     <SidebarContainer>
       <SidebarItems>
         <SidebarTitle>This PC</SidebarTitle>
-        <SidebarItem onClick={() => onDirClick(homePath)} isActive={'/home/popbob' === currentPath}>
+        <SidebarItem onClick={() => onDirClick(homePath)} isActive={homePath === currentPath}>
           {getIcons('home')}
           <span>Home</span>
         </SidebarItem>
