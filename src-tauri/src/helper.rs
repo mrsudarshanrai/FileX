@@ -34,8 +34,7 @@ pub fn get_files(path: String) -> Result<Vec<Files>, String> {
         let path = entry.path();
         let extension = utils::option_to_string(path.extension());
         let is_dir = path.is_dir();
-        let file_info = entry.file_type();
-        let folder_name = utils::option_to_string(path.file_name());
+        let folder_name = utils::option_to_string(path.file_name()).trim().to_string();
         let is_visible = !folder_name.starts_with(".");
 
         let file = Files {
@@ -47,6 +46,12 @@ pub fn get_files(path: String) -> Result<Vec<Files>, String> {
         };
         dirs.push(file);
     }
+    dirs.retain(|a| !a.folder_name.starts_with("."));
+    dirs.sort_by(|a, b| {
+        a.folder_name
+            .to_lowercase()
+            .cmp(&b.folder_name.to_lowercase())
+    });
     Ok(dirs)
 }
 
