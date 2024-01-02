@@ -10,7 +10,7 @@ const TopbarContainer = styled.div<Theme>`
     padding: 15px;
     display: flex;
     align-items: center;
-    column-gap: 0.3em;
+    column-gap: 20px;
   `}
 `
 export { TopbarContainer }

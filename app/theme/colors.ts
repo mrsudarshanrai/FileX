@@ -36,6 +36,9 @@ const colors: Color = {
     green800: '#25483a',
     green900: '#20362d',
   },
+  black: {
+    black700: '#13141b',
+  },
 }
 
 export { colors }

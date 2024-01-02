@@ -34,5 +34,8 @@ type Color = {
     green800: string
     green900: string
   }
+  black: {
+    black700: string
+  }
 }
 export type { Color }

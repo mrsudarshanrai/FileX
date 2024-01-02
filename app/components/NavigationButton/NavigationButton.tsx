@@ -1,5 +1,5 @@
 import { getIcons } from '../Icon/icon'
-import { ArrowIcon } from '../NavigationPath/PathStyled'
+import { ArrowIcon, NavigationButtonWrapper } from './NavigationButtonStyled'
 import { NavigationButtonType } from './NavigationButton.type'
 
 const ARROW_LEFT = 'arrowLeft'
@@ -8,7 +8,7 @@ const ARROW_RIGHT = 'arrowRight'
 const NavigationButton = (props: NavigationButtonType.Props) => {
   const { isBackBtnDisabled, isForwardBtnDisabled, onClick } = props
   return (
-    <>
+    <NavigationButtonWrapper>
       <ArrowIcon
         disabled={isBackBtnDisabled}
         onClick={() => onClick(NavigationButtonType.NavigationTypeEnum.backward)}
@@ -23,7 +23,7 @@ const NavigationButton = (props: NavigationButtonType.Props) => {
       >
         {getIcons(ARROW_RIGHT)}
       </ArrowIcon>
-    </>
+    </NavigationButtonWrapper>
   )
 }
 
