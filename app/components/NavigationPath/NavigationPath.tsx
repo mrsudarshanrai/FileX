@@ -6,7 +6,6 @@ import { icons } from '../Icon/icon'
 const NavigationPath = (props: NavigationPathType.Props) => {
   const { path, onClick } = props
 
-  console.log('path', splitByslash(path))
   return (
     <PathContainer>
       {splitByslash(path)
