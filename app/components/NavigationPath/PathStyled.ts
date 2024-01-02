@@ -18,12 +18,11 @@ const Paths = styled.div<IPaths>`
   align-items: center;
   flex-wrap: nowrap;
   min-width: fit-content;
-  span {
+  p {
     cursor: pointer;
     color: ${(props) => (props.isActive && props.isActive ? '#fff' : '#aeaeae')};
     border-radius: 3px;
     padding: 4px;
-
     &:hover {
       color: #fff;
     }
