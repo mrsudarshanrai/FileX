@@ -6,6 +6,7 @@ import FileIcon from '@/app/components/FileIcon'
 import { NavigationContext } from '@/app/context/NavigationContext'
 import ContextMenu from '@/app/context/ContextMenu'
 import { Display, DisplayEnum } from '@/app/components/ContextMenuModal/contextmenu.type'
+import { invoke } from '@tauri-apps/api/tauri'
 
 const isContextMenuOpen = (value: Display) => value === DisplayEnum.none
 
@@ -15,9 +16,23 @@ const Directory = () => {
   const { show, setShow, setTargetPath } = useContext(ContextMenu)
   const [selectedFile, setSelectedFile] = useState<undefined | string>(undefined)
 
-  const onFileDoubleClick = async (path: string) => {
+  const onFileDoubleClick = async (
+    e: React.MouseEvent<HTMLDivElement>,
+    path: string,
+    is_dir: boolean,
+  ) => {
     setShow(DisplayEnum.none)
-    if (isContextMenuOpen(show)) navigate(path)
+    if (is_dir) {
+      if (isContextMenuOpen(show)) navigate(path)
+    } else {
+      await invoke('open_file', {
+        path,
+      })
+        .then((res) => {
+          console.log('🚀 ~ file: index.tsx:32 ~ .then ~ res:', res)
+        })
+        .catch(console.error)
+    }
   }
 
   const onFileClick = (filePath: string) => {
@@ -46,7 +61,7 @@ const Directory = () => {
                 onContextMenu(event, path)
               }}
               onClick={() => onFileClick(path)}
-              onDoubleClick={() => onFileDoubleClick(path)}
+              onDoubleClick={(e) => onFileDoubleClick(e, path, is_dir)}
             >
               <FileIcon isDir={is_dir} extension={extension} />
               <FileNameWrapper title={folder_name}>

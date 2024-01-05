@@ -5,6 +5,7 @@ use std::{
     env,
     fs::{self, Metadata},
     path::PathBuf,
+    process::Command,
 };
 
 #[tauri::command]
@@ -122,6 +123,20 @@ pub fn get_metadata(path: &String) -> Metadata {
     fs::metadata(&path).unwrap()
 }
 
+#[tauri::command]
+pub fn open_file(path: &str) -> String {
+    let res = Command::new("xdg-open").arg(path).status();
+    match res {
+        Ok(status) => {
+            if status.success() {
+                String::from("success")
+            } else {
+                String::from("error")
+            }
+        }
+        Err(e) => String::from("error"),
+    }
+}
 // pub fn get_file_type(file_path: &str) {
 //     let output = Command::new("xdg-mime")
 //         .arg("query")
