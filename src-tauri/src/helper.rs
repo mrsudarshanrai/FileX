@@ -116,30 +116,3 @@ fn get_filename_and_extension(full_filename: &str) -> (&str, &str) {
         _ => (full_filename, ""),  // no extension found
     }
 }
-
-/** Ensure this function is called after validating the metadata using 'metadata.is_ok()' */
-pub fn get_metadata(path: &String) -> Metadata {
-    fs::metadata(&path).unwrap()
-}
-
-// pub fn get_file_type(file_path: &str) {
-//     let output = Command::new("xdg-mime")
-//         .arg("query")
-//         .arg("filetype")
-//         .arg(file_path)
-//         .output()
-//         .expect("Failed to execute command");
-
-//     if !output.status.success() {
-//         let error_message = String::from_utf8_lossy(&output.stderr);
-//         println!("Error querying default application: {}", error_message);
-//     } else {
-//         let default_app = String::from_utf8_lossy(&output.stdout);
-//         println!("default application: {:?}", default_app);
-//     }
-// }
-
-// #[tauri::command]
-// pub fn openA(path: String) {
-//     open::that(path).unwrap();
-// }
