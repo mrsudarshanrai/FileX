@@ -1,5 +1,5 @@
-use std::fs::{self};
-
+use crate::file_manager::File;
+use crate::folder_manager::Folder;
 use crate::helper;
 use crate::utils;
 
@@ -13,47 +13,24 @@ pub fn get_all_dir() -> Result<Vec<helper::Files>, String> {
     helper::get_files(helper::get_home())
 }
 
-/**
- * Create new folder
- * creates a new folder called Untitled Folder in the path provided,
- * if folder name exisit , it will create new Untitled Folder<with folder count>
- */
+/** Create new folder */
 #[tauri::command]
 pub fn create_folder(folder_path: String) {
-    let mut attempt = 1;
-    let folder_name_suffix = "Untitled Folder";
-    let mut full_folder_path = format!("{}{}", &folder_path, folder_name_suffix);
-
-    // check if folder exist
-    while fs::metadata(&full_folder_path).is_ok() {
-        attempt += 1;
-        full_folder_path = format!("{}{} {}", folder_path, folder_name_suffix, attempt);
-    }
-    // Create the folder
-    if let Err(err) = fs::create_dir_all(&full_folder_path) {
-        println!("Failed to create folder: {}", err);
-    } else {
-        println!("Folder created successfully at: {}", full_folder_path);
-    }
+    Folder::create(folder_path)
 }
 
-/** */
-/**
- * Delete File/Folder
- */
+/** Delete File/Folder */
 #[tauri::command]
 pub fn delete_path(path: String) -> String {
-    let path_metadata = fs::metadata(&path);
-
-    match path_metadata {
+    match File::get_metadata(&path) {
         Ok(metadata) => {
             if metadata.is_file() {
-                match helper::delete_file(&path) {
+                match File::delete(&path) {
                     Ok(_) => String::from("File deleted"),
                     Err(_) => String::from("Failed to delete file"),
                 }
             } else {
-                match helper::delete_folder(&path) {
+                match Folder::delete(&path) {
                     Ok(_) => String::from("Folder deleted"),
                     Err(_) => String::from("Failed to delete folder"),
                 }
@@ -63,22 +40,19 @@ pub fn delete_path(path: String) -> String {
     }
 }
 
-/**
- * Copy File/Folder
- */
-
+/** Copy File/Folder */
 #[tauri::command]
 pub async fn copy_to_path(from: String, to: String) -> String {
-    if utils::has_valid_metadata(&from) && utils::has_valid_metadata(&to) {
-        if utils::is_file(&from) && !utils::is_file(&to) {
-            let result = helper::copy_file(&from, &to).await;
+    if File::has_valid_metadata(&from) && File::has_valid_metadata(&to) {
+        if File::is_file(&from) && !File::is_file(&to) {
+            let result = File::copy(&from, &to).await;
             match result {
                 Ok(_) => String::from("File copied"),
                 Err(_) => String::from("Failed to copy"),
             }
         } else {
             let dest_path = format!("{}/{}", to, utils::get_full_filename_from_path(&from));
-            let result = helper::copy_folder(&from, &dest_path).await;
+            let result = Folder::copy(&from, &dest_path).await;
             match result {
                 Ok(_) => String::from("Folder copied"),
                 Err(_) => String::from("Failed to copy Folder"),

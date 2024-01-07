@@ -1,6 +1,8 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
+mod file_manager;
 mod files;
+mod folder_manager;
 mod helper;
 mod utils;
 
