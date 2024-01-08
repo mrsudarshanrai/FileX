@@ -1,7 +1,7 @@
 import { createContext, useEffect, useState } from 'react'
 import ContextMenuModal from '@/app/components/ContextMenuModal'
-import { Display, DisplayEnum } from '@/app/components/ContextMenuModal/contextmenu.type'
-import { ContextMenuType } from './ContextMenu.type'
+import { Display, DisplayEnum } from '@/app/components/ContextMenuModal/contextmenuModalType'
+import { ContextMenuType } from './ContextMenuType'
 
 const ContextMenu = createContext<ContextMenuType>({
   onContextMenu() {},

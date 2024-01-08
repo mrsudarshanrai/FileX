@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components'
-import { ContextMenuItemElement, ContextMenuWrapperProps } from './contextmenu.type'
+import { ContextMenuItemElement, ContextMenuWrapperProps } from './contextmenuModalType'
 import { switchContextMenuItemDisabledStyle } from './utils'
 
 const CONTEXT_MENU_ITEM_HEIGHT = 47

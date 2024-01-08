@@ -1,6 +1,6 @@
 import { useDir } from '@/app/hooks/useDir'
 import React, { createContext, ReactNode } from 'react'
-import { DirContextType } from './DirectoryContext.type'
+import { DirContextType } from './DirectoryContextType'
 
 const DirContext = createContext<DirContextType>({
   dirs: [],

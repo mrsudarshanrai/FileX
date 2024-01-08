@@ -1,6 +1,6 @@
 import { getIcons } from '../Icon/icon'
 import { ArrowIcon } from '../NavigationPath/PathStyled'
-import { NavigationButtonType } from './NavigationButton.type'
+import { NavigationButtonType } from './NavigationButtonType'
 
 const ARROW_LEFT = 'arrowLeft'
 const ARROW_RIGHT = 'arrowRight'

@@ -1,6 +1,6 @@
 import { invoke } from '@tauri-apps/api/tauri'
 import { Dispatch, SetStateAction } from 'react'
-import { Display, DisplayEnum } from './contextmenu.type'
+import { Display, DisplayEnum } from './contextmenuModalType'
 import { ModalOptions } from '@/app/context/ModalContext/ModalContextType'
 import { Mark, ModalBodyMessage, ModalFooterButtonContainer } from '../Modal/ModalStyled'
 import { getFileNameFromPath } from '@/app/utils'

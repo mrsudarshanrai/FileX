@@ -1,6 +1,6 @@
 import { getFileIcon } from '@/app/utils'
 import Image from 'next/image'
-import { FileIconType } from './fileIcon.type'
+import { FileIconType } from './fileIconType'
 import { FileIconWrapper } from './fileIconStyled'
 
 const FileIcon = (props: FileIconType.Props) => {

@@ -14,7 +14,7 @@ import {
   DisplayEnum,
   IContextMenuItem,
   IContextMenuItemEnum,
-} from './contextmenu.type'
+} from './contextmenuModalType'
 import { contextMenuItems } from './contextMenuItems'
 import { isOptionDisabled } from './utils'
 import { toast } from 'react-hot-toast'

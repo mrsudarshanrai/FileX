@@ -1,5 +1,5 @@
 import { PathContainer, Paths } from './PathStyled'
-import { NavigationPathType } from './NavigationPath.type'
+import { NavigationPathType } from './NavigationPathType'
 import { splitByslash } from '@/app/utils'
 
 const NavigationPath = (props: NavigationPathType.Props) => {

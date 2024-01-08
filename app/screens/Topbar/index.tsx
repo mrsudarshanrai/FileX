@@ -2,7 +2,7 @@ import { useContext } from 'react'
 import NavigationPath from '@/app/components/NavigationPath'
 import { useDirRoute } from '@/app/hooks/useDirRoute'
 import { NavigationContext } from '@/app/context/NavigationContext'
-import { NavigationButtonType } from '@/app/components/NavigationButton/NavigationButton.type'
+import { NavigationButtonType } from '@/app/components/NavigationButton/NavigationButtonType'
 import NavigationButton from '@/app/components/NavigationButton'
 import { TopbarContainer } from './TopbarStyled'
 

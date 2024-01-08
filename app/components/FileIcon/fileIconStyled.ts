@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components'
-import { FileIconType } from './fileIcon.type'
+import { FileIconType } from './fileIconType'
 
 const FileIconWrapper = styled.div<FileIconType.FileIconWrapper>`
   filter: brightness(100%);
