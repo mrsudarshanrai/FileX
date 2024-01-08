@@ -19,7 +19,7 @@ import { contextMenuItems } from './contextMenuItems'
 import { isOptionDisabled } from './utils'
 import { toast } from 'react-hot-toast'
 import ModalContext from '@/app/context/ModalContext'
-import { deleteFile } from './ContextMenuOptionsUtils'
+import { useContextMenu } from '@/app/hooks/useContextMenu'
 
 const CONDITIONAL_ITEM = ['delete', 'copy']
 
@@ -27,6 +27,7 @@ const ContextMenuModal = (props: ContextMenuModalProps) => {
   const { currentPath } = useContext(NavigationContext)
   const { fetch } = useContext(DirContext)
   const { show } = useContext(ModalContext)
+  const { deleteFile } = useContextMenu()
   const { top, left, display, setShow, targetPath, setSorucePathToCopy, sorucePathToCopy } = props
 
   const [items, setItems] = useState<IContextMenuItem[]>([])
@@ -46,7 +47,7 @@ const ContextMenuModal = (props: ContextMenuModalProps) => {
 
     /** on file/folder delete */
     if (name === IContextMenuItemEnum.delete) {
-      deleteFile(setShow, show, currentPath, fetch, targetPath)
+      deleteFile()
     }
 
     /**  on file/folder copy */

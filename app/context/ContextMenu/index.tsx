@@ -7,6 +7,7 @@ const ContextMenu = createContext<ContextMenuType>({
   onContextMenu() {},
   show: DisplayEnum.none,
   setShow() {},
+  targetPath: undefined,
   setTargetPath() {},
 })
 
