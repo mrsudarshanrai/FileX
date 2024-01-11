@@ -6,6 +6,7 @@ import FileIcon from '@/app/components/FileIcon'
 import { NavigationContext } from '@/app/context/NavigationContext'
 import ContextMenu from '@/app/context/ContextMenu'
 import { Display, DisplayEnum } from '@/app/components/ContextMenuModal/contextmenuModalType'
+import { useContextMenu } from '@/app/hooks/useContextMenu'
 
 const isContextMenuOpen = (value: Display) => value === DisplayEnum.none
 
@@ -13,11 +14,18 @@ const Directory = () => {
   const { dirs, isLoading } = useContext(DirContext)
   const { navigate } = useContext(NavigationContext)
   const { show, setShow, setTargetPath } = useContext(ContextMenu)
+
+  const { openFile } = useContextMenu()
   const [selectedFile, setSelectedFile] = useState<undefined | string>(undefined)
 
-  const onFileDoubleClick = async (path: string) => {
+  const onFileDoubleClick = async (path: string, isFolder: boolean) => {
+    setTargetPath(path)
     setShow(DisplayEnum.none)
-    if (isContextMenuOpen(show)) navigate(path)
+    if (isFolder) {
+      if (isContextMenuOpen(show)) navigate(path)
+    } else {
+      openFile(path)
+    }
   }
 
   const onFileClick = (filePath: string) => {
@@ -37,7 +45,7 @@ const Directory = () => {
   return (
     <DirContainer>
       {isLoading && <p>Fetching files</p>}
-      {dirs.map(({ folder_name, path, is_dir, is_visible, extension }: IDir.IDirs) => {
+      {dirs.map(({ folder_name, path, is_dir: isFolder, is_visible, extension }: IDir.IDirs) => {
         if (!is_visible) return null
         return (
           <FileGrid key={path} draggable={true}>
@@ -46,9 +54,9 @@ const Directory = () => {
                 onContextMenu(event, path)
               }}
               onClick={() => onFileClick(path)}
-              onDoubleClick={() => onFileDoubleClick(path)}
+              onDoubleClick={() => onFileDoubleClick(path, isFolder)}
             >
-              <FileIcon isDir={is_dir} extension={extension} />
+              <FileIcon isDir={isFolder} extension={extension} />
               <FileNameWrapper title={folder_name}>
                 <FileName isSelected={selectedFile === path}>{folder_name}</FileName>
               </FileNameWrapper>

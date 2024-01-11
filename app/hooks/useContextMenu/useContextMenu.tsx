@@ -2,12 +2,18 @@ import { useContext } from 'react'
 import { NavigationContext } from '@/app/context/NavigationContext'
 import DirContext from '@/app/context/DirectoryContext'
 import ModalContext from '@/app/context/ModalContext'
-import ContextMenu from '../context/ContextMenu'
-import { DisplayEnum } from '../components/ContextMenuModal/contextmenuModalType'
-import { getFileNameFromPath } from '../utils'
-import { Mark, ModalBodyMessage, ModalFooterButtonContainer } from '../components/Modal/ModalStyled'
-import Button from '../components/Button'
+import ContextMenu from '../../context/ContextMenu'
+import { DisplayEnum } from '../../components/ContextMenuModal/contextmenuModalType'
+import { getFileNameFromPath } from '../../utils'
+import {
+  Mark,
+  ModalBodyMessage,
+  ModalFooterButtonContainer,
+} from '../../components/Modal/ModalStyled'
+import Button from '../../components/Button'
 import { invoke } from '@tauri-apps/api/tauri'
+import { UseContextMenuType } from './useContextMenuType'
+import { openFileErrorModalMessage } from './useContextMenuUtils'
 
 const useContextMenu = () => {
   const { currentPath } = useContext(NavigationContext)
@@ -55,7 +61,44 @@ const useContextMenu = () => {
       })
     }
   }
-  return { deleteFile }
+
+  const openFile = async (path: string) => {
+    if (path) {
+      await invoke('open_file', {
+        path,
+      })
+        .then((response: keyof typeof UseContextMenuType.OpenFileResponseTypeEnum | unknown) => {
+          if (
+            typeof response === 'string' &&
+            Object.keys(openFileErrorModalMessage).includes(response)
+          ) {
+            show({
+              open: true,
+              modalHeight: '220px',
+              modalHeader: (
+                <h4>
+                  Can&apos;t open &quot;<Mark>{getFileNameFromPath(path)}</Mark>&quot;
+                </h4>
+              ),
+              modalBody: (
+                <ModalBodyMessage>
+                  {openFileErrorModalMessage?.[response as string](
+                    getFileNameFromPath(path) as string,
+                  )}
+                </ModalBodyMessage>
+              ),
+              modalFooter: (
+                <ModalFooterButtonContainer>
+                  <Button onClick={() => show({ open: false })}>Cancel</Button>
+                </ModalFooterButtonContainer>
+              ),
+            })
+          }
+        })
+        .catch(console.error)
+    }
+  }
+  return { deleteFile, openFile }
 }
 
 export { useContextMenu }
