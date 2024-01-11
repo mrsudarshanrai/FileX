@@ -25,13 +25,13 @@ const renderContent = (content: React.ReactNode | string) => {
 const Modal = () => {
   const modalContentRef = useRef<HTMLDivElement>(null)
   const modalHeaderRef = useRef<HTMLDivElement>(null)
-  const { show, modalFooter, modalHeader, modalBody } = useContext(ModalContext)
+  const { show, modalFooter, modalHeader, modalBody, modalHeight } = useContext(ModalContext)
   const _ = useDraggable(modalContentRef, modalHeaderRef, Modal_HEADER_ID)
 
   return (
     <ModalWrapper>
       <ModalContainer>
-        <ModalContent ref={modalContentRef}>
+        <ModalContent ref={modalContentRef} modalHeight={modalHeight}>
           <ModalHeader id={Modal_HEADER_ID} ref={modalHeaderRef}>
             <ModalHeaderLeftContainer>{renderContent(modalHeader)}</ModalHeaderLeftContainer>
             <ModalHeaderRightContainer>

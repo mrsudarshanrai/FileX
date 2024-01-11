@@ -17,10 +17,10 @@ const ModalContainer = styled.div`
   align-items: center;
 `
 
-const ModalContent = styled.div`
+const ModalContent = styled.div<{ modalHeight?: string }>`
   width: 500px;
   position: absolute;
-  height: 200px;
+  height: ${({ modalHeight }) => modalHeight || '200px'};
   position: absolute;
   overflow: hidden;
 

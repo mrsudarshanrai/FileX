@@ -6,6 +6,7 @@ export type ModalContextType = ModalOptions & {
 
 export type ModalOptions = {
   open: boolean
+  modalHeight?: string
   modalHeader?: React.ReactNode | string
   modalBody?: React.ReactNode | string
   modalFooter?: React.ReactNode
