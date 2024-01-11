@@ -4,6 +4,7 @@ use std::{
     env,
     fs::{self},
     path::PathBuf,
+    process::Command,
 };
 
 #[tauri::command]
@@ -52,4 +53,66 @@ pub fn get_files(path: String) -> Result<Vec<Files>, String> {
             .cmp(&b.folder_name.to_lowercase())
     });
     Ok(dirs)
+}
+
+#[derive(Debug)]
+pub enum XDGSearchResult {
+    Found(String),
+    NotFound,
+}
+
+pub fn get_file_mime_type(path: &str) -> Result<XDGSearchResult, String> {
+    let mime_type = Command::new("xdg-mime")
+        .arg("query")
+        .arg("filetype")
+        .arg(path)
+        .output();
+    match mime_type {
+        Ok(output) => {
+            if output.status.success() {
+                let mime_type = String::from_utf8_lossy(&output.stdout).trim().to_string();
+                Ok(XDGSearchResult::Found(mime_type))
+            } else {
+                Ok(XDGSearchResult::NotFound)
+            }
+        }
+        Err(_) => Err(String::from("mime_type_not_found")),
+    }
+}
+
+pub fn get_default_file_opener(mime_type: String) -> Result<XDGSearchResult, String> {
+    let default_opener_output = Command::new("xdg-mime")
+        .arg("query")
+        .arg("default")
+        .arg(mime_type)
+        .output();
+    match default_opener_output {
+        Ok(output) => {
+            if output.status.success() {
+                let default_opener = String::from_utf8_lossy(&output.stdout).trim().to_string();
+                if default_opener.is_empty() {
+                    Ok(XDGSearchResult::NotFound)
+                } else {
+                    Ok(XDGSearchResult::Found(default_opener))
+                }
+            } else {
+                Ok(XDGSearchResult::NotFound)
+            }
+        }
+        Err(_) => Err(String::from("mime_type_not_found")),
+    }
+}
+
+pub fn open_file_with_default_file_opener(path: &String) -> String {
+    let res = Command::new("xdg-open").arg(path).status();
+    match res {
+        Ok(status) => {
+            if status.success() {
+                String::from("success")
+            } else {
+                String::from("unable_to_open_file")
+            }
+        }
+        Err(_) => String::from("unable_to_open_file"),
+    }
 }

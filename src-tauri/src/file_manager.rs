@@ -1,4 +1,7 @@
-use crate::utils;
+use crate::{
+    helper::{self, open_file_with_default_file_opener, XDGSearchResult},
+    utils,
+};
 use async_recursion::async_recursion;
 use std::fs::{self, Metadata};
 pub struct File;
@@ -44,5 +47,17 @@ impl File {
     /** Ensure this function is called after validating the metadata using 'metadata.is_ok()' */
     pub fn is_file(path: &String) -> bool {
         fs::metadata(&path).unwrap().is_file()
+    }
+
+    pub fn open(path: &String) -> String {
+        if let Ok(XDGSearchResult::Found(mime_type)) = helper::get_file_mime_type(path) {
+            if let Ok(XDGSearchResult::Found(_)) = helper::get_default_file_opener(mime_type) {
+                open_file_with_default_file_opener(path)
+            } else {
+                String::from("default_opener_not_found")
+            }
+        } else {
+            String::from("mime_type_not_found")
+        }
     }
 }

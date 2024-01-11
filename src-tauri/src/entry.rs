@@ -62,3 +62,8 @@ pub async fn copy_to_path(from: String, to: String) -> String {
         String::from("Not a valid path")
     }
 }
+
+#[tauri::command]
+pub fn open_file(path: String) -> String {
+    File::open(&path)
+}
