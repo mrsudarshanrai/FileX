@@ -4,7 +4,7 @@ import DirContext from '@/app/context/DirectoryContext'
 import ModalContext from '@/app/context/ModalContext'
 import ContextMenu from '../../context/ContextMenu'
 import { DisplayEnum } from '../../components/ContextMenuModal/contextmenuModalType'
-import { getFileNameFromPath } from '../../utils'
+import { getFileNameFromPath, truncateMiddle } from '../../utils'
 import {
   Mark,
   ModalBodyMessage,
@@ -103,9 +103,9 @@ const useContextMenu = () => {
   const showFileProperties = async (path: string) => {
     show({
       open: true,
-      modalHeight: '330px',
+      modalHeight: '350px',
       modalWidth: '600px',
-      modalHeader: <h4>{getFileNameFromPath(path)} Properties</h4>,
+      modalHeader: <h4>{truncateMiddle(getFileNameFromPath(path) as string, 40)} Properties</h4>,
       modalBody: <PropertiesModal path={path} />,
       modalFooter: (
         <ModalFooterButtonContainer>

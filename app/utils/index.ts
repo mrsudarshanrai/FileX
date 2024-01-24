@@ -46,6 +46,22 @@ const convertBytes = (byteSize: number) => {
   }
 }
 
+function truncateMiddle(inputString: string, maxLength: number): string {
+  if (inputString.length <= maxLength) {
+    return inputString
+  }
+
+  const ellipsis = '...'
+  const halfMaxLength = Math.floor((maxLength - ellipsis.length) / 2)
+
+  const truncatedString =
+    inputString.substring(0, halfMaxLength) +
+    ellipsis +
+    inputString.substring(inputString.length - halfMaxLength)
+
+  return truncatedString
+}
+
 export {
   getFileIcon,
   getLastItemFromArray,
@@ -54,4 +70,5 @@ export {
   isString,
   getFileNameFromPath,
   convertBytes,
+  truncateMiddle,
 }
