@@ -20,7 +20,7 @@ const ModalContainer = styled.div`
 const ModalContent = styled.div<{ modalHeight?: string; modalWidth?: string }>`
   width: ${({ modalWidth }) => modalWidth || '500px'};
   position: absolute;
-  height: ${({ modalHeight }) => modalHeight || '200px'};
+  height: ${({ modalHeight }) => modalHeight || 'fit-content'};
   position: absolute;
   overflow: hidden;
 
@@ -62,16 +62,18 @@ const ModalHeaderLeftContainer = styled.div``
 
 const ModalBodySection = styled.section`
   display: grid;
-  grid-template-rows: 1fr 1fr;
+  grid-template-rows: 1fr auto;
+  padding: 10px 15px 5px 15px;
 `
 
 const ModalBody = styled.div`
-  padding: 10px 15px;
   min-height: 100px;
+  height: fit-content;
+  padding-bottom: 10px;
 `
 
 const ModalFooter = styled.div`
-  padding: 10px 15px 5px 15px;
+  padding: 10px 0px 5px 0px;
   width: 100%;
 `
 
@@ -85,6 +87,7 @@ const ModalBodyMessage = styled.div`
   font-size: 16px;
   font-weight: 500;
   margin: 10px 0;
+  height: fit-content;
 `
 
 const Mark = styled.mark`

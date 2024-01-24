@@ -29,7 +29,8 @@ const useContextMenu = () => {
         open: true,
         modalHeader: (
           <h4>
-            Delete &quot;<Mark>{getFileNameFromPath(targetPath)}</Mark>&quot;
+            Delete &quot;
+            <Mark>{truncateMiddle(getFileNameFromPath(targetPath) as string, 30)}</Mark>&quot;
           </h4>
         ),
         modalBody: (
@@ -75,10 +76,11 @@ const useContextMenu = () => {
           ) {
             show({
               open: true,
-              modalHeight: '220px',
               modalHeader: (
                 <h4>
-                  Can&apos;t open &quot;<Mark>{getFileNameFromPath(path)}</Mark>&quot;
+                  Can&apos;t open &quot;
+                  <Mark>{truncateMiddle(getFileNameFromPath(path) as string, 30)}</Mark>
+                  &quot;
                 </h4>
               ),
               modalBody: (
@@ -103,7 +105,6 @@ const useContextMenu = () => {
   const showFileProperties = async (path: string) => {
     show({
       open: true,
-      modalHeight: '350px',
       modalWidth: '600px',
       modalHeader: <h4>{truncateMiddle(getFileNameFromPath(path) as string, 40)} Properties</h4>,
       modalBody: <PropertiesModal path={path} />,
