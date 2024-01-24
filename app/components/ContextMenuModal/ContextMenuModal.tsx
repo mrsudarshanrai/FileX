@@ -18,7 +18,6 @@ import {
 import { contextMenuItems } from './contextMenuItems'
 import { isOptionDisabled } from './utils'
 import { toast } from 'react-hot-toast'
-import ModalContext from '@/app/context/ModalContext'
 import { useContextMenu } from '@/app/hooks/useContextMenu'
 
 const CONDITIONAL_ITEM = ['delete', 'copy']
@@ -26,8 +25,7 @@ const CONDITIONAL_ITEM = ['delete', 'copy']
 const ContextMenuModal = (props: ContextMenuModalProps) => {
   const { currentPath } = useContext(NavigationContext)
   const { fetch } = useContext(DirContext)
-  const { show } = useContext(ModalContext)
-  const { deleteFile } = useContextMenu()
+  const { deleteFile, showFileProperties } = useContextMenu()
   const { top, left, display, setShow, targetPath, setSorucePathToCopy, sorucePathToCopy } = props
 
   const [items, setItems] = useState<IContextMenuItem[]>([])
@@ -56,7 +54,16 @@ const ContextMenuModal = (props: ContextMenuModalProps) => {
       setShow(DisplayEnum.none)
     }
 
-    /**  on file/folder copy */
+    /**  on properties view */
+    if (name === IContextMenuItemEnum.properties) {
+      if (targetPath || currentPath) {
+        setSorucePathToCopy(targetPath)
+        setShow(DisplayEnum.none)
+        showFileProperties(targetPath || currentPath)
+      }
+    }
+
+    /**  on file/folder paste */
     if (name === IContextMenuItemEnum.paste) {
       const toastId = toast.loading('Copying')
       setShow(DisplayEnum.none)
@@ -103,7 +110,7 @@ const ContextMenuModal = (props: ContextMenuModalProps) => {
           <ContextMenuItem
             key={index}
             disabled={isOptionDisabled(name, sorucePathToCopy)}
-            onClick={() => onContextItemClick(name)}
+            onClick={() => !isOptionDisabled(name, sorucePathToCopy) && onContextItemClick(name)}
           >
             <Item>
               {getIcons(name as keyof typeof icons)}

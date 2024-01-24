@@ -14,6 +14,7 @@ import Button from '../../components/Button'
 import { invoke } from '@tauri-apps/api/tauri'
 import { UseContextMenuType } from './useContextMenuType'
 import { openFileErrorModalMessage } from './useContextMenuUtils'
+import { PropertiesModal } from '@/app/components/PropertiesModal'
 
 const useContextMenu = () => {
   const { currentPath } = useContext(NavigationContext)
@@ -98,7 +99,21 @@ const useContextMenu = () => {
         .catch(console.error)
     }
   }
-  return { deleteFile, openFile }
+
+  const showFileProperties = async (path: string) => {
+    show({
+      open: true,
+      modalHeight: '400px',
+      modalHeader: <h4>aa.jpg Properties</h4>,
+      modalBody: <PropertiesModal path={path} />,
+      modalFooter: (
+        <ModalFooterButtonContainer>
+          <Button onClick={() => show({ open: false })}>Close</Button>
+        </ModalFooterButtonContainer>
+      ),
+    })
+  }
+  return { deleteFile, openFile, showFileProperties }
 }
 
 export { useContextMenu }

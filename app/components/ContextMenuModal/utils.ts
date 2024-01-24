@@ -15,6 +15,7 @@ const switchContextMenuItemDisabledStyle = (disabled: boolean | undefined, theme
   return disabled
     ? css`
         ${Item} {
+          cursor: not-allowed;
           color: ${theme.grey.grey20};
           svg {
             fill: ${theme.grey.grey20};
