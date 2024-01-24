@@ -1,4 +1,5 @@
 use crate::file_manager::File;
+use crate::file_manager::FileProperties;
 use crate::folder_manager::Folder;
 use crate::helper;
 use crate::utils;
@@ -66,4 +67,8 @@ pub async fn copy_to_path(from: String, to: String) -> String {
 #[tauri::command]
 pub fn open_file(path: String) -> String {
     File::open(&path)
+}
+#[tauri::command]
+pub fn get_properties(path: String) -> Result<FileProperties, String> {
+    File::properties(path)
 }

@@ -3,8 +3,24 @@ use crate::{
     utils,
 };
 use async_recursion::async_recursion;
-use std::fs::{self, Metadata};
+use serde::Serialize;
+use std::{
+    fs::{self, Metadata},
+    path::Path,
+};
 pub struct File;
+
+#[derive(Serialize, Debug)]
+pub struct FileProperties {
+    size: u64,
+    is_file: bool,
+    name: String,
+    mime_type: String,
+    location: String,
+    last_modified: String,
+    created: String,
+    extension: String,
+}
 
 impl File {
     /** delete files */
@@ -58,6 +74,33 @@ impl File {
             }
         } else {
             String::from("mime_type_not_found")
+        }
+    }
+
+    pub fn properties(path: String) -> Result<FileProperties, String> {
+        let metadata_result = fs::metadata(&path);
+        match metadata_result {
+            Ok(metadata) => {
+                let directory_path = Path::new(&path);
+                let mut mime_type = String::from("");
+
+                if let Ok(XDGSearchResult::Found(result)) = helper::get_file_mime_type(&path) {
+                    mime_type = result;
+                }
+
+                let properties = FileProperties {
+                    size: metadata.len(),
+                    is_file: metadata.is_file(),
+                    name: utils::option_to_string(directory_path.file_name()),
+                    mime_type,
+                    location: path.clone(),
+                    last_modified: utils::sys_time_to_date_time(metadata.modified().unwrap()),
+                    created: utils::sys_time_to_date_time(metadata.created().unwrap()),
+                    extension: utils::option_to_string(directory_path.extension()),
+                };
+                Ok(properties)
+            }
+            Err(e) => Err(String::from(e.to_string())),
         }
     }
 }
