@@ -23,5 +23,5 @@ pub fn get_filename_and_extension_from_path(full_filename: &str) -> (&str, &str)
 
 pub fn sys_time_to_date_time(sys_time: SystemTime) -> String {
     let datetime: DateTime<Utc> = sys_time.into();
-    datetime.format("%d/%m/%Y").to_string()
+    datetime.to_rfc3339()
 }
