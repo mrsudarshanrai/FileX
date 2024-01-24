@@ -17,8 +17,8 @@ const ModalContainer = styled.div`
   align-items: center;
 `
 
-const ModalContent = styled.div<{ modalHeight?: string }>`
-  width: 500px;
+const ModalContent = styled.div<{ modalHeight?: string; modalWidth?: string }>`
+  width: ${({ modalWidth }) => modalWidth || '500px'};
   position: absolute;
   height: ${({ modalHeight }) => modalHeight || '200px'};
   position: absolute;
