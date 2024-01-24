@@ -33,6 +33,19 @@ const getFileNameFromPath = (path: string) => {
     return getLastItemFromArray<string>(path.split('/'))
   }
 }
+
+const convertBytes = (byteSize: number) => {
+  if (byteSize < 1024) {
+    return `${byteSize} bytes`
+  } else if (byteSize < Math.pow(1024, 2)) {
+    return `${(byteSize / 1024).toFixed(2)} KB`
+  } else if (byteSize < Math.pow(1024, 3)) {
+    return `${(byteSize / Math.pow(1024, 2)).toFixed(2)} MB`
+  } else {
+    return `${(byteSize / Math.pow(1024, 3)).toFixed(2)} GB`
+  }
+}
+
 export {
   getFileIcon,
   getLastItemFromArray,
@@ -40,4 +53,5 @@ export {
   splitByslash,
   isString,
   getFileNameFromPath,
+  convertBytes,
 }

@@ -103,8 +103,9 @@ const useContextMenu = () => {
   const showFileProperties = async (path: string) => {
     show({
       open: true,
-      modalHeight: '400px',
-      modalHeader: <h4>aa.jpg Properties</h4>,
+      modalHeight: '330px',
+      modalWidth: '600px',
+      modalHeader: <h4>{getFileNameFromPath(path)} Properties</h4>,
       modalBody: <PropertiesModal path={path} />,
       modalFooter: (
         <ModalFooterButtonContainer>
