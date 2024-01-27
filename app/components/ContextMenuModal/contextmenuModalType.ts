@@ -6,6 +6,7 @@ export type ContextMenuModalProps = {
   targetPath: string | undefined
   setSorucePathToCopy: React.Dispatch<React.SetStateAction<string | undefined>>
   sorucePathToCopy: string | undefined
+  isTargetPathFile: boolean
 }
 export enum DisplayEnum {
   none = 'none',
@@ -29,6 +30,7 @@ export type ContextMenuWrapperProps = ContextMenuModalProps & {
 }
 
 export enum IContextMenuItemEnum {
+  open = 'open',
   newFolder = 'newFolder',
   copy = 'copy',
   name = 'name',

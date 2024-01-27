@@ -7,7 +7,7 @@ const CONTEXT_MENU_ITEM_HEIGHT = 47
 const ContextMenuWrapper = styled.div<
   Omit<
     ContextMenuWrapperProps,
-    'setShow' | 'targetPath' | 'setSorucePathToCopy' | 'sorucePathToCopy'
+    'setShow' | 'targetPath' | 'setSorucePathToCopy' | 'sorucePathToCopy' | 'isTargetPathFile'
   >
 >`
   ${(props) => css`
@@ -28,7 +28,7 @@ const ContextMenuWrapper = styled.div<
 const ContextMenuItem = styled.div<ContextMenuItemElement>`
   ${({ disabled, theme }) => css`
     height: ${CONTEXT_MENU_ITEM_HEIGHT}px;
-    padding: 0 21px;
+    padding: 0 16px;
     /* background-color: red; */
     display: flex;
     align-items: center;
@@ -47,9 +47,8 @@ const ContextMenuItem = styled.div<ContextMenuItemElement>`
 
 const Item = styled.div`
   display: flex;
-  justify-content: flex-end;
   align-items: center;
-  column-gap: 8px;
+  column-gap: 18px;
 `
 
 const ContentMenuItemShortcut = styled.div`
@@ -61,4 +60,8 @@ const ContentMenuItemShortcut = styled.div`
   color: #767676;
 `
 
-export { ContextMenuWrapper, ContextMenuItem, Item, ContentMenuItemShortcut }
+const IconContainer = styled.div`
+  width: 16px;
+`
+
+export { ContextMenuWrapper, ContextMenuItem, Item, ContentMenuItemShortcut, IconContainer }

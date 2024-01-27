@@ -6,4 +6,6 @@ export type ContextMenuType = {
   targetPath: string | undefined
   setShow: (show: Display) => void
   setTargetPath: (path?: string) => void
+  setIsTargetPathFile: (isFile: boolean) => void
+  isTargetPathFile: boolean
 }

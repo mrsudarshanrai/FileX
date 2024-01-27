@@ -8,12 +8,12 @@ import ContextMenu from '@/app/context/ContextMenu'
 import { Display, DisplayEnum } from '@/app/components/ContextMenuModal/contextmenuModalType'
 import { useContextMenu } from '@/app/hooks/useContextMenu'
 
-const isContextMenuOpen = (value: Display) => value === DisplayEnum.none
+export const isContextMenuOpen = (value: Display) => value === DisplayEnum.none
 
 const Directory = () => {
   const { dirs, isLoading } = useContext(DirContext)
   const { navigate } = useContext(NavigationContext)
-  const { show, setShow, setTargetPath } = useContext(ContextMenu)
+  const { show, setShow, setTargetPath, setIsTargetPathFile } = useContext(ContextMenu)
 
   const { openFile } = useContextMenu()
   const [selectedFile, setSelectedFile] = useState<undefined | string>(undefined)
@@ -34,12 +34,14 @@ const Directory = () => {
   }
 
   const onContextMenu = async (
-    event?: React.MouseEvent<HTMLSpanElement, MouseEvent>,
-    path?: string,
+    event: React.MouseEvent<HTMLSpanElement, MouseEvent>,
+    path: string,
+    isFolder: boolean,
   ) => {
     event?.preventDefault()
     if (isContextMenuOpen(show)) setSelectedFile(() => path)
     setTargetPath(path)
+    setIsTargetPathFile(!isFolder)
   }
 
   return (
@@ -51,7 +53,7 @@ const Directory = () => {
           <FileGrid key={path} draggable={true}>
             <File
               onContextMenu={(event) => {
-                onContextMenu(event, path)
+                onContextMenu(event, path, isFolder)
               }}
               onClick={() => onFileClick(path)}
               onDoubleClick={() => onFileDoubleClick(path, isFolder)}

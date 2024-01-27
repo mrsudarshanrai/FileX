@@ -9,6 +9,8 @@ const ContextMenu = createContext<ContextMenuType>({
   setShow() {},
   targetPath: undefined,
   setTargetPath() {},
+  setIsTargetPathFile() {},
+  isTargetPathFile: false,
 })
 
 const ContextMenuProvider = ({ children }: { children: React.ReactNode }) => {
@@ -16,6 +18,7 @@ const ContextMenuProvider = ({ children }: { children: React.ReactNode }) => {
   const [left, setLeft] = useState(0)
   const [show, setShow] = useState<Display>(DisplayEnum.none)
   const [targetPath, setTargetPath] = useState<undefined | string>(undefined)
+  const [isTargetPathFile, setIsTargetPathFile] = useState(false)
   const [sorucePathToCopy, setSorucePathToCopy] = useState<undefined | string>(undefined)
 
   const onContextMenu = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -47,7 +50,10 @@ const ContextMenuProvider = ({ children }: { children: React.ReactNode }) => {
     setTargetPath,
     sorucePathToCopy,
     setSorucePathToCopy,
+    isTargetPathFile,
+    setIsTargetPathFile,
   }
+
   return (
     <ContextMenu.Provider value={contextValue}>
       <ContextMenuModal
@@ -58,6 +64,7 @@ const ContextMenuProvider = ({ children }: { children: React.ReactNode }) => {
         display={show}
         setSorucePathToCopy={setSorucePathToCopy}
         sorucePathToCopy={sorucePathToCopy}
+        isTargetPathFile={isTargetPathFile}
       />
       <div onContextMenu={(event) => onContextMenu(event)} onClick={() => onClick()}>
         {children}

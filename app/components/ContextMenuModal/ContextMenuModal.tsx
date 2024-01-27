@@ -4,6 +4,7 @@ import {
   ContextMenuWrapper,
   ContentMenuItemShortcut,
   Item,
+  IconContainer,
 } from './contextMenuStyled'
 import { useContext, useEffect, useState } from 'react'
 import { NavigationContext } from '@/app/context/NavigationContext'
@@ -20,13 +21,22 @@ import { isOptionDisabled } from './utils'
 import { toast } from 'react-hot-toast'
 import { useContextMenu } from '@/app/hooks/useContextMenu'
 
-const CONDITIONAL_ITEM = ['delete', 'copy']
+const CONDITIONAL_ITEM = ['delete', 'copy', 'open']
 
 const ContextMenuModal = (props: ContextMenuModalProps) => {
-  const { currentPath } = useContext(NavigationContext)
+  const { currentPath, navigate } = useContext(NavigationContext)
   const { fetch } = useContext(DirContext)
-  const { deleteFile, showFileProperties } = useContextMenu()
-  const { top, left, display, setShow, targetPath, setSorucePathToCopy, sorucePathToCopy } = props
+  const { deleteFile, showFileProperties, openFile } = useContextMenu()
+  const {
+    top,
+    left,
+    display,
+    setShow,
+    targetPath,
+    setSorucePathToCopy,
+    sorucePathToCopy,
+    isTargetPathFile,
+  } = props
 
   const [items, setItems] = useState<IContextMenuItem[]>([])
 
@@ -63,6 +73,14 @@ const ContextMenuModal = (props: ContextMenuModalProps) => {
       }
     }
 
+    if (name === IContextMenuItemEnum.open) {
+      setShow(DisplayEnum.none)
+      if (targetPath) {
+        if (isTargetPathFile) openFile(targetPath)
+        else navigate(targetPath)
+      }
+    }
+
     /**  on file/folder paste */
     if (name === IContextMenuItemEnum.paste) {
       const toastId = toast.loading('Copying')
@@ -91,6 +109,10 @@ const ContextMenuModal = (props: ContextMenuModalProps) => {
         if (CONDITIONAL_ITEM.includes(item.name) && typeof targetPath === 'undefined') {
           return false
         }
+        if (item.name === 'newFolder' && targetPath) {
+          return false
+        }
+
         return true
       })
       return filteredItems
@@ -113,7 +135,7 @@ const ContextMenuModal = (props: ContextMenuModalProps) => {
             onClick={() => !isOptionDisabled(name, sorucePathToCopy) && onContextItemClick(name)}
           >
             <Item>
-              {getIcons(name as keyof typeof icons)}
+              <IconContainer>{getIcons(name as keyof typeof icons)}</IconContainer>
               {label}
             </Item>
             <ContentMenuItemShortcut>{shortcut}</ContentMenuItemShortcut>
