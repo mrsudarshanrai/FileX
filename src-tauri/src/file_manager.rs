@@ -77,7 +77,7 @@ impl File {
         }
     }
 
-    pub fn properties(path: String) -> Result<FileProperties, String> {
+    pub async fn properties(path: String) -> Result<FileProperties, String> {
         let metadata_result = fs::metadata(&path);
         match metadata_result {
             Ok(metadata) => {
@@ -88,15 +88,29 @@ impl File {
                     mime_type = result;
                 }
 
-                let properties = FileProperties {
-                    size: metadata.len(),
-                    is_file: metadata.is_file(),
-                    name: utils::option_to_string(directory_path.file_name()),
-                    mime_type,
-                    location: path.clone(),
-                    last_modified: utils::sys_time_to_date_time(metadata.modified().unwrap()),
-                    created: utils::sys_time_to_date_time(metadata.created().unwrap()),
-                    extension: utils::option_to_string(directory_path.extension()),
+                let properties = if metadata.is_dir() {
+                    let total_size = helper::calculate_directory_size(directory_path).await?;
+                    FileProperties {
+                        size: total_size,
+                        is_file: false,
+                        name: utils::option_to_string(directory_path.file_name()),
+                        mime_type,
+                        location: path.clone(),
+                        last_modified: utils::sys_time_to_date_time(metadata.modified().unwrap()),
+                        created: utils::sys_time_to_date_time(metadata.created().unwrap()),
+                        extension: String::from(""),
+                    }
+                } else {
+                    FileProperties {
+                        size: metadata.len(),
+                        is_file: true,
+                        name: utils::option_to_string(directory_path.file_name()),
+                        mime_type,
+                        location: path.clone(),
+                        last_modified: utils::sys_time_to_date_time(metadata.modified().unwrap()),
+                        created: utils::sys_time_to_date_time(metadata.created().unwrap()),
+                        extension: utils::option_to_string(directory_path.extension()),
+                    }
                 };
                 Ok(properties)
             }

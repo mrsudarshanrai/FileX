@@ -1,9 +1,10 @@
 use crate::utils;
+use async_recursion::async_recursion;
 use serde::Serialize;
 use std::{
     env,
     fs::{self},
-    path::PathBuf,
+    path::{Path, PathBuf},
     process::Command,
 };
 
@@ -115,4 +116,27 @@ pub fn open_file_with_default_file_opener(path: &String) -> String {
         }
         Err(_) => String::from("unable_to_open_file"),
     }
+}
+
+#[async_recursion]
+pub async fn calculate_directory_size(directory_path: &Path) -> Result<u64, String> {
+    let mut total_size: u64 = 0;
+
+    if let Ok(entries) = fs::read_dir(directory_path) {
+        for entry in entries {
+            if let Ok(entry) = entry {
+                let path = entry.path();
+                let metadata = fs::metadata(&path).map_err(|e| e.to_string())?;
+                if metadata.is_file() {
+                    total_size += metadata.len();
+                } else if metadata.is_dir() {
+                    total_size += calculate_directory_size(&path).await?;
+                }
+            }
+        }
+    } else {
+        return Err("Failed to read directory".to_string());
+    }
+
+    Ok(total_size)
 }

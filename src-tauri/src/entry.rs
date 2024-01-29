@@ -68,7 +68,8 @@ pub async fn copy_to_path(from: String, to: String) -> String {
 pub fn open_file(path: String) -> String {
     File::open(&path)
 }
+
 #[tauri::command]
-pub fn get_properties(path: String) -> Result<FileProperties, String> {
-    File::properties(path)
+pub async fn get_properties(path: String) -> Result<FileProperties, String> {
+    File::properties(path).await
 }
