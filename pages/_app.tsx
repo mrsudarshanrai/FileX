@@ -12,6 +12,7 @@ import { GlobalStyles, MainContainer } from '@/styles/GlobalStyles'
 import { Toaster } from 'react-hot-toast'
 import { ModalContextProvider } from '@/app/context/ModalContext'
 import '../styles/index.css'
+import { DirectorySizeContextProvider } from '@/app/context/DirectorySizeContext/DirectorySizeContext'
 const App = ({ Component, pageProps }: AppProps) => {
   return (
     <>
@@ -30,14 +31,16 @@ const App = ({ Component, pageProps }: AppProps) => {
           <NavigationContextProvider>
             <ModalContextProvider>
               <Topbar />
-              <AppContainer>
-                <Sidebar />
-                <ContextMenuProvider>
-                  <MainContainer>
-                    <Component {...pageProps} />
-                  </MainContainer>
-                </ContextMenuProvider>
-              </AppContainer>
+              <DirectorySizeContextProvider>
+                <AppContainer>
+                  <Sidebar />
+                  <ContextMenuProvider>
+                    <MainContainer>
+                      <Component {...pageProps} />
+                    </MainContainer>
+                  </ContextMenuProvider>
+                </AppContainer>
+              </DirectorySizeContextProvider>
             </ModalContextProvider>
           </NavigationContextProvider>
         </DirContextProvider>
