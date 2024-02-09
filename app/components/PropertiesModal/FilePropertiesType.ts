@@ -7,6 +7,5 @@ export namespace FilePropertiesType {
     location: string
     mime_type: string
     name: string
-    size: number
   }
 }

@@ -1,12 +1,14 @@
 import { useFileProperties } from '@/app/hooks/useFileProperties'
 import { Info, PropertiesModalWrapper } from './PropertiesModalStyled'
 import FileIcon from '../FileIcon'
+import { useContext } from 'react'
+import DirectorySizeContext from '@/app/context/DirectorySizeContext/DirectorySizeContext'
 import { convertBytes } from '@/app/utils'
 
 const PropertiesModal = (props: { path: string }) => {
   const { properties } = useFileProperties(props.path)
-  const { name, extension, is_file, size, created, last_modified, mime_type, location } =
-    properties || {}
+  const { name, extension, is_file, created, last_modified, mime_type, location } = properties || {}
+  const { fileCount, directorySize, isFetching } = useContext(DirectorySizeContext)
 
   return (
     <PropertiesModalWrapper>
@@ -25,10 +27,16 @@ const PropertiesModal = (props: { path: string }) => {
           </p>
         </Info>
         <Info>
+          <h4>Contents:</h4>
+          <p>{isFetching ? 'Calculating...' : `${fileCount} items`}</p>
+        </Info>
+        <Info>
           <h4>Size:</h4>
-          <p>
-            {convertBytes(size)}({size.toLocaleString()} bytes)
-          </p>
+          <p>{`${
+            isFetching
+              ? 'Calculating...'
+              : `${convertBytes(directorySize)} (${directorySize.toLocaleString()}) bytes`
+          }`}</p>
         </Info>
         <Info>
           <h4>Location:</h4>

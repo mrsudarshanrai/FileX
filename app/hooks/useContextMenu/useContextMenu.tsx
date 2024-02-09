@@ -15,11 +15,13 @@ import { invoke } from '@tauri-apps/api/tauri'
 import { UseContextMenuType } from './useContextMenuType'
 import { openFileErrorModalMessage } from './useContextMenuUtils'
 import { PropertiesModal } from '@/app/components/PropertiesModal'
+import DirectorySizeContext from '@/app/context/DirectorySizeContext/DirectorySizeContext'
 
 const useContextMenu = () => {
   const { currentPath } = useContext(NavigationContext)
   const { fetch } = useContext(DirContext)
   const { show } = useContext(ModalContext)
+  const { setDirectorySizeFunc } = useContext(DirectorySizeContext)
   const { setShow: setContextMenuShow, targetPath } = useContext(ContextMenu)
 
   const deleteFile = () => {
@@ -110,7 +112,14 @@ const useContextMenu = () => {
       modalBody: <PropertiesModal path={path} />,
       modalFooter: (
         <ModalFooterButtonContainer>
-          <Button onClick={() => show({ open: false })}>Close</Button>
+          <Button
+            onClick={() => {
+              show({ open: false })
+              setDirectorySizeFunc(0, 0)
+            }}
+          >
+            Close
+          </Button>
         </ModalFooterButtonContainer>
       ),
     })

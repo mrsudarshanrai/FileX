@@ -20,12 +20,14 @@ import { contextMenuItems } from './contextMenuItems'
 import { isOptionDisabled } from './utils'
 import { toast } from 'react-hot-toast'
 import { useContextMenu } from '@/app/hooks/useContextMenu'
+import DirectorySizeContext from '@/app/context/DirectorySizeContext/DirectorySizeContext'
 
 const CONDITIONAL_ITEM = ['delete', 'copy', 'open']
 
 const ContextMenuModal = (props: ContextMenuModalProps) => {
   const { currentPath, navigate } = useContext(NavigationContext)
   const { fetch } = useContext(DirContext)
+  const { setIsFetchingFunc } = useContext(DirectorySizeContext)
   const { deleteFile, showFileProperties, openFile } = useContextMenu()
   const {
     top,
@@ -67,9 +69,13 @@ const ContextMenuModal = (props: ContextMenuModalProps) => {
     /**  on properties view */
     if (name === IContextMenuItemEnum.properties) {
       if (targetPath || currentPath) {
+        setIsFetchingFunc(true)
         setSorucePathToCopy(targetPath)
         setShow(DisplayEnum.none)
         showFileProperties(targetPath || currentPath)
+        await invoke('calculate_directory_size', {
+          dirPath: targetPath || currentPath,
+        })
       }
     }
 
