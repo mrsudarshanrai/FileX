@@ -8,6 +8,7 @@ use std::{
     fs::{self, Metadata},
     path::Path,
 };
+
 pub struct File;
 
 #[derive(Serialize, Debug)]
@@ -89,9 +90,8 @@ impl File {
                 }
 
                 let properties = if metadata.is_dir() {
-                    let total_size = helper::calculate_directory_size(directory_path).await?;
                     FileProperties {
-                        size: total_size,
+                        size: 0,
                         is_file: false,
                         name: utils::option_to_string(directory_path.file_name()),
                         mime_type,

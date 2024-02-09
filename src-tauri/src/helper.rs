@@ -119,24 +119,24 @@ pub fn open_file_with_default_file_opener(path: &String) -> String {
 }
 
 #[async_recursion]
-pub async fn calculate_directory_size(directory_path: &Path) -> Result<u64, String> {
-    let mut total_size: u64 = 0;
-
-    if let Ok(entries) = fs::read_dir(directory_path) {
+pub async fn calculate_file_size_recursive(
+    path: &Path,
+    total_size: &mut u64,
+    file_count: &mut u64,
+) {
+    if let Ok(entries) = fs::read_dir(path) {
         for entry in entries {
             if let Ok(entry) = entry {
-                let path = entry.path();
-                let metadata = fs::metadata(&path).map_err(|e| e.to_string())?;
-                if metadata.is_file() {
-                    total_size += metadata.len();
-                } else if metadata.is_dir() {
-                    total_size += calculate_directory_size(&path).await?;
+                let metadata = entry.metadata().map_err(|e| e.to_string());
+                if let Ok(metadata) = metadata {
+                    if metadata.is_file() {
+                        *total_size += metadata.len();
+                        *file_count += 1;
+                    } else if metadata.is_dir() {
+                        calculate_file_size_recursive(&entry.path(), total_size, file_count).await;
+                    }
                 }
             }
         }
-    } else {
-        return Err("Failed to read directory".to_string());
     }
-
-    Ok(total_size)
 }
