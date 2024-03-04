@@ -11,7 +11,6 @@ const DirContainer = styled.div`
   row-gap: 0.3em;
   column-gap: calc(100vw / 150px);
   width: 100%;
-  height: 100%;
   margin: 0 auto;
   padding: 15px 0px 50px 0;
 `;
@@ -75,6 +74,19 @@ const FileRenameInput = styled.input`
   border-radius: 4px;
   padding: 4px 0;
   height: 30px;
+  width: 130px;
 `;
 
-export { DirContainer, FileGrid, File, FileNameWrapper, FileName, FileRenameInput };
+const DirContainerWrapper = styled.div`
+  height: 100%;
+`;
+
+export {
+  DirContainer,
+  FileGrid,
+  File,
+  FileNameWrapper,
+  FileName,
+  FileRenameInput,
+  DirContainerWrapper,
+};
