@@ -7,14 +7,13 @@ type FileName = {
 
 const DirContainer = styled.div`
   display: flex;
-  align-items: center;
-  justify-content: flex-start;
   flex-wrap: wrap;
-  row-gap: 1em;
+  row-gap: 0.3em;
   column-gap: calc(100vw / 150px);
   width: 100%;
+  height: 100%;
   margin: 0 auto;
-  padding-bottom: 50px;
+  padding: 15px 0px 50px 0;
 `;
 
 const FileGrid = styled.div`
@@ -22,15 +21,19 @@ const FileGrid = styled.div`
   flex-direction: column;
   cursor: pointer;
   width: 150px;
-  height: 150px;
+  height: 180px;
 `;
 
 const File = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  place-content: center;
   cursor: pointer;
+  height: 100%;
+  .file_icon_container {
+    display: flex;
+    justify-content: center;
+  }
 `;
 
 const FileNameWrapper = styled.div`
@@ -71,6 +74,7 @@ const FileRenameInput = styled.input`
   color: #fff;
   border-radius: 4px;
   padding: 4px 0;
+  height: 30px;
 `;
 
 export { DirContainer, FileGrid, File, FileNameWrapper, FileName, FileRenameInput };
