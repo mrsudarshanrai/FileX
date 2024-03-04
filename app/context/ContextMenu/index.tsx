@@ -34,12 +34,6 @@ const ContextMenuProvider = ({ children }: { children: React.ReactNode }) => {
     setLeft(clientX);
   };
 
-  const onClick = () => {
-    setShow(() => DisplayEnum.none);
-    setTargetPath(undefined);
-    setFileRenamePath(null);
-  };
-
   useEffect(() => {
     if (show === DisplayEnum.none) {
       setTargetPath(undefined);
@@ -73,9 +67,7 @@ const ContextMenuProvider = ({ children }: { children: React.ReactNode }) => {
         isTargetPathFile={isTargetPathFile}
         setFileRenamePath={setFileRenamePath}
       />
-      <div onContextMenu={(event) => onContextMenu(event)} onClick={() => onClick()}>
-        {children}
-      </div>
+      <div onContextMenu={(event) => onContextMenu(event)}>{children}</div>
     </ContextMenu.Provider>
   );
 };
