@@ -117,4 +117,17 @@ impl File {
             Err(e) => Err(String::from(e.to_string())),
         }
     }
+
+    pub async fn rename(path: String, new_name: String) -> String {
+        if let Some(relative_path) = path.rsplitn(2, "/").nth(1) {
+            let new_path = format!("{}/{}", relative_path, new_name);
+            if let Ok(_) = fs::rename(path, new_path) {
+                String::from("rename_success")
+            } else {
+                String::from("rename_failed")
+            }
+        } else {
+            String::from("path_not_found")
+        }
+    }
 }
