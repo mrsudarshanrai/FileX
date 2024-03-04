@@ -1,5 +1,5 @@
-import { createContext, useState } from 'react'
-import { ModalContextProviderPropsType, ModalContextType, ModalOptions } from './ModalContextType'
+import { createContext, useState } from 'react';
+import { ModalContextProviderPropsType, ModalContextType, ModalOptions } from './ModalContextType';
 
 const ModalContext = createContext<ModalContextType>({
   open: false,
@@ -7,7 +7,7 @@ const ModalContext = createContext<ModalContextType>({
   modalBody: 'Modal Body',
   modalFooter: <p>footer</p>,
   show(options) {},
-})
+});
 
 const ModalContextProvider = ({ children }: ModalContextProviderPropsType) => {
   const [modalOptions, setModalOptions] = useState<ModalOptions>({
@@ -19,17 +19,17 @@ const ModalContextProvider = ({ children }: ModalContextProviderPropsType) => {
         </b>
       </p>
     ),
-  })
+  });
 
   const show = (options: ModalOptions) => {
-    setModalOptions(options)
-  }
+    setModalOptions(options);
+  };
   const contextValue = {
     ...modalOptions,
     show,
-  }
-  return <ModalContext.Provider value={contextValue}>{children}</ModalContext.Provider>
-}
+  };
+  return <ModalContext.Provider value={contextValue}>{children}</ModalContext.Provider>;
+};
 
-export { ModalContextProvider }
-export default ModalContext
+export { ModalContextProvider };
+export default ModalContext;

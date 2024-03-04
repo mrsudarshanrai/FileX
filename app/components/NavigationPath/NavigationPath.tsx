@@ -1,9 +1,9 @@
-import { PathContainer, Paths } from './PathStyled'
-import { NavigationPathType } from './NavigationPathType'
-import { splitByslash } from '@/app/utils'
+import { PathContainer, Paths } from './PathStyled';
+import { NavigationPathType } from './NavigationPathType';
+import { splitByslash } from '@/app/utils';
 
 const NavigationPath = (props: NavigationPathType.Props) => {
-  const { path, onClick } = props
+  const { path, onClick } = props;
 
   return (
     <PathContainer>
@@ -30,10 +30,10 @@ const NavigationPath = (props: NavigationPathType.Props) => {
               </svg>{' '}
               <span>{dir}</span>
             </Paths>
-          )
+          );
         })}
     </PathContainer>
-  )
-}
+  );
+};
 
-export default NavigationPath
+export default NavigationPath;

@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled from 'styled-components';
 
 const PathContainer = styled.div`
   display: flex;
@@ -7,11 +7,11 @@ const PathContainer = styled.div`
   background-color: #13141b;
   border-radius: 8px;
   padding: 3px 10px;
-`
+`;
 
 type IPaths = {
-  isActive: boolean
-}
+  isActive: boolean;
+};
 
 const Paths = styled.div<IPaths>`
   display: flex;
@@ -28,10 +28,10 @@ const Paths = styled.div<IPaths>`
       color: #fff;
     }
   }
-`
+`;
 
 interface IArrowIcon {
-  disabled?: boolean
+  disabled?: boolean;
 }
 
 const ArrowIcon = styled.button<IArrowIcon>`
@@ -49,6 +49,6 @@ const ArrowIcon = styled.button<IArrowIcon>`
   background: transparent;
   opacity: ${(props) => (props.disabled ? 0.5 : 1)};
   cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
-`
+`;
 
-export { PathContainer, Paths, ArrowIcon }
+export { PathContainer, Paths, ArrowIcon };

@@ -1,2 +1,2 @@
-import NavigationPath from './NavigationPath'
-export default NavigationPath
+import NavigationPath from './NavigationPath';
+export default NavigationPath;

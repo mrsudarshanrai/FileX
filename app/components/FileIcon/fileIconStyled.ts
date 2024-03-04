@@ -1,5 +1,5 @@
-import styled, { css } from 'styled-components'
-import { FileIconType } from './fileIconType'
+import styled, { css } from 'styled-components';
+import { FileIconType } from './fileIconType';
 
 const FileIconWrapper = styled.div<FileIconType.FileIconWrapper>`
   filter: brightness(100%);
@@ -12,6 +12,6 @@ const FileIconWrapper = styled.div<FileIconType.FileIconWrapper>`
         filter: brightness(90%);
       }
     `}
-`
+`;
 
-export { FileIconWrapper }
+export { FileIconWrapper };

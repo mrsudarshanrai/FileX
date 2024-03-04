@@ -1,7 +1,7 @@
 export namespace ModalType {
   export type Props = {
-    size?: ModalSize
-  }
+    size?: ModalSize;
+  };
 
   export enum ModalSizeEnum {
     small = 'small',
@@ -9,5 +9,5 @@ export namespace ModalType {
     large = 'large',
   }
 
-  export type ModalSize = keyof typeof ModalSizeEnum
+  export type ModalSize = keyof typeof ModalSizeEnum;
 }

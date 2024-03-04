@@ -1,6 +1,6 @@
-import { invoke } from '@tauri-apps/api/tauri'
-import { useEffect, useState } from 'react'
-import { FilePropertiesType } from '../components/PropertiesModal/FilePropertiesType'
+import { invoke } from '@tauri-apps/api/tauri';
+import { useEffect, useState } from 'react';
+import { FilePropertiesType } from '../components/PropertiesModal/FilePropertiesType';
 
 const useFileProperties = (targetPath: string) => {
   const [properties, setProperties] = useState<FilePropertiesType.Property>({
@@ -11,22 +11,22 @@ const useFileProperties = (targetPath: string) => {
     location: '',
     mime_type: '',
     name: '',
-  })
+  });
 
   const getFileProperties = async () => {
     await invoke('get_properties', {
       path: targetPath,
     }).then((res) => {
-      setProperties(res as FilePropertiesType.Property)
-    })
+      setProperties(res as FilePropertiesType.Property);
+    });
 
-    return { targetPath }
-  }
+    return { targetPath };
+  };
 
   useEffect(() => {
-    getFileProperties()
-  }, [])
-  return { properties }
-}
+    getFileProperties();
+  }, []);
+  return { properties };
+};
 
-export { useFileProperties }
+export { useFileProperties };

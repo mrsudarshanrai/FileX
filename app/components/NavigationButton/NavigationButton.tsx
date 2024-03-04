@@ -1,12 +1,12 @@
-import { getIcons } from '../Icon/icon'
-import { ArrowIcon } from '../NavigationPath/PathStyled'
-import { NavigationButtonType } from './NavigationButtonType'
+import { getIcons } from '../Icon/icon';
+import { ArrowIcon } from '../NavigationPath/PathStyled';
+import { NavigationButtonType } from './NavigationButtonType';
 
-const ARROW_LEFT = 'arrowLeft'
-const ARROW_RIGHT = 'arrowRight'
+const ARROW_LEFT = 'arrowLeft';
+const ARROW_RIGHT = 'arrowRight';
 
 const NavigationButton = (props: NavigationButtonType.Props) => {
-  const { isBackBtnDisabled, isForwardBtnDisabled, onClick } = props
+  const { isBackBtnDisabled, isForwardBtnDisabled, onClick } = props;
   return (
     <>
       <ArrowIcon
@@ -24,7 +24,7 @@ const NavigationButton = (props: NavigationButtonType.Props) => {
         {getIcons(ARROW_RIGHT)}
       </ArrowIcon>
     </>
-  )
-}
+  );
+};
 
-export default NavigationButton
+export default NavigationButton;

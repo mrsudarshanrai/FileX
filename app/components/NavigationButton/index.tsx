@@ -1,2 +1,2 @@
-import NavigationButton from './NavigationButton'
-export default NavigationButton
+import NavigationButton from './NavigationButton';
+export default NavigationButton;

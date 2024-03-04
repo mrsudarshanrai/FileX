@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled from 'styled-components';
 
 const PropertiesModalWrapper = styled.div`
   height: 230px;
@@ -11,7 +11,7 @@ const PropertiesModalWrapper = styled.div`
     flex-direction: column;
     row-gap: 10px;
   }
-`
+`;
 
 const Info = styled.div`
   display: grid;
@@ -34,6 +34,6 @@ const Info = styled.div`
     text-overflow: ellipsis;
     user-select: all;
   }
-`
+`;
 
-export { PropertiesModalWrapper, Info }
+export { PropertiesModalWrapper, Info };

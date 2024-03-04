@@ -1,9 +1,9 @@
-import { Color } from '@/app/theme/colorsType'
-import styled, { createGlobalStyle, css } from 'styled-components'
+import { Color } from '@/app/theme/colorsType';
+import styled, { createGlobalStyle, css } from 'styled-components';
 
 export type Theme = {
-  theme: Color
-}
+  theme: Color;
+};
 const MainContainer = styled.div`
   border: 0;
   height: 100vh;
@@ -11,7 +11,7 @@ const MainContainer = styled.div`
   color: white;
   padding: 15px 0;
   width: 100%;
-`
+`;
 
 const GlobalStyles = createGlobalStyle<Theme>`
 ${({ theme }) =>
@@ -32,6 +32,6 @@ ${({ theme }) =>
       overflow: hidden;
       font-family: 'Poppins', sans-serif;
   `}}
-`
+`;
 
-export { GlobalStyles, MainContainer }
+export { GlobalStyles, MainContainer };

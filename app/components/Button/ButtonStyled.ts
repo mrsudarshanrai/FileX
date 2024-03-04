@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components'
+import styled, { css } from 'styled-components';
 
 const ButtonStyled = styled.button`
   ${({ theme, disabled }) => css`
@@ -28,6 +28,6 @@ const ButtonStyled = styled.button`
       cursor: not-allowed;
     }
   `}
-`
+`;
 
-export { ButtonStyled }
+export { ButtonStyled };

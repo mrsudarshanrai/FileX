@@ -1,2 +1,2 @@
-import ContextMenuModal from './ContextMenuModal'
-export default ContextMenuModal
+import ContextMenuModal from './ContextMenuModal';
+export default ContextMenuModal;

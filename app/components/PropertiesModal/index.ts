@@ -1,2 +1,2 @@
-import { PropertiesModal } from './PropertiesModal'
-export { PropertiesModal }
+import { PropertiesModal } from './PropertiesModal';
+export { PropertiesModal };

@@ -1,2 +1,2 @@
-import { useContextMenu } from './useContextMenu'
-export { useContextMenu }
+import { useContextMenu } from './useContextMenu';
+export { useContextMenu };

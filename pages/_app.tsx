@@ -1,18 +1,18 @@
-import Sidebar from '@/app/screens/Sidebar'
-import type { AppProps } from 'next/app'
-import Head from 'next/head'
-import { ThemeProvider } from 'styled-components'
-import AppContainer from '@/app/screens/AppContainer'
-import Topbar from '@/app/screens/Topbar'
-import { DirContextProvider } from '@/app/context/DirectoryContext'
-import { ContextMenuProvider } from '@/app/context/ContextMenu'
-import NavigationContextProvider from '@/app/context/NavigationContext'
-import { colors } from '@/app/theme/colors'
-import { GlobalStyles, MainContainer } from '@/styles/GlobalStyles'
-import { Toaster } from 'react-hot-toast'
-import { ModalContextProvider } from '@/app/context/ModalContext'
-import '../styles/index.css'
-import { DirectorySizeContextProvider } from '@/app/context/DirectorySizeContext/DirectorySizeContext'
+import Sidebar from '@/app/screens/Sidebar';
+import type { AppProps } from 'next/app';
+import Head from 'next/head';
+import { ThemeProvider } from 'styled-components';
+import AppContainer from '@/app/screens/AppContainer';
+import Topbar from '@/app/screens/Topbar';
+import { DirContextProvider } from '@/app/context/DirectoryContext';
+import { ContextMenuProvider } from '@/app/context/ContextMenu';
+import NavigationContextProvider from '@/app/context/NavigationContext';
+import { colors } from '@/app/theme/colors';
+import { GlobalStyles, MainContainer } from '@/styles/GlobalStyles';
+import { Toaster } from 'react-hot-toast';
+import { ModalContextProvider } from '@/app/context/ModalContext';
+import '../styles/index.css';
+import { DirectorySizeContextProvider } from '@/app/context/DirectorySizeContext/DirectorySizeContext';
 const App = ({ Component, pageProps }: AppProps) => {
   return (
     <>
@@ -46,7 +46,7 @@ const App = ({ Component, pageProps }: AppProps) => {
         </DirContextProvider>
       </ThemeProvider>
     </>
-  )
-}
+  );
+};
 
-export default App
+export default App;

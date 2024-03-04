@@ -1,5 +1,5 @@
-import { colors } from '@/app/theme/colors'
-import { ButtonType } from './ButtonType'
+import { colors } from '@/app/theme/colors';
+import { ButtonType } from './ButtonType';
 
 const defaultButtonTheme: ButtonType.ButtonThemeColor = {
   background: 'transparent',
@@ -7,7 +7,7 @@ const defaultButtonTheme: ButtonType.ButtonThemeColor = {
   shadowColor: colors.grey.grey50,
   disabledColor: colors.grey.grey100,
   borderColor: colors.grey.grey50,
-}
+};
 
 const errorButtonTheme: ButtonType.ButtonThemeColor = {
   background: colors.red.red400,
@@ -16,7 +16,7 @@ const errorButtonTheme: ButtonType.ButtonThemeColor = {
   disabledColor: colors.grey.grey100,
   borderColor: colors.red.red400,
   textColor: colors.white.white,
-}
+};
 
 const successButtonTheme: ButtonType.ButtonThemeColor = {
   background: colors.green.green400,
@@ -25,18 +25,18 @@ const successButtonTheme: ButtonType.ButtonThemeColor = {
   disabledColor: colors.grey.grey100,
   borderColor: colors.green.green400,
   textColor: colors.white.white,
-}
+};
 
 const buttonThemes = {
   default: defaultButtonTheme,
   error: errorButtonTheme,
   success: successButtonTheme,
-}
+};
 
 const getButtonTheme = (themeName?: ButtonType.ButtonTheme) => {
   if (themeName && themeName in buttonThemes) {
-    return buttonThemes[themeName as keyof typeof buttonThemes]
-  } else return defaultButtonTheme
-}
+    return buttonThemes[themeName as keyof typeof buttonThemes];
+  } else return defaultButtonTheme;
+};
 
-export { defaultButtonTheme, buttonThemes, getButtonTheme }
+export { defaultButtonTheme, buttonThemes, getButtonTheme };

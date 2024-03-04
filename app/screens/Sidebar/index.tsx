@@ -1,23 +1,23 @@
-import { getIcons, icons } from '@/app/components/Icon/icon'
-import { SidebarContainer, SidebarItem, SidebarItems, SidebarTitle } from './SidebarStyled'
-import { useContext, useEffect, useState } from 'react'
-import DirContext from '@/app/context/DirectoryContext'
-import { getSidebarDirs } from './helper'
-import { IDir } from '@/app/lib/types/dir'
-import { NavigationContext } from '@/app/context/NavigationContext'
+import { getIcons, icons } from '@/app/components/Icon/icon';
+import { SidebarContainer, SidebarItem, SidebarItems, SidebarTitle } from './SidebarStyled';
+import { useContext, useEffect, useState } from 'react';
+import DirContext from '@/app/context/DirectoryContext';
+import { getSidebarDirs } from './helper';
+import { IDir } from '@/app/lib/types/dir';
+import { NavigationContext } from '@/app/context/NavigationContext';
 
 const Sidebar = () => {
-  const { dirs, homePath } = useContext(DirContext)
-  const { navigate, currentPath } = useContext(NavigationContext)
-  const [sideBarDirs, setSideBarDirs] = useState<IDir.IDirs[]>([])
+  const { dirs, homePath } = useContext(DirContext);
+  const { navigate, currentPath } = useContext(NavigationContext);
+  const [sideBarDirs, setSideBarDirs] = useState<IDir.IDirs[]>([]);
 
   useEffect(() => {
-    if (!sideBarDirs.length) setSideBarDirs(getSidebarDirs(dirs))
-  }, [dirs, sideBarDirs.length])
+    if (!sideBarDirs.length) setSideBarDirs(getSidebarDirs(dirs));
+  }, [dirs, sideBarDirs.length]);
 
   const onDirClick = (path: string) => {
-    navigate(path)
-  }
+    navigate(path);
+  };
 
   return (
     <SidebarContainer>
@@ -35,7 +35,7 @@ const Sidebar = () => {
         ))}
       </SidebarItems>
     </SidebarContainer>
-  )
-}
+  );
+};
 
-export default Sidebar
+export default Sidebar;

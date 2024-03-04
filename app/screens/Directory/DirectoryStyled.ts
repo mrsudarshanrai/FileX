@@ -1,8 +1,9 @@
-import styled, { css } from 'styled-components'
+import { colors } from '@/app/theme/colors';
+import styled, { css } from 'styled-components';
 
 type FileName = {
-  isSelected: boolean
-}
+  isSelected: boolean;
+};
 
 const DirContainer = styled.div`
   display: flex;
@@ -14,7 +15,7 @@ const DirContainer = styled.div`
   width: 100%;
   margin: 0 auto;
   padding-bottom: 50px;
-`
+`;
 
 const FileGrid = styled.div`
   display: flex;
@@ -22,7 +23,7 @@ const FileGrid = styled.div`
   cursor: pointer;
   width: 150px;
   height: 150px;
-`
+`;
 
 const File = styled.div`
   display: flex;
@@ -30,14 +31,14 @@ const File = styled.div`
   align-items: center;
   flex-direction: column;
   cursor: pointer;
-`
+`;
 
 const FileNameWrapper = styled.div`
   width: 100px;
   margin: 7px 0 0 0;
   display: flex;
   justify-content: center;
-`
+`;
 
 const FileName = styled.span<FileName>`
   font-size: 15px;
@@ -60,6 +61,16 @@ const FileName = styled.span<FileName>`
       background-color: #007acc;
       border-radius: 3px;
     `}
-`
+`;
 
-export { DirContainer, FileGrid, File, FileNameWrapper, FileName }
+const FileRenameInput = styled.input`
+  text-align: center;
+  background-color: ${colors.grey.grey30};
+  outline: none;
+  border: 1px solid ${colors.grey.grey20};
+  color: #fff;
+  border-radius: 4px;
+  padding: 4px 0;
+`;
+
+export { DirContainer, FileGrid, File, FileNameWrapper, FileName, FileRenameInput };

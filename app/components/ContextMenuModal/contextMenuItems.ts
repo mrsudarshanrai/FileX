@@ -1,4 +1,4 @@
-import { IContextMenuItem, IContextMenuItemEnum } from './contextmenuModalType'
+import { IContextMenuItem, IContextMenuItemEnum } from './contextmenuModalType';
 
 const contextMenuItems: IContextMenuItem[] = [
   {
@@ -23,6 +23,11 @@ const contextMenuItems: IContextMenuItem[] = [
     shortcut: '',
   },
   {
+    label: 'Rename',
+    name: IContextMenuItemEnum.rename,
+    shortcut: '',
+  },
+  {
     label: 'Delete',
     name: IContextMenuItemEnum.delete,
     shortcut: '',
@@ -37,6 +42,6 @@ const contextMenuItems: IContextMenuItem[] = [
     name: IContextMenuItemEnum.properties,
     shortcut: '',
   },
-]
+];
 
-export { contextMenuItems }
+export { contextMenuItems };

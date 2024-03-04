@@ -1,14 +1,15 @@
-import { useFileProperties } from '@/app/hooks/useFileProperties'
-import { Info, PropertiesModalWrapper } from './PropertiesModalStyled'
-import FileIcon from '../FileIcon'
-import { useContext } from 'react'
-import DirectorySizeContext from '@/app/context/DirectorySizeContext/DirectorySizeContext'
-import { convertBytes } from '@/app/utils'
+import { useFileProperties } from '@/app/hooks/useFileProperties';
+import { Info, PropertiesModalWrapper } from './PropertiesModalStyled';
+import FileIcon from '../FileIcon';
+import { useContext } from 'react';
+import DirectorySizeContext from '@/app/context/DirectorySizeContext/DirectorySizeContext';
+import { convertBytes } from '@/app/utils';
 
 const PropertiesModal = (props: { path: string }) => {
-  const { properties } = useFileProperties(props.path)
-  const { name, extension, is_file, created, last_modified, mime_type, location } = properties || {}
-  const { fileCount, directorySize, isFetching } = useContext(DirectorySizeContext)
+  const { properties } = useFileProperties(props.path);
+  const { name, extension, is_file, created, last_modified, mime_type, location } =
+    properties || {};
+  const { fileCount, directorySize, isFetching } = useContext(DirectorySizeContext);
 
   return (
     <PropertiesModalWrapper>
@@ -52,7 +53,7 @@ const PropertiesModal = (props: { path: string }) => {
         </Info>
       </div>
     </PropertiesModalWrapper>
-  )
-}
+  );
+};
 
-export { PropertiesModal }
+export { PropertiesModal };

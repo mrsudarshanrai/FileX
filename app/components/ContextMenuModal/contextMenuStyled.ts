@@ -1,13 +1,18 @@
-import styled, { css } from 'styled-components'
-import { ContextMenuItemElement, ContextMenuWrapperProps } from './contextmenuModalType'
-import { switchContextMenuItemDisabledStyle } from './utils'
+import styled, { css } from 'styled-components';
+import { ContextMenuItemElement, ContextMenuWrapperProps } from './contextmenuModalType';
+import { switchContextMenuItemDisabledStyle } from './utils';
 
-const CONTEXT_MENU_ITEM_HEIGHT = 47
+const CONTEXT_MENU_ITEM_HEIGHT = 47;
 
 const ContextMenuWrapper = styled.div<
   Omit<
     ContextMenuWrapperProps,
-    'setShow' | 'targetPath' | 'setSorucePathToCopy' | 'sorucePathToCopy' | 'isTargetPathFile'
+    | 'setShow'
+    | 'targetPath'
+    | 'setSorucePathToCopy'
+    | 'sorucePathToCopy'
+    | 'isTargetPathFile'
+    | 'setFileRenamePath'
   >
 >`
   ${(props) => css`
@@ -23,7 +28,7 @@ const ContextMenuWrapper = styled.div<
     overflow: hidden;
     cursor: pointer;
   `}
-`
+`;
 
 const ContextMenuItem = styled.div<ContextMenuItemElement>`
   ${({ disabled, theme }) => css`
@@ -43,13 +48,13 @@ const ContextMenuItem = styled.div<ContextMenuItemElement>`
 
     ${switchContextMenuItemDisabledStyle(disabled, theme)}
   `}
-`
+`;
 
 const Item = styled.div`
   display: flex;
   align-items: center;
   column-gap: 18px;
-`
+`;
 
 const ContentMenuItemShortcut = styled.div`
   font-style: normal;
@@ -58,10 +63,10 @@ const ContentMenuItemShortcut = styled.div`
   line-height: 12px;
   word-spacing: -3px;
   color: #767676;
-`
+`;
 
 const IconContainer = styled.div`
   width: 16px;
-`
+`;
 
-export { ContextMenuWrapper, ContextMenuItem, Item, ContentMenuItemShortcut, IconContainer }
+export { ContextMenuWrapper, ContextMenuItem, Item, ContentMenuItemShortcut, IconContainer };
