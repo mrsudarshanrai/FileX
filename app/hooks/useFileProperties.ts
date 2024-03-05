@@ -11,6 +11,7 @@ const useFileProperties = (targetPath: string) => {
     location: '',
     mime_type: '',
     name: '',
+    size: 0,
   });
 
   const getFileProperties = async () => {

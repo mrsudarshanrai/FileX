@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import DirContext from '@/app/context/DirectoryContext';
 import { IDir } from '@/app/lib/types/dir';
 import {
@@ -16,20 +16,18 @@ import ContextMenu from '@/app/context/ContextMenu';
 import { Display, DisplayEnum } from '@/app/components/ContextMenuModal/contextmenuModalType';
 import { useContextMenu } from '@/app/hooks/useContextMenu';
 import { checkIfRenameEnabled } from './directoryUtils';
-import { getFileNameFromPath } from '@/app/utils';
-import { invoke } from '@tauri-apps/api/tauri';
+import { useRenameFile } from '@/app/hooks/useRenameFile';
 
 export const isContextMenuOpen = (value: Display) => value === DisplayEnum.none;
 
 const Directory = () => {
-  const { dirs, isLoading, fetch } = useContext(DirContext);
-  const { navigate, currentPath } = useContext(NavigationContext);
-  const { show, setShow, setTargetPath, setIsTargetPathFile, fileRenamePath, setFileRenamePath } =
-    useContext(ContextMenu);
+  const { dirs, isLoading } = useContext(DirContext);
+  const { navigate } = useContext(NavigationContext);
+  const { show, setShow, setTargetPath, setIsTargetPathFile } = useContext(ContextMenu);
 
   const { openFile } = useContextMenu();
+  const { fileName, setFileName, renameFile, fileRenamePath, setFileRenamePath } = useRenameFile();
   const [selectedFile, setSelectedFile] = useState<string>('');
-  const [fileName, setFileName] = useState<string>('');
 
   const onFileDoubleClick = async (path: string, isFolder: boolean) => {
     setTargetPath(path);
@@ -57,17 +55,8 @@ const Directory = () => {
     setIsTargetPathFile(!isFolder);
   };
 
-  const renameFile = async (newName: string) => {
-    await invoke('rename', {
-      path: fileRenamePath,
-      newName,
-    }).then(() => {
-      setFileRenamePath(null);
-      fetch(currentPath, 'get_files_in_path');
-    });
-  };
   const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter' && fileRenamePath && fileName.length > 0) {
+    if (event.key === 'Enter') {
       renameFile(fileName);
     }
   };
@@ -76,16 +65,8 @@ const Directory = () => {
     setShow(DisplayEnum.none);
     setTargetPath(undefined);
     setFileRenamePath(null);
-    if (fileName && fileName.length > 0) {
-      renameFile(fileName);
-    }
+    renameFile(fileName);
   };
-
-  useEffect(() => {
-    if (fileRenamePath) {
-      setFileName(getFileNameFromPath(fileRenamePath) as string);
-    }
-  }, [fileRenamePath]);
 
   return (
     <DirContainerWrapper onClick={onDirectoryContainerClicked}>
