@@ -27,10 +27,12 @@ const PropertiesModal = (props: { path: string }) => {
             {is_file ? 'File' : 'Folder'} ({mime_type})
           </p>
         </Info>
-        <Info>
-          <h4>Contents:</h4>
-          <p>{isFetching ? 'Calculating...' : `${fileCount} items`}</p>
-        </Info>
+        {!is_file && (
+          <Info>
+            <h4>Contents:</h4>
+            <p>{isFetching ? 'Calculating...' : `${fileCount} items`}</p>
+          </Info>
+        )}
         <Info>
           <h4>Size:</h4>
           <p>{`${isFetching ? 'Calculating...' : getFileSize(is_file, directorySize, size)}`}</p>
