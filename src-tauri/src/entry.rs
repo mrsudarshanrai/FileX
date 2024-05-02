@@ -1,7 +1,12 @@
 use crate::file_manager::File;
+use crate::file_manager::FileProperties;
 use crate::folder_manager::Folder;
 use crate::helper;
 use crate::utils;
+use std::path::Path;
+use std::time::Duration;
+use tauri::Manager;
+use tokio::time;
 
 #[tauri::command]
 pub fn get_files_in_path(path: &str) -> Result<Vec<helper::Files>, String> {
@@ -66,4 +71,41 @@ pub async fn copy_to_path(from: String, to: String) -> String {
 #[tauri::command]
 pub fn open_file(path: String) -> String {
     File::open(&path)
+}
+
+#[tauri::command]
+pub async fn get_properties(path: String) -> Result<FileProperties, String> {
+    File::properties(path).await
+}
+
+#[derive(Clone, serde::Serialize, Debug)]
+struct DirectorySize {
+    file_count: u64,
+    size: u64,
+}
+
+#[tauri::command]
+pub async fn calculate_directory_size(app: tauri::AppHandle, dir_path: String) {
+    let mut interval = time::interval(Duration::from_secs(3));
+    let mut total_size = 0;
+    let mut file_count = 0;
+    let app_handle = app.clone();
+
+    interval.tick().await;
+    tokio::spawn(async move {
+        let path = Path::new(&dir_path);
+        helper::calculate_file_size_recursive(path, &mut total_size, &mut file_count).await;
+        let payload = DirectorySize {
+            size: total_size,
+            file_count: file_count,
+        };
+        app_handle
+            .emit_all("calculate_directory_size", payload)
+            .unwrap();
+    });
+}
+
+#[tauri::command]
+pub async fn rename(path: String, new_name: String) -> String {
+    File::rename(path, new_name).await
 }

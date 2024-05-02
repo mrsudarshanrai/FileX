@@ -1,4 +1,4 @@
-import { useContext, useRef } from 'react'
+import { useContext, useRef } from 'react';
 import {
   ModalBody,
   ModalBodySection,
@@ -9,29 +9,30 @@ import {
   ModalHeaderLeftContainer,
   ModalHeaderRightContainer,
   ModalWrapper,
-} from './ModalStyled'
-import { useDraggable } from '@/app/hooks/useDraggable'
-import { getIcons } from '../Icon/icon'
-import ModalContext from '@/app/context/ModalContext'
-import { isString } from '@/app/utils'
+} from './ModalStyled';
+import { useDraggable } from '@/app/hooks/useDraggable';
+import ModalContext from '@/app/context/ModalContext';
+import { isString } from '@/app/utils';
+import { Icon } from '../Icon/Icon';
 
-const Modal_HEADER_ID = 'modal_header'
+const Modal_HEADER_ID = 'modal_header';
 
 const renderContent = (content: React.ReactNode | string) => {
-  if (isString(content)) return <p>{content}</p>
-  return content
-}
+  if (isString(content)) return <p>{content}</p>;
+  return content;
+};
 
 const Modal = () => {
-  const modalContentRef = useRef<HTMLDivElement>(null)
-  const modalHeaderRef = useRef<HTMLDivElement>(null)
-  const { show, modalFooter, modalHeader, modalBody, modalHeight } = useContext(ModalContext)
-  const _ = useDraggable(modalContentRef, modalHeaderRef, Modal_HEADER_ID)
+  const modalContentRef = useRef<HTMLDivElement>(null);
+  const modalHeaderRef = useRef<HTMLDivElement>(null);
+  const { show, modalFooter, modalHeader, modalBody, modalHeight, modalWidth } =
+    useContext(ModalContext);
+  const _ = useDraggable(modalContentRef, modalHeaderRef, Modal_HEADER_ID);
 
   return (
     <ModalWrapper>
       <ModalContainer>
-        <ModalContent ref={modalContentRef} modalHeight={modalHeight}>
+        <ModalContent ref={modalContentRef} modalHeight={modalHeight} modalWidth={modalWidth}>
           <ModalHeader id={Modal_HEADER_ID} ref={modalHeaderRef}>
             <ModalHeaderLeftContainer>{renderContent(modalHeader)}</ModalHeaderLeftContainer>
             <ModalHeaderRightContainer>
@@ -42,7 +43,7 @@ const Modal = () => {
                   })
                 }
               >
-                {getIcons('cross')}
+                <Icon name='close' width='15px' height='15px' />
               </div>
             </ModalHeaderRightContainer>
           </ModalHeader>
@@ -53,7 +54,7 @@ const Modal = () => {
         </ModalContent>
       </ModalContainer>
     </ModalWrapper>
-  )
-}
+  );
+};
 
-export default Modal
+export default Modal;

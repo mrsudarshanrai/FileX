@@ -10,6 +10,14 @@ const nextConfig = {
   experimental: {
     appDir: false,
   },
-}
+  webpack: (config, { isServer }) => {
+    config.module.rules.push({
+      test: /\.svg$/,
+      use: ['@svgr/webpack'],
+    });
 
-module.exports = nextConfig
+    return config;
+  },
+};
+
+module.exports = nextConfig;

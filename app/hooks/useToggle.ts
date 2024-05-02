@@ -1,27 +1,27 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react';
 
 const useToggle = (defaultIsActive?: boolean) => {
-  const [isActive, setActive] = useState(defaultIsActive)
+  const [isActive, setActive] = useState(defaultIsActive);
 
   const toggle = () => {
-    setActive(!isActive)
-  }
+    setActive(!isActive);
+  };
 
   const close = () => {
-    setActive(false)
-  }
+    setActive(false);
+  };
 
   const open = () => {
-    setActive(true)
-  }
+    setActive(true);
+  };
 
   const set = (value: boolean) => {
-    setActive(value)
-  }
+    setActive(value);
+  };
 
   useEffect(() => {
-    setActive(!!defaultIsActive)
-  }, [defaultIsActive])
+    setActive(!!defaultIsActive);
+  }, [defaultIsActive]);
 
   return {
     isActive,
@@ -29,7 +29,7 @@ const useToggle = (defaultIsActive?: boolean) => {
     close,
     open,
     set,
-  }
-}
+  };
+};
 
-export { useToggle }
+export { useToggle };

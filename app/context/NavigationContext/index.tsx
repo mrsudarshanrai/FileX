@@ -1,18 +1,18 @@
-import React, { useContext, useEffect, useState } from 'react'
-import { getLastItemFromArray } from '@/app/utils'
-import DirContext from '../DirectoryContext'
+import React, { useContext, useEffect, useState } from 'react';
+import { getLastItemFromArray } from '@/app/utils';
+import DirContext from '../DirectoryContext';
 
 type Props = {
-  children: React.ReactNode
-}
+  children: React.ReactNode;
+};
 
 type NavigationContextType = {
-  navigate: (path: number | string) => void
-  currentPath: string
-  setCurrentPath: React.Dispatch<React.SetStateAction<string>>
-  isForwardDisabled: boolean
-  isBackDisabled: boolean
-}
+  navigate: (path: number | string) => void;
+  currentPath: string;
+  setCurrentPath: React.Dispatch<React.SetStateAction<string>>;
+  isForwardDisabled: boolean;
+  isBackDisabled: boolean;
+};
 
 const NavigationContext = React.createContext<NavigationContextType>({
   navigate: () => {},
@@ -20,78 +20,78 @@ const NavigationContext = React.createContext<NavigationContextType>({
   setCurrentPath: () => {},
   isForwardDisabled: false,
   isBackDisabled: false,
-})
+});
 
 const NavigationContextProvider = (props: Props) => {
-  const { children } = props
-  const { fetch, homePath } = useContext(DirContext)
+  const { children } = props;
+  const { fetch, homePath } = useContext(DirContext);
 
-  const [currentPath, setCurrentPath] = useState(homePath)
+  const [currentPath, setCurrentPath] = useState(homePath);
   /** all forward and backward paths */
-  const [forwardStack, setForwardStack] = useState<string[]>([])
-  const [backwardStack, setBackwardStack] = useState<string[]>([])
+  const [forwardStack, setForwardStack] = useState<string[]>([]);
+  const [backwardStack, setBackwardStack] = useState<string[]>([]);
 
-  const pushToBackwardStack = (path: string) => setBackwardStack((stack) => [...stack, path])
-  const pushToForwardStack = (path: string) => setForwardStack((stack) => [...stack, path])
+  const pushToBackwardStack = (path: string) => setBackwardStack((stack) => [...stack, path]);
+  const pushToForwardStack = (path: string) => setForwardStack((stack) => [...stack, path]);
 
   const [navigationBtnStatus, setNavigationBtnStatus] = useState({
     isForwardDisabled: false,
     isBackDisabled: false,
-  })
+  });
 
   const navigate = (path: number | string) => {
     switch (path) {
       // backward navigation
       case -1: {
         if (backwardStack.length === 0 || currentPath === getLastItemFromArray(backwardStack)) {
-          return
+          return;
         }
-        const backwardStackCopy = [...backwardStack]
-        const poppedItem = backwardStackCopy.pop()
-        setBackwardStack(backwardStackCopy)
+        const backwardStackCopy = [...backwardStack];
+        const poppedItem = backwardStackCopy.pop();
+        setBackwardStack(backwardStackCopy);
         if (poppedItem) {
-          pushToForwardStack(currentPath)
-          setCurrentPath(poppedItem)
-          fetch(poppedItem, 'get_files_in_path')
+          pushToForwardStack(currentPath);
+          setCurrentPath(poppedItem);
+          fetch(poppedItem, 'get_files_in_path');
         }
-        break
+        break;
       }
       // forward navigation
       case 1: {
         if (forwardStack.length === 0 || currentPath === getLastItemFromArray(forwardStack)) {
-          return
+          return;
         }
-        const forwardStackCopy = [...forwardStack]
-        const poppedItem = forwardStackCopy.pop()
-        setForwardStack(forwardStackCopy)
+        const forwardStackCopy = [...forwardStack];
+        const poppedItem = forwardStackCopy.pop();
+        setForwardStack(forwardStackCopy);
         if (poppedItem) {
-          pushToBackwardStack(currentPath)
-          setCurrentPath(poppedItem)
-          fetch(poppedItem, 'get_files_in_path')
+          pushToBackwardStack(currentPath);
+          setCurrentPath(poppedItem);
+          fetch(poppedItem, 'get_files_in_path');
         }
-        break
+        break;
       }
       // default navigates to provided path string
       default:
         if (typeof path === 'string') {
-          pushToBackwardStack(currentPath)
-          setCurrentPath(path)
-          fetch(path, 'get_files_in_path')
+          pushToBackwardStack(currentPath);
+          setCurrentPath(path);
+          fetch(path, 'get_files_in_path');
         }
-        break
+        break;
     }
-  }
+  };
 
   useEffect(() => {
     setNavigationBtnStatus({
       isForwardDisabled: forwardStack.length === 0,
       isBackDisabled: backwardStack.length === 0,
-    })
-  }, [forwardStack.length, backwardStack.length])
+    });
+  }, [forwardStack.length, backwardStack.length]);
 
   useEffect(() => {
-    setCurrentPath(homePath)
-  }, [homePath])
+    setCurrentPath(homePath);
+  }, [homePath]);
 
   const contextValue = {
     navigate,
@@ -99,10 +99,10 @@ const NavigationContextProvider = (props: Props) => {
     setCurrentPath,
     isForwardDisabled: navigationBtnStatus.isForwardDisabled,
     isBackDisabled: navigationBtnStatus.isBackDisabled,
-  }
+  };
 
-  return <NavigationContext.Provider value={contextValue}>{children}</NavigationContext.Provider>
-}
+  return <NavigationContext.Provider value={contextValue}>{children}</NavigationContext.Provider>;
+};
 
-export default NavigationContextProvider
-export { NavigationContext }
+export default NavigationContextProvider;
+export { NavigationContext };

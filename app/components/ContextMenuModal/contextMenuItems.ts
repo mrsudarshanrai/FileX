@@ -1,37 +1,47 @@
-import { IContextMenuItem, IContextMenuItemEnum } from './contextmenuModalType'
+import { IContextMenuItem, IContextMenuItemEnum } from './contextmenuModalType';
 
 const contextMenuItems: IContextMenuItem[] = [
   {
+    label: 'Open',
+    name: IContextMenuItemEnum.open,
+    shortcut: '',
+  },
+  {
     label: 'New Folder',
     name: IContextMenuItemEnum.newFolder,
-    shortcut: 'Shift + Ctrl + N',
+    shortcut: '',
   },
   {
     label: 'Copy',
     name: IContextMenuItemEnum.copy,
-    shortcut: 'Ctrl + C',
+    shortcut: '',
     disabled: true,
   },
   {
     label: 'Paste',
     name: IContextMenuItemEnum.paste,
-    shortcut: 'Ctrl + P',
+    shortcut: '',
+  },
+  {
+    label: 'Rename',
+    name: IContextMenuItemEnum.rename,
+    shortcut: '',
   },
   {
     label: 'Delete',
     name: IContextMenuItemEnum.delete,
-    shortcut: 'Ctrl + D',
+    shortcut: '',
   },
   {
     label: 'Select All',
     name: IContextMenuItemEnum.selectAll,
-    shortcut: 'Ctrl + A',
+    shortcut: '',
   },
   {
     label: 'Properties',
     name: IContextMenuItemEnum.properties,
-    shortcut: 'Ctrl + I',
+    shortcut: '',
   },
-]
+];
 
-export { contextMenuItems }
+export { contextMenuItems };

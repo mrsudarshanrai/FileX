@@ -1,10 +1,10 @@
-import { getFileIcon } from '@/app/utils'
-import Image from 'next/image'
-import { FileIconType } from './fileIconType'
-import { FileIconWrapper } from './fileIconStyled'
+import { getFileIcon } from '@/app/utils';
+import Image from 'next/image';
+import { FileIconType } from './fileIconType';
+import { FileIconWrapper } from './fileIconStyled';
 
 const FileIcon = (props: FileIconType.Props) => {
-  const { isDir, extension, disableHover = false } = props
+  const { isDir, extension, disableHover = false } = props;
   return (
     <FileIconWrapper disableHover={disableHover}>
       {isDir ? (
@@ -13,7 +13,7 @@ const FileIcon = (props: FileIconType.Props) => {
         <Image alt='file' src={getFileIcon(extension)} width={80} height={80} />
       )}
     </FileIconWrapper>
-  )
-}
+  );
+};
 
-export default FileIcon
+export default FileIcon;

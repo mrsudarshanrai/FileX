@@ -1,2 +1,2 @@
-import Directory from '../app/screens/Directory'
-export default Directory
+import Directory from '../app/screens/Directory';
+export default Directory;

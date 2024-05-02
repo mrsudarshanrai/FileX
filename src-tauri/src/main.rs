@@ -15,7 +15,10 @@ fn main() {
             entry::get_files_in_path,
             entry::delete_path,
             entry::copy_to_path,
-            entry::open_file
+            entry::open_file,
+            entry::get_properties,
+            entry::calculate_directory_size,
+            entry::rename
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

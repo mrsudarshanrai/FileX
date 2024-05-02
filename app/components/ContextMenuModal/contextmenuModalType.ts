@@ -1,35 +1,40 @@
-export type ContextMenuModalProps = {
-  top: number
-  left: number
-  display: Display
-  setShow: React.Dispatch<React.SetStateAction<Display>>
-  targetPath: string | undefined
-  setSorucePathToCopy: React.Dispatch<React.SetStateAction<string | undefined>>
-  sorucePathToCopy: string | undefined
-}
+import { ContextMenuType } from '@/app/context/ContextMenu/ContextMenuType';
+
+export type ContextMenuModalProps = Pick<
+  ContextMenuType,
+  'targetPath' | 'setShow' | 'isTargetPathFile' | 'setFileRenamePath'
+> & {
+  top: number;
+  left: number;
+  display: Display;
+  setSorucePathToCopy: React.Dispatch<React.SetStateAction<string | undefined>>;
+  sorucePathToCopy: string | undefined;
+};
 export enum DisplayEnum {
   none = 'none',
   block = 'block',
 }
-export type Display = keyof typeof DisplayEnum
+export type Display = keyof typeof DisplayEnum;
 
 export type IContextMenuItem = {
-  label: string
-  name: ContextMenuItemUnion
-  shortcut: string
-  disabled?: boolean
-}
+  label: string;
+  name: ContextMenuItemUnion;
+  shortcut: string;
+  disabled?: boolean;
+};
 
 export type ContextMenuItemElement = {
-  disabled: boolean | undefined
-}
+  disabled: boolean | undefined;
+};
 
 export type ContextMenuWrapperProps = ContextMenuModalProps & {
-  itemCount: number
-}
+  itemCount: number;
+};
 
 export enum IContextMenuItemEnum {
+  open = 'open',
   newFolder = 'newFolder',
+  rename = 'rename',
   copy = 'copy',
   name = 'name',
   paste = 'paste',
@@ -38,4 +43,4 @@ export enum IContextMenuItemEnum {
   delete = 'delete',
 }
 
-export type ContextMenuItemUnion = keyof typeof IContextMenuItemEnum
+export type ContextMenuItemUnion = keyof typeof IContextMenuItemEnum;

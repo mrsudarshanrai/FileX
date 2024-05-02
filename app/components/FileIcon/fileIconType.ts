@@ -1,10 +1,10 @@
 export namespace FileIconType {
   export type FileIconWrapper = {
-    disableHover?: boolean
-  }
+    disableHover?: boolean;
+  };
 
   export interface Props extends FileIconWrapper {
-    isDir: boolean
-    extension: string
+    isDir: boolean;
+    extension: string;
   }
 }

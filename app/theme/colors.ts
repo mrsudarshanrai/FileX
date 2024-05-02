@@ -1,4 +1,4 @@
-import { Color } from './colorsType'
+import { Color } from './colorsType';
 
 const colors: Color = {
   grey: {
@@ -36,6 +36,6 @@ const colors: Color = {
     green800: '#25483a',
     green900: '#20362d',
   },
-}
+};
 
-export { colors }
+export { colors };

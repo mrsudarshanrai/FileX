@@ -5,6 +5,6 @@ const openFileErrorModalMessage: { [key: string]: (filename: string) => string }
     `Unable to determine the MIME type for the file "${filename}".`,
   unable_to_open_file: (filename: string) =>
     `Unable to locate the file "${filename}" on your system. Please ensure the file exists and try again.`,
-}
+};
 
-export { openFileErrorModalMessage }
+export { openFileErrorModalMessage };

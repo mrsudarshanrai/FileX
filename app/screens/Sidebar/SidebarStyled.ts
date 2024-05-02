@@ -1,24 +1,24 @@
-import { colors } from '@/app/theme/colors'
-import { Theme } from '@/styles/GlobalStyles'
-import styled, { css } from 'styled-components'
+import { colors } from '@/app/theme/colors';
+import { Theme } from '@/styles/GlobalStyles';
+import styled, { css } from 'styled-components';
 
 type ISidebarItem = {
-  isActive: boolean
-}
+  isActive: boolean;
+};
 const SidebarContainer = styled.div`
   border: 0;
   border-right: 1px solid ${colors.grey.grey50};
   height: 100vh;
   background-color: ${colors.grey.grey100};
   color: #fff;
-`
+`;
 
 const SidebarItems = styled.div`
   display: flex;
   flex-direction: column;
-`
+`;
 
-const SidebarItem = styled.p<ISidebarItem>`
+const SidebarItem = styled.div<ISidebarItem>`
   ${({ theme, isActive }) => css`
     padding: 15px;
     height: 40px;
@@ -42,10 +42,10 @@ const SidebarItem = styled.p<ISidebarItem>`
       height: 18px;
     }
   `}
-`
+`;
 
 const SidebarTitle = styled.h4`
   padding: 10px;
-`
+`;
 
-export { SidebarContainer, SidebarItems, SidebarItem, SidebarTitle }
+export { SidebarContainer, SidebarItems, SidebarItem, SidebarTitle };

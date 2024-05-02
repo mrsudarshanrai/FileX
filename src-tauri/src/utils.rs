@@ -1,5 +1,5 @@
-use std::ffi::OsStr;
-
+use chrono::{DateTime, Utc};
+use std::{ffi::OsStr, time::SystemTime};
 pub fn option_to_string(option: Option<&OsStr>) -> String {
     option
         .unwrap_or(OsStr::new(""))
@@ -19,4 +19,9 @@ pub fn get_filename_and_extension_from_path(full_filename: &str) -> (&str, &str)
         2 => (parts[1], parts[0]), // filename and extension
         _ => (full_filename, ""),  // no extension found
     }
+}
+
+pub fn sys_time_to_date_time(sys_time: SystemTime) -> String {
+    let datetime: DateTime<Utc> = sys_time.into();
+    datetime.to_rfc3339()
 }

@@ -1,5 +1,5 @@
-import { Theme } from '@/styles/GlobalStyles'
-import styled, { css } from 'styled-components'
+import { Theme } from '@/styles/GlobalStyles';
+import styled, { css } from 'styled-components';
 
 const TopbarContainer = styled.div<Theme>`
   ${({ theme }) => css`
@@ -12,5 +12,5 @@ const TopbarContainer = styled.div<Theme>`
     align-items: center;
     column-gap: 0.3em;
   `}
-`
-export { TopbarContainer }
+`;
+export { TopbarContainer };
