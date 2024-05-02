@@ -14,7 +14,7 @@ export namespace IconType {
     | 'delete'
     | 'desktop'
     | 'documents'
-    | 'download'
+    | 'downloads'
     | 'home'
     | 'music'
     | 'new-folder'
