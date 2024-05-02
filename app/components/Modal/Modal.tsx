@@ -11,9 +11,9 @@ import {
   ModalWrapper,
 } from './ModalStyled';
 import { useDraggable } from '@/app/hooks/useDraggable';
-import { getIcons } from '../Icon/icon';
 import ModalContext from '@/app/context/ModalContext';
 import { isString } from '@/app/utils';
+import { Icon } from '../Icon/Icon';
 
 const Modal_HEADER_ID = 'modal_header';
 
@@ -43,7 +43,7 @@ const Modal = () => {
                   })
                 }
               >
-                {getIcons('cross')}
+                <Icon name='close' width='15px' height='15px' />
               </div>
             </ModalHeaderRightContainer>
           </ModalHeader>

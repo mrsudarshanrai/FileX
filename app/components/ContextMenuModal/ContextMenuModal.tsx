@@ -1,4 +1,3 @@
-import { getIcons, icons } from '@/app/components/Icon/icon';
 import {
   ContextMenuItem,
   ContextMenuWrapper,
@@ -21,6 +20,8 @@ import { isOptionDisabled } from './utils';
 import { toast } from 'react-hot-toast';
 import { useContextMenu } from '@/app/hooks/useContextMenu';
 import DirectorySizeContext from '@/app/context/DirectorySizeContext/DirectorySizeContext';
+import { Icon } from '../Icon/Icon';
+import { IconType } from '../Icon/IconType';
 
 const CONDITIONAL_ITEM = ['delete', 'copy', 'open', 'rename'];
 
@@ -150,7 +151,9 @@ const ContextMenuModal = (props: ContextMenuModalProps) => {
             onClick={() => !isOptionDisabled(name, sorucePathToCopy) && onContextItemClick(name)}
           >
             <Item>
-              <IconContainer>{getIcons(name as keyof typeof icons)}</IconContainer>
+              <IconContainer>
+                <Icon name={name as IconType.IconName} />
+              </IconContainer>
               {label}
             </Item>
             <ContentMenuItemShortcut>{shortcut}</ContentMenuItemShortcut>

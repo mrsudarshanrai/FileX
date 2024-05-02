@@ -1,10 +1,11 @@
-import { getIcons, icons } from '@/app/components/Icon/icon';
 import { SidebarContainer, SidebarItem, SidebarItems, SidebarTitle } from './SidebarStyled';
 import { useContext, useEffect, useState } from 'react';
 import DirContext from '@/app/context/DirectoryContext';
 import { getSidebarDirs } from './helper';
 import { IDir } from '@/app/lib/types/dir';
 import { NavigationContext } from '@/app/context/NavigationContext';
+import { Icon } from '@/app/components/Icon/Icon';
+import { IconType } from '@/app/components/Icon/IconType';
 
 const Sidebar = () => {
   const { dirs, homePath } = useContext(DirContext);
@@ -24,12 +25,12 @@ const Sidebar = () => {
       <SidebarItems>
         <SidebarTitle>This PC</SidebarTitle>
         <SidebarItem onClick={() => onDirClick(homePath)} isActive={homePath === currentPath}>
-          {getIcons('home')}
+          <Icon name='home' />
           <span>Home</span>
         </SidebarItem>
         {sideBarDirs.map(({ folder_name, path }: IDir.IDirs, index: number) => (
           <SidebarItem key={index} onClick={() => onDirClick(path)} isActive={path === currentPath}>
-            {getIcons(folder_name.toLowerCase() as keyof typeof icons)}
+            <Icon name={folder_name.toLowerCase() as IconType.IconName} />
             <span>{folder_name}</span>
           </SidebarItem>
         ))}
