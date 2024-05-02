@@ -66,7 +66,7 @@ const ContentMenuItemShortcut = styled.div`
 `;
 
 const IconContainer = styled.div`
-  width: 16px;
+  width: 20px;
 `;
 
 export { ContextMenuWrapper, ContextMenuItem, Item, ContentMenuItemShortcut, IconContainer };

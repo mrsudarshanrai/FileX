@@ -18,7 +18,7 @@ const SidebarItems = styled.div`
   flex-direction: column;
 `;
 
-const SidebarItem = styled.p<ISidebarItem>`
+const SidebarItem = styled.div<ISidebarItem>`
   ${({ theme, isActive }) => css`
     padding: 15px;
     height: 40px;
