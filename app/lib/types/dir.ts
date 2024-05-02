@@ -1,5 +1,5 @@
 export namespace IDir {
-  export type IDirs = {
+  export type IDir = {
     path: string;
     folder_name: string;
     is_dir: boolean;

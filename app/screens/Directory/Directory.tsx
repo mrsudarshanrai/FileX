@@ -73,7 +73,7 @@ const Directory = () => {
       <DirContainer>
         {isLoading && <p>Fetching files</p>}
         {dirs.map(
-          ({ folder_name, path, is_dir: isFolder, is_visible, extension }: IDir.IDirs, index) => {
+          ({ folder_name, path, is_dir: isFolder, is_visible, extension }: IDir.IDir, index) => {
             if (!is_visible) return null;
             return (
               <FileGrid key={path} draggable={true}>

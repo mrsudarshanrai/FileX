@@ -4,13 +4,13 @@ import { IDir } from '../lib/types/dir';
 import { sortArrayByBoolean } from '../utils';
 
 const useDir = (funcName?: string) => {
-  const [dirs, setDirs] = useState<IDir.IDirs[]>([]);
+  const [dirs, setDirs] = useState<IDir.IDir[]>([]);
   const [homePath, setHomePath] = useState('/');
   const [isLoading, setIsLoading] = useState(false);
 
   const getFile = async (path: string, funcName = 'get_all_dir'): Promise<unknown> =>
     await invoke(funcName, { path })
-      .then((res: IDir.IDirs[] | unknown) => {
+      .then((res: IDir.IDir[] | unknown) => {
         if (Array.isArray(res)) {
           res.sort(sortArrayByBoolean);
           setDirs(res);

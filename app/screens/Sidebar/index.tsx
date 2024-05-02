@@ -10,7 +10,7 @@ import { IconType } from '@/app/components/Icon/IconType';
 const Sidebar = () => {
   const { dirs, homePath } = useContext(DirContext);
   const { navigate, currentPath } = useContext(NavigationContext);
-  const [sideBarDirs, setSideBarDirs] = useState<IDir.IDirs[]>([]);
+  const [sideBarDirs, setSideBarDirs] = useState<IDir.IDir[]>([]);
 
   useEffect(() => {
     if (!sideBarDirs.length) setSideBarDirs(getSidebarDirs(dirs));
@@ -28,7 +28,7 @@ const Sidebar = () => {
           <Icon name='home' />
           <span>Home</span>
         </SidebarItem>
-        {sideBarDirs.map(({ folder_name, path }: IDir.IDirs, index: number) => (
+        {sideBarDirs.map(({ folder_name, path }: IDir.IDir, index: number) => (
           <SidebarItem key={index} onClick={() => onDirClick(path)} isActive={path === currentPath}>
             <Icon name={folder_name.toLowerCase() as IconType.IconName} />
             <span>{folder_name}</span>

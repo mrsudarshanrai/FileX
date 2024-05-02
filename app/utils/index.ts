@@ -19,7 +19,7 @@ const getFileIcon = (extension: string) => {
 const getLastItemFromArray = <T>(array: Array<T>) => array[array.length - 1];
 
 // true...false
-const sortArrayByBoolean = (x: IDir.IDirs, y: IDir.IDirs) => +y.is_dir - +x.is_dir;
+const sortArrayByBoolean = (x: IDir.IDir, y: IDir.IDir) => +y.is_dir - +x.is_dir;
 
 const splitByslash = (path: string) => {
   if (typeof path === 'string') return path.split('/');
