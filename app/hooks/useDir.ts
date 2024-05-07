@@ -7,6 +7,7 @@ const useDir = (funcName?: string) => {
   const [dirs, setDirs] = useState<IDir.IDir[]>([]);
   const [homePath, setHomePath] = useState('/');
   const [isLoading, setIsLoading] = useState(false);
+  const [activeDir, setActiveDir] = useState<Partial<IDir.IDir>>({});
 
   const getFile = async (path: string, funcName = 'get_all_dir'): Promise<unknown> =>
     await invoke(funcName, { path })
@@ -38,6 +39,8 @@ const useDir = (funcName?: string) => {
     isLoading,
     fetch,
     homePath,
+    setActiveDir,
+    activeDir,
   };
 };
 

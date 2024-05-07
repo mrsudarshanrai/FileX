@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useMemo, useState } from 'react';
 import DirContext from '@/app/context/DirectoryContext';
 import { IDir } from '@/app/lib/types/dir';
 import {
@@ -17,6 +17,7 @@ import { Display, DisplayEnum } from '@/app/components/ContextMenuModal/contextm
 import { useContextMenu } from '@/app/hooks/useContextMenu';
 import { checkIfRenameEnabled } from './directoryUtils';
 import { useRenameFile } from '@/app/hooks/useRenameFile';
+import { useDir } from '@/app/hooks/useDir';
 
 export const isContextMenuOpen = (value: Display) => value === DisplayEnum.none;
 
@@ -26,8 +27,8 @@ const Directory = () => {
   const { show, setShow, setTargetPath, setIsTargetPathFile } = useContext(ContextMenu);
 
   const { openFile } = useContextMenu();
+  const { activeDir, setActiveDir } = useDir();
   const { fileName, setFileName, renameFile, fileRenamePath, setFileRenamePath } = useRenameFile();
-  const [selectedFile, setSelectedFile] = useState<string>('');
 
   const onFileDoubleClick = async (path: string, isFolder: boolean) => {
     setTargetPath(path);
@@ -39,9 +40,14 @@ const Directory = () => {
     }
   };
 
-  const onFileClick = (filePath: string) => {
+  const onFileClick = (filePath: string, folder_name: string, isFolder: boolean) => {
     setShow(DisplayEnum.none);
-    if (isContextMenuOpen(show)) setSelectedFile(() => filePath);
+    if (isContextMenuOpen(show))
+      setActiveDir({
+        path: filePath,
+        folder_name,
+        is_dir: isFolder,
+      });
   };
 
   const onContextMenu = async (
@@ -50,7 +56,7 @@ const Directory = () => {
     isFolder: boolean,
   ) => {
     event?.preventDefault();
-    if (isContextMenuOpen(show)) setSelectedFile(() => path);
+    if (isContextMenuOpen(show)) setActiveDir({ path });
     setTargetPath(path);
     setIsTargetPathFile(!isFolder);
   };
@@ -68,6 +74,10 @@ const Directory = () => {
     renameFile(fileName);
   };
 
+  const activePath = useMemo(() => {
+    return activeDir?.path;
+  }, [activeDir]);
+
   return (
     <DirContainerWrapper onClick={onDirectoryContainerClicked}>
       <DirContainer>
@@ -81,7 +91,7 @@ const Directory = () => {
                   onContextMenu={(event) => {
                     onContextMenu(event, path, isFolder);
                   }}
-                  onClick={() => onFileClick(path)}
+                  onClick={() => onFileClick(path, folder_name, isFolder)}
                   onDoubleClick={() => onFileDoubleClick(path, isFolder)}
                 >
                   <div className='file_icon_container'>
@@ -96,7 +106,7 @@ const Directory = () => {
                         onChange={(event) => setFileName(event?.target.value)}
                       />
                     ) : (
-                      <FileName isSelected={selectedFile === path}>{folder_name}</FileName>
+                      <FileName isSelected={activePath === path}>{folder_name}</FileName>
                     )}
                   </FileNameWrapper>
                 </File>
