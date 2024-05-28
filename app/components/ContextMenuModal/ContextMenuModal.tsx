@@ -42,6 +42,10 @@ const ContextMenuModal = (props: ContextMenuModalProps) => {
     setFileRenamePath,
   } = props;
 
+  type CreateFolderResponse = {
+    folder_path: string;
+    success: string;
+  };
   const [items, setItems] = useState<IContextMenuItem[]>([]);
 
   const onContextItemClick = async (name: string) => {
@@ -50,7 +54,10 @@ const ContextMenuModal = (props: ContextMenuModalProps) => {
       await invoke('create_folder', {
         folderPath: currentPath + '/',
       })
-        .then(() => {
+        .then((response) => {
+          if (typeof response === 'object' && (response as CreateFolderResponse)?.success) {
+            setFileRenamePath((response as CreateFolderResponse)?.folder_path);
+          }
           fetch(currentPath, 'get_files_in_path');
           setShow(DisplayEnum.none);
         })

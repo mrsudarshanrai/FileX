@@ -1,5 +1,6 @@
 use crate::file_manager::File;
 use crate::file_manager::FileProperties;
+use crate::folder_manager::CreateFolderResponse;
 use crate::folder_manager::Folder;
 use crate::helper;
 use crate::utils;
@@ -20,7 +21,7 @@ pub fn get_all_dir() -> Result<Vec<helper::Files>, String> {
 
 /** Create new folder */
 #[tauri::command]
-pub fn create_folder(folder_path: String) {
+pub fn create_folder(folder_path: String) -> Result<CreateFolderResponse, String> {
     Folder::create(folder_path)
 }
 

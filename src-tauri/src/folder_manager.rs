@@ -1,11 +1,18 @@
 use crate::file_manager::File;
 use async_recursion::async_recursion;
+use serde::Serialize;
 use std::fs::{self};
+
+#[derive(Serialize)]
+pub struct CreateFolderResponse {
+    success: bool,
+    folder_path: String,
+}
 pub struct Folder;
 
 impl Folder {
     /** create folder  */
-    pub fn create(folder_path: String) {
+    pub fn create(folder_path: String) -> Result<CreateFolderResponse, String> {
         let mut attempt = 1;
         let folder_name_suffix = "Untitled Folder";
         let mut full_folder_path = format!("{}{}", &folder_path, folder_name_suffix);
@@ -17,9 +24,15 @@ impl Folder {
         }
         // Create the folder
         if let Err(err) = fs::create_dir_all(&full_folder_path) {
-            println!("Failed to create folder: {}", err);
+            Ok(CreateFolderResponse {
+                success: false,
+                folder_path: String::from(""),
+            })
         } else {
-            println!("Folder created successfully at: {}", full_folder_path);
+            Ok(CreateFolderResponse {
+                success: true,
+                folder_path: full_folder_path,
+            })
         }
     }
 
