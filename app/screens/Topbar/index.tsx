@@ -5,6 +5,7 @@ import { NavigationContext } from '@/app/context/NavigationContext';
 import { NavigationButtonType } from '@/app/components/NavigationButton/NavigationButtonType';
 import NavigationButton from '@/app/components/NavigationButton';
 import { TopbarContainer } from './TopbarStyled';
+import Button from '@/app/components/Button';
 
 const Topbar = () => {
   const { navigate, currentPath, isBackDisabled, isForwardDisabled } =
@@ -29,12 +30,14 @@ const Topbar = () => {
 
   return (
     <TopbarContainer>
-      <NavigationButton
-        isBackBtnDisabled={isBackDisabled}
-        isForwardBtnDisabled={isForwardDisabled}
-        onClick={(navigationType) => handleNavigation(navigationType)}
-      />
-      <NavigationPath path={currentPath} onClick={onClick} />
+      <div className='left_container'>
+        <NavigationButton
+          isBackBtnDisabled={isBackDisabled}
+          isForwardBtnDisabled={isForwardDisabled}
+          onClick={(navigationType) => handleNavigation(navigationType)}
+        />
+        <NavigationPath path={currentPath} onClick={onClick} />
+      </div>
     </TopbarContainer>
   );
 };
