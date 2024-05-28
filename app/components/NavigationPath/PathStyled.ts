@@ -9,18 +9,13 @@ const PathContainer = styled.div`
   padding: 3px 10px;
 `;
 
-type IPaths = {
-  isActive: boolean;
-};
-
-const Paths = styled.div<IPaths>`
+const Paths = styled.div`
   display: flex;
   align-items: center;
   flex-wrap: nowrap;
   min-width: fit-content;
   span {
     cursor: pointer;
-    color: ${(props) => (props.isActive && props.isActive ? '#fff' : '#aeaeae')};
     border-radius: 3px;
     padding: 4px;
 
