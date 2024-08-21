@@ -2,8 +2,8 @@
 
 This project is a Linux file manager built using Next.js and Tauri. While the frontend is developed in Next.js, the backend and system interactions are handled using Rust and Tauri. The primary goal of this project was to explore Tauri and learn Rust for me.
 
-![fileX](https://raw.githubusercontent.com/mrsudarshanrai/FileX/main/public/assets/fileX-01.jpg?token=GHSAT0AAAAAACWM3WRVO4VN75NKV4SNBZOYZWGBCPQ)
-![fileX](https://raw.githubusercontent.com/mrsudarshanrai/FileX/main/public/assets/fileX-02.jpg?token=GHSAT0AAAAAACWM3WRUWRII7M7QVTVBZ22YZWGBEBA)
+![fileX](https://github.com/mrsudarshanrai/FileX/blob/main/public/assets/fileX-01.jpg?raw=true)
+![fileX](https://github.com/mrsudarshanrai/FileX/blob/main/public/assets/fileX-02.jpg?raw=true)
 ## Current Stage: Development
 
 FileX is currently under development. While core functionalities are implemented, it's not yet ready for production use. Further development is needed for stability, performance optimization, and additional features.
