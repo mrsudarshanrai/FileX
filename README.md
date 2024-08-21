@@ -39,6 +39,13 @@ To start the development server, run:
     
 This will start the application in development mode.
 
+## Build and Run
+[https://tauri.app/v1/guides/building/](https://tauri.app/v1/guides/building/)
+```
+yarn tauri build
+```
+linux build `.deb` and `.AppImage`
+
 ## License
 
 By contributing to this repository, you agree that your contributions will be licensed under the project's [MIT License](./LICENSE)
