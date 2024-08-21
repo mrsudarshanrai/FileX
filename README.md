@@ -1,44 +1,43 @@
 # FileX
 
-This is a file manager built with Tauri, Next.js and Rust.
+This project is a Linux file manager built using Next.js and Tauri. While the frontend is developed in Next.js, the backend and system interactions are handled using Rust and Tauri. The primary goal of this project was to explore Tauri and learn Rust for me.
+
+![fileX](https://raw.githubusercontent.com/mrsudarshanrai/FileX/main/public/assets/fileX-01.jpg?token=GHSAT0AAAAAACWM3WRVO4VN75NKV4SNBZOYZWGBCPQ)
+![fileX](https://raw.githubusercontent.com/mrsudarshanrai/FileX/main/public/assets/fileX-02.jpg?token=GHSAT0AAAAAACWM3WRUWRII7M7QVTVBZ22YZWGBEBA)
+## Current Stage: Development
+
+FileX is currently under development. While core functionalities are implemented, it's not yet ready for production use. Further development is needed for stability, performance optimization, and additional features.
+
+## Features (Current Status)
+- Basic File Listing: Lists files and directories in the current directory.
+- Directory Navigation: Allows users to navigate between directories.
+- File Creation: Supports creating new files.
+- File Deletion: Enables users to delete files.
+- File Renaming: Provides functionality to rename files.
+- File Copying: Implements basic file copying.
+- File Properties: Displays detailed information about selected files.
+
 
 ## Requirements
 
 - Node.js (v14 or higher)
-
 - Rust
-
+- [Tauri requirments](https://tauri.app/v1/guides/getting-started/prerequisites)
 - Tauri CLI (`yarn global add tauri`)
 
-## Installation
+## Running In your machine
 
-    https://github.com/mrsudarshanrai/FileX.git
+    https://github.com/mrsudarshanrai/FileX.git](https://github.com/mrsudarshanrai/FileX.git
 
-    cd file-manager
+    cd FileX
 
     yarn install
-
-## Usage
 
 To start the development server, run:
 
     yarn tauri dev
-
+    
 This will start the application in development mode.
-
-## Contributing
-
-If you would like to contribute to this project, please follow these steps:
-
-1. Fork this repository.
-
-2. Create a new branch: `git checkout -b my-branch`
-
-3. Make your changes and commit them: `git commit -m "my changes"`
-
-4. Push to the original branch: `git push origin my-branch`
-
-5. Create a new Pull Request.
 
 ## License
 
