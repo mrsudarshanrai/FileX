@@ -39,9 +39,9 @@ const colors: Color = {
     green900: '#20362d',
   },
   blue: {
-    blue100: "#005a9e",
-    blue50: "#0078d4"
-  }
+    blue100: '#005a9e',
+    blue50: '#0078d4',
+  },
 };
 
 export { colors };

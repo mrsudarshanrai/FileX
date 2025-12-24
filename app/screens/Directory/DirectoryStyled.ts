@@ -7,7 +7,7 @@ type FileName = {
 
 const DirContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); 
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
   gap: 16px;
   padding: 20px;
   height: max-content;
@@ -33,14 +33,14 @@ const File = styled.div`
   align-items: center;
   width: 100%;
   cursor: pointer;
-  
+
   .file_icon_container {
     padding: 10px;
     margin-bottom: 4px;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 64px; 
+    height: 64px;
     width: 64px;
   }
 `;
@@ -74,11 +74,11 @@ const FileRenameInput = styled.input`
   outline: none;
 `;
 const FileNameWrapper = styled.div`
-    width: 100px;
-    margin: 7px 0 0 0;
-    display: flex;
-    justify-content: center;
-  `;
+  width: 100px;
+  margin: 7px 0 0 0;
+  display: flex;
+  justify-content: center;
+`;
 
 const DirContainerWrapper = styled.div`
   height: 100%;

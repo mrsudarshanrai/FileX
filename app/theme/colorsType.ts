@@ -39,7 +39,6 @@ type Color = {
   blue: {
     blue50: string;
     blue100: string;
-
   };
 };
 export type { Color };
