@@ -5,7 +5,6 @@ import { NavigationContext } from '@/app/context/NavigationContext';
 import { NavigationButtonType } from '@/app/components/NavigationButton/NavigationButtonType';
 import NavigationButton from '@/app/components/NavigationButton';
 import { TopbarContainer } from './TopbarStyled';
-import Button from '@/app/components/Button';
 
 const Topbar = () => {
   const { navigate, currentPath, isBackDisabled, isForwardDisabled } =
