@@ -6,76 +6,79 @@ type FileName = {
 };
 
 const DirContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  row-gap: 0.3em;
-  column-gap: calc(100vw / 150px);
-  width: 100%;
-  margin: 0 auto;
-  padding: 15px 0px 50px 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); 
+  gap: 16px;
+  padding: 20px;
+  height: max-content;
 `;
 
 const FileGrid = styled.div`
   display: flex;
   flex-direction: column;
-  cursor: pointer;
-  width: 150px;
-  height: 180px;
-`;
-
-const File = styled.div`
-  display: grid;
-  grid-template-rows: 1fr 1fr;
-  place-content: center;
-  cursor: pointer;
-  height: 100%;
-  .file_icon_container {
-    display: flex;
-    justify-content: center;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 8px;
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
+  user-select: none;
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.05);
   }
 `;
 
-const FileNameWrapper = styled.div`
-  width: 100px;
-  margin: 7px 0 0 0;
+const File = styled.div`
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  cursor: pointer;
+  
+  .file_icon_container {
+    padding: 10px;
+    margin-bottom: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 64px; 
+    width: 64px;
+  }
 `;
 
 const FileName = styled.span<FileName>`
-  font-size: 15px;
-  /* font-weight: 300; */
-  display: -webkit-box;
-  max-width: 200px;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+  font-size: 13px;
+  color: ${colors.grey.grey5};
   text-align: center;
-  word-break: break-all;
-  height: fit-content;
-  padding: 2px 4px;
-  width: fit-content;
+  word-break: break-word;
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 1px solid transparent;
 
   ${(props) =>
-    props &&
     props.isSelected &&
     css`
-      background-color: #007acc;
-      border-radius: 3px;
+      background-color: ${colors.blue.blue100};
+      border: 1px solid ${colors.blue.blue50};
     `}
 `;
 
 const FileRenameInput = styled.input`
+  width: 100%;
+  font-size: 13px;
   text-align: center;
-  background-color: ${colors.grey.grey30};
+  background: ${colors.grey.grey105};
+  border: 1px solid ${colors.blue.blue50};
+  color: white;
+  border-radius: 2px;
+  padding: 2px;
   outline: none;
-  border: 1px solid ${colors.grey.grey20};
-  color: #fff;
-  border-radius: 4px;
-  padding: 4px 0;
-  height: 30px;
-  width: 130px;
 `;
+const FileNameWrapper = styled.div`
+    width: 100px;
+    margin: 7px 0 0 0;
+    display: flex;
+    justify-content: center;
+  `;
 
 const DirContainerWrapper = styled.div`
   height: 100%;

@@ -1,11 +1,13 @@
 type Color = {
   grey: {
+    grey105: string;
     grey100: string;
     grey90: string;
     grey50: string;
     grey30: string;
     grey20: string;
     grey10: string;
+    grey5: string;
   };
   red: {
     red50: string;
@@ -33,6 +35,11 @@ type Color = {
     green700: string;
     green800: string;
     green900: string;
+  };
+  blue: {
+    blue50: string;
+    blue100: string;
+
   };
 };
 export type { Color };

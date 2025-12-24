@@ -2,12 +2,14 @@ import { Color } from './colorsType';
 
 const colors: Color = {
   grey: {
+    grey105: '#1e1e1e',
     grey100: '#1b1d26',
     grey90: '#3a3746',
     grey50: '#8d8f9257',
     grey30: '#4a4a4a57',
     grey20: '#8F8F8F',
     grey10: '#ccc',
+    grey5: '#eee',
   },
   red: {
     red50: '#e5393533',
@@ -36,6 +38,10 @@ const colors: Color = {
     green800: '#25483a',
     green900: '#20362d',
   },
+  blue: {
+    blue100: "#005a9e",
+    blue50: "#0078d4"
+  }
 };
 
 export { colors };
