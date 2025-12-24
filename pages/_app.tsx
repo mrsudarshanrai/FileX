@@ -25,7 +25,7 @@ const App = ({ Component, pageProps }: AppProps) => {
         <link rel='icon' href='/favicon.ico' />
       </Head>
       <ThemeProvider theme={colors}>
-        <GlobalStyles />
+        <GlobalStyles theme={colors} />
         <Toaster position='top-right' />
         <DirContextProvider>
           <NavigationContextProvider>
