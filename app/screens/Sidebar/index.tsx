@@ -13,8 +13,10 @@ const Sidebar = () => {
   const [sideBarDirs, setSideBarDirs] = useState<IDir.IDir[]>([]);
 
   useEffect(() => {
-    if (!sideBarDirs.length) setSideBarDirs(getSidebarDirs(dirs));
-  }, [dirs, sideBarDirs.length]);
+    if (sideBarDirs.length === 0) {
+      setSideBarDirs(getSidebarDirs(dirs));
+    }
+  }, [dirs, sideBarDirs]);
 
   const onDirClick = (path: string) => {
     navigate(path);
