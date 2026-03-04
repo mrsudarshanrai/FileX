@@ -1,52 +1,74 @@
-import { RefObject, useEffect } from 'react';
+import { RefObject, useEffect, useRef } from 'react';
 
-const useDraggable = <T extends HTMLElement>(
-  ref: RefObject<T>,
-  modalHeaderRef: RefObject<T>,
-  Modal_HEADER_ID: string,
-) => {
+type DragState = {
+  isDragging: boolean;
+  offsetX: number;
+  offsetY: number;
+};
+
+const useDraggable = <T extends HTMLElement>(ref: RefObject<T>, modalHeaderRef: RefObject<T>) => {
+  const dragStateRef = useRef<DragState>({
+    isDragging: false,
+    offsetX: 0,
+    offsetY: 0,
+  });
+
   useEffect(() => {
     const element = ref.current;
     const headerElement = modalHeaderRef.current;
 
-    if (element && headerElement) {
-      let isDragging = false;
+    if (!element || !headerElement) return;
 
-      const handleMouseDown = (e: MouseEvent) => {
-        if (e.target && 'id' in e.target && e.target.id === Modal_HEADER_ID) {
-          isDragging = true;
-          element.style.cursor = 'move';
-          element.addEventListener('mousemove', handleMouseMove);
-          element.addEventListener('mouseup', handleMouseUp);
-        }
-      };
+    const handleMouseDown = (e: MouseEvent) => {
+      if (e.button !== 0) return;
 
-      const handleMouseMove = (e: MouseEvent) => {
-        if (isDragging) {
-          element.style.left = e.clientX + 'px';
-          element.style.top = e.clientY + 'px';
-          element.style.transform = `translate(-${e.clientX}, -${e.clientY})`;
-        }
-      };
+      const rect = element.getBoundingClientRect();
+      const state = dragStateRef.current;
 
-      const handleMouseUp = () => {
-        isDragging = false;
-        element.style.zIndex = 'auto';
-        element.style.cursor = 'auto';
-        element.removeEventListener('mousemove', handleMouseMove);
-        element.removeEventListener('mouseup', handleMouseUp);
-      };
+      state.isDragging = true;
+      state.offsetX = e.clientX - rect.left;
+      state.offsetY = e.clientY - rect.top;
 
-      element.addEventListener('mousedown', handleMouseDown);
+      element.style.cursor = 'move';
+      element.style.position = 'fixed';
+      element.style.left = `${rect.left}px`;
+      element.style.top = `${rect.top}px`;
+      element.style.transform = 'none';
 
-      return () => {
-        window.removeEventListener('mousedown', handleMouseDown);
-        element.removeEventListener('mousedown', handleMouseDown);
-        element.removeEventListener('mousemove', handleMouseMove);
-        element.removeEventListener('mouseup', handleMouseUp);
-      };
-    }
-  }, [ref]);
+      window.addEventListener('mousemove', handleMouseMove);
+      window.addEventListener('mouseup', handleMouseUp);
+    };
+
+    const handleMouseMove = (e: MouseEvent) => {
+      const state = dragStateRef.current;
+      if (!state.isDragging) return;
+
+      const nextLeft = e.clientX - state.offsetX;
+      const nextTop = e.clientY - state.offsetY;
+
+      element.style.left = `${nextLeft}px`;
+      element.style.top = `${nextTop}px`;
+    };
+
+    const handleMouseUp = () => {
+      const state = dragStateRef.current;
+      if (!state.isDragging) return;
+
+      state.isDragging = false;
+      element.style.cursor = 'auto';
+
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseup', handleMouseUp);
+    };
+
+    headerElement.addEventListener('mousedown', handleMouseDown);
+
+    return () => {
+      headerElement.removeEventListener('mousedown', handleMouseDown);
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, [ref, modalHeaderRef]);
 };
 
 export { useDraggable };
