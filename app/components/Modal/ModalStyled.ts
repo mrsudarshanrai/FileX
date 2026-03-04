@@ -38,7 +38,7 @@ const ModalHeader = styled.div`
   display: flex;
   justify-content: space-between;
   padding: 10px 15px;
-  cursor: pointer;
+  cursor: move;
 `;
 
 const ModalHeaderRightContainer = styled.div`
@@ -59,9 +59,7 @@ const ModalHeaderRightContainer = styled.div`
     }
   }
 `;
-const ModalHeaderLeftContainer = styled.div`
-  cursor: auto;
-`;
+const ModalHeaderLeftContainer = styled.div``;
 
 const ModalBodySection = styled.section`
   display: grid;
