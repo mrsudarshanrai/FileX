@@ -25,6 +25,11 @@ ${({ theme }) =>
       font-family: 'Poppins', sans-serif;
     }
 
+    input,
+    textarea {
+      user-select: text;
+    }
+
     html {
       background-color: ${theme.grey.grey100};
       color: #bbb;

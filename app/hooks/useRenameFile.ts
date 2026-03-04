@@ -25,7 +25,10 @@ const useRenameFile = () => {
 
   useEffect(() => {
     if (fileRenamePath) {
-      setFileName(getFileNameFromPath(fileRenamePath) as string);
+      const nameFromPath = getFileNameFromPath(fileRenamePath);
+      setFileName(nameFromPath ?? '');
+    } else {
+      setFileName('');
     }
   }, [fileRenamePath]);
 
