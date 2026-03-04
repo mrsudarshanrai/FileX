@@ -48,7 +48,7 @@ const StatusDot = styled.span<{ status: 'pending' | 'in_progress' | 'completed' 
 
 const StatusText = styled.span`
   font-size: 11px;
-  color: ${ colors.grey.grey10};
+  color: ${colors.grey.grey10};
 `;
 
 const LabelText = styled.span`

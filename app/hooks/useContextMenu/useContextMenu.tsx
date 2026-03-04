@@ -16,6 +16,7 @@ import { UseContextMenuType } from './useContextMenuType';
 import { openFileErrorModalMessage } from './useContextMenuUtils';
 import { PropertiesModal } from '@/app/components/PropertiesModal';
 import DirectorySizeContext from '@/app/context/DirectorySizeContext/DirectorySizeContext';
+import { useOperations } from '@/app/context/OperationContext';
 
 const useContextMenu = () => {
   const { currentPath } = useContext(NavigationContext);
@@ -23,6 +24,7 @@ const useContextMenu = () => {
   const { show } = useContext(ModalContext);
   const { setDirectorySizeFunc } = useContext(DirectorySizeContext);
   const { setShow: setContextMenuShow, targetPath } = useContext(ContextMenu);
+  const { startOperation, finishOperation } = useOperations();
 
   const deleteFile = () => {
     if (targetPath) {
@@ -47,14 +49,22 @@ const useContextMenu = () => {
             <Button onClick={() => show({ open: false })}>Cancel</Button>
             <Button
               onClick={async () => {
-                await invoke('delete_path', {
-                  path: targetPath,
-                })
-                  .then(() => {
-                    fetch(currentPath, 'get_files_in_path');
-                    show({ open: false });
-                  })
-                  .catch(console.error);
+                const opId = startOperation({
+                  label: `Deleting "${getFileNameFromPath(targetPath) ?? ''}"`,
+                });
+                try {
+                  await invoke('delete_path', {
+                    path: targetPath,
+                  });
+                  fetch(currentPath, 'get_files_in_path');
+                  finishOperation(opId, 'completed');
+                } catch (error: any) {
+                  // eslint-disable-next-line no-console
+                  console.error(error);
+                  finishOperation(opId, 'failed', String(error));
+                } finally {
+                  show({ open: false });
+                }
               }}
               theme='error'
             >

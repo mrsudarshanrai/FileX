@@ -1,7 +1,12 @@
 import { useEffect } from 'react';
 import { useOperations } from '@/app/context/OperationContext';
-import { LabelText, OperationCard, PanelWrapper, StatusDot, StatusText } from './OperationPanelStyled';
-
+import {
+  LabelText,
+  OperationCard,
+  PanelWrapper,
+  StatusDot,
+  StatusText,
+} from './OperationPanelStyled';
 
 const OperationPanel = () => {
   const { operations, clearCompleted } = useOperations();
@@ -25,11 +30,7 @@ const OperationPanel = () => {
       {visibleOperations.map((op) => {
         const isActive = op.status === 'in_progress' || op.status === 'pending';
         const statusLabel =
-          op.status === 'completed'
-            ? 'Completed'
-            : op.status === 'failed'
-            ? 'Failed'
-            : 'Working…';
+          op.status === 'completed' ? 'Completed' : op.status === 'failed' ? 'Failed' : 'Working…';
 
         return (
           <OperationCard key={op.id} isActive={isActive}>
@@ -44,4 +45,3 @@ const OperationPanel = () => {
 };
 
 export default OperationPanel;
-

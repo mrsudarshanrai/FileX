@@ -13,6 +13,7 @@ import { Toaster } from 'react-hot-toast';
 import { ModalContextProvider } from '@/app/context/ModalContext';
 import '../styles/index.css';
 import { DirectorySizeContextProvider } from '@/app/context/DirectorySizeContext/DirectorySizeContext';
+import { OperationContextProvider } from '@/app/context/OperationContext';
 const App = ({ Component, pageProps }: AppProps) => {
   return (
     <>
@@ -35,13 +36,15 @@ const App = ({ Component, pageProps }: AppProps) => {
               <NavigationContextProvider>
                 <ModalContextProvider>
                   <DirectorySizeContextProvider>
-                    <AppContainer>
-                      <ContextMenuProvider>
-                        <MainContainer>
-                          <Component {...pageProps} />
-                        </MainContainer>
-                      </ContextMenuProvider>
-                    </AppContainer>
+                    <OperationContextProvider>
+                      <AppContainer>
+                        <ContextMenuProvider>
+                          <MainContainer>
+                            <Component {...pageProps} />
+                          </MainContainer>
+                        </ContextMenuProvider>
+                      </AppContainer>
+                    </OperationContextProvider>
                   </DirectorySizeContextProvider>
                 </ModalContextProvider>
               </NavigationContextProvider>
