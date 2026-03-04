@@ -1,17 +1,43 @@
 import { RefObject, useEffect, useRef } from 'react';
 
+type DragAxis = 'x' | 'y' | 'both';
+
+type UseDraggableOptions = {
+  /**
+   * Constrain dragging so the element stays fully within the viewport.
+   * Default: true
+   */
+  bounded?: boolean;
+  /**
+   * Which axes to allow dragging on.
+   * Default: 'both'
+   */
+  axis?: DragAxis;
+};
+
 type DragState = {
   isDragging: boolean;
   offsetX: number;
   offsetY: number;
+  width: number;
+  height: number;
 };
 
-const useDraggable = <T extends HTMLElement>(ref: RefObject<T>, modalHeaderRef: RefObject<T>) => {
+const useDraggable = <T extends HTMLElement>(
+  ref: RefObject<T>,
+  modalHeaderRef: RefObject<T>,
+  options?: UseDraggableOptions,
+) => {
   const dragStateRef = useRef<DragState>({
     isDragging: false,
     offsetX: 0,
     offsetY: 0,
+    width: 0,
+    height: 0,
   });
+
+  const bounded = options?.bounded ?? true;
+  const axis: DragAxis = options?.axis ?? 'both';
 
   useEffect(() => {
     const element = ref.current;
@@ -28,6 +54,8 @@ const useDraggable = <T extends HTMLElement>(ref: RefObject<T>, modalHeaderRef: 
       state.isDragging = true;
       state.offsetX = e.clientX - rect.left;
       state.offsetY = e.clientY - rect.top;
+      state.width = rect.width;
+      state.height = rect.height;
 
       element.style.cursor = 'move';
       element.style.position = 'fixed';
@@ -43,11 +71,23 @@ const useDraggable = <T extends HTMLElement>(ref: RefObject<T>, modalHeaderRef: 
       const state = dragStateRef.current;
       if (!state.isDragging) return;
 
-      const nextLeft = e.clientX - state.offsetX;
-      const nextTop = e.clientY - state.offsetY;
+      let nextLeft = e.clientX - state.offsetX;
+      let nextTop = e.clientY - state.offsetY;
 
-      element.style.left = `${nextLeft}px`;
-      element.style.top = `${nextTop}px`;
+      if (bounded) {
+        const maxLeft = Math.max(0, window.innerWidth - state.width);
+        const maxTop = Math.max(0, window.innerHeight - state.height);
+
+        nextLeft = Math.min(Math.max(0, nextLeft), maxLeft);
+        nextTop = Math.min(Math.max(0, nextTop), maxTop);
+      }
+
+      if (axis === 'x' || axis === 'both') {
+        element.style.left = `${nextLeft}px`;
+      }
+      if (axis === 'y' || axis === 'both') {
+        element.style.top = `${nextTop}px`;
+      }
     };
 
     const handleMouseUp = () => {
@@ -68,7 +108,8 @@ const useDraggable = <T extends HTMLElement>(ref: RefObject<T>, modalHeaderRef: 
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseup', handleMouseUp);
     };
-  }, [ref, modalHeaderRef]);
+  }, [axis, bounded, modalHeaderRef, ref]);
 };
 
+export type { UseDraggableOptions };
 export { useDraggable };
