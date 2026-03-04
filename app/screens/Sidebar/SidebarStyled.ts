@@ -26,7 +26,7 @@ const SidebarItem = styled.div<ISidebarItem>`
     align-items: center;
     cursor: pointer;
     color: #bbb;
-    width: 200px;
+    width: 100%;
     background-color: ${isActive ? theme.grey.grey30 : 'transparent'};
     &:hover {
       background-color: ${theme.grey.grey50};
