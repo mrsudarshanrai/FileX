@@ -82,6 +82,19 @@ const FileNameWrapper = styled.div`
 
 const DirContainerWrapper = styled.div`
   height: 100%;
+  position: relative;
+`;
+
+const LoadingOverlay = styled.div`
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  background: radial-gradient(circle at top, rgba(255, 255, 255, 0.03), transparent 60%);
+  font-size: 13px;
+  color: ${colors.grey.grey10};
 `;
 
 export {
@@ -92,4 +105,5 @@ export {
   FileName,
   FileRenameInput,
   DirContainerWrapper,
+  LoadingOverlay,
 };

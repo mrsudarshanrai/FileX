@@ -9,6 +9,7 @@ import {
   FileName,
   FileNameWrapper,
   FileRenameInput,
+  LoadingOverlay,
 } from './DirectoryStyled';
 import FileIcon from '@/app/components/FileIcon';
 import { checkIfRenameEnabled } from './directoryUtils';
@@ -30,8 +31,8 @@ const Directory = () => {
 
   return (
     <DirContainerWrapper onClick={onDirectoryContainerClicked}>
+      {isLoading && <LoadingOverlay>Fetching files…</LoadingOverlay>}
       <DirContainer>
-        {isLoading && <p>Fetching files</p>}
         {dirs.map(({ folder_name, path, is_dir: isFolder, is_visible, extension }: IDir.IDir) => {
           if (!is_visible) return null;
           return (
