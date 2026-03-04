@@ -41,6 +41,7 @@ const AppContainer = ({ children }: { children: React.ReactNode }) => {
 export default AppContainer;
 
 const AppWrapper = styled.div`
-  display: grid;
-  grid-template-columns: 190px 1fr;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 `;
