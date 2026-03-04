@@ -64,4 +64,3 @@ export {
   listenNavigationAction,
   listenNavigationState,
 };
-

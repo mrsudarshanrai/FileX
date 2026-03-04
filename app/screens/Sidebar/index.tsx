@@ -4,14 +4,12 @@ import { getSidebarDirs, SIDEBAR_PLACES } from './helper';
 import { IDir } from '@/app/lib/types/dir';
 import { Icon } from '@/app/components/Icon/Icon';
 import { IconType } from '@/app/components/Icon/IconType';
-import { emit, listen } from '@tauri-apps/api/event';
 import { invoke } from '@tauri-apps/api/tauri';
-
-type NavigationStatePayload = {
-  currentPath: string;
-  isForwardDisabled: boolean;
-  isBackDisabled: boolean;
-};
+import {
+  emitNavigationActionGoto,
+  listenNavigationState,
+  type NavigationStatePayload,
+} from '@/app/lib/navigationEvents';
 
 const Sidebar = () => {
   const [sideBarDirs, setSideBarDirs] = useState<IDir.IDir[]>([]);
@@ -42,26 +40,23 @@ const Sidebar = () => {
     let unlisten: (() => void) | undefined;
 
     const setupListener = async () => {
-      unlisten = await listen<NavigationStatePayload>(
-        'navigation_state',
-        (event: { payload?: NavigationStatePayload }) => {
-          const nextPath = event.payload?.currentPath;
-          if (!nextPath) return;
+      unlisten = await listenNavigationState((payload: NavigationStatePayload) => {
+        const nextPath = payload.currentPath;
+        if (!nextPath) return;
 
-          if (nextPath === homePath) {
-            if (activePlace !== 'Home') {
-              setActivePlace('Home');
-            }
-            return;
+        if (nextPath === homePath) {
+          if (activePlace !== 'Home') {
+            setActivePlace('Home');
           }
+          return;
+        }
 
-          const matchedPlace = SIDEBAR_PLACES.find((place) => nextPath.includes(`/${place}`));
+        const matchedPlace = SIDEBAR_PLACES.find((place) => nextPath.includes(`/${place}`));
 
-          if (matchedPlace && matchedPlace !== activePlace) {
-            setActivePlace(matchedPlace);
-          }
-        },
-      );
+        if (matchedPlace && matchedPlace !== activePlace) {
+          setActivePlace(matchedPlace);
+        }
+      });
     };
 
     setupListener();
@@ -74,7 +69,7 @@ const Sidebar = () => {
   }, [activePlace, homePath]);
 
   const onDirClick = (path: string) => {
-    emit('navigation_action', { type: 'goto', path });
+    emitNavigationActionGoto(path);
   };
 
   return (

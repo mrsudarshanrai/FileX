@@ -4,13 +4,13 @@ import { useDirRoute } from '@/app/hooks/useDirRoute';
 import { NavigationButtonType } from '@/app/components/NavigationButton/NavigationButtonType';
 import NavigationButton from '@/app/components/NavigationButton';
 import { TopbarContainer } from './TopbarStyled';
-import { emit, listen } from '@tauri-apps/api/event';
-
-type NavigationStatePayload = {
-  currentPath: string;
-  isForwardDisabled: boolean;
-  isBackDisabled: boolean;
-};
+import {
+  emitNavigationActionBack,
+  emitNavigationActionForward,
+  emitNavigationActionGoto,
+  listenNavigationState,
+  type NavigationStatePayload,
+} from '@/app/lib/navigationEvents';
 
 const Topbar = () => {
   const { changeDir } = useDirRoute();
@@ -22,17 +22,11 @@ const Topbar = () => {
     let unlisten: (() => void) | undefined;
 
     const setupListener = async () => {
-      unlisten = await listen<NavigationStatePayload>(
-        'navigation_state',
-        (event: { payload?: NavigationStatePayload }) => {
-          const payload = event.payload;
-          if (!payload) return;
-
-          setCurrentPath(payload.currentPath);
-          setIsForwardDisabled(payload.isForwardDisabled);
-          setIsBackDisabled(payload.isBackDisabled);
-        },
-      );
+      unlisten = await listenNavigationState((payload: NavigationStatePayload) => {
+        setCurrentPath((prev) => (prev === payload.currentPath ? prev : payload.currentPath));
+        setIsForwardDisabled(payload.isForwardDisabled);
+        setIsBackDisabled(payload.isBackDisabled);
+      });
     };
 
     setupListener();
@@ -46,16 +40,16 @@ const Topbar = () => {
 
   const onClick = (path: string, dir: string) => {
     const pathToRoute = changeDir(path, dir);
-    emit('navigation_action', { type: 'goto', path: pathToRoute });
+    emitNavigationActionGoto(pathToRoute);
   };
 
   const handleNavigation = (type: NavigationButtonType.NavigationType) => {
     switch (type) {
       case NavigationButtonType.NavigationTypeEnum.backward:
-        emit('navigation_action', { type: 'back' });
+        emitNavigationActionBack();
         break;
       case NavigationButtonType.NavigationTypeEnum.forward:
-        emit('navigation_action', { type: 'forward' });
+        emitNavigationActionForward();
         break;
     }
   };
