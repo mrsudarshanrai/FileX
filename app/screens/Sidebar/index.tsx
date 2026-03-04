@@ -1,6 +1,6 @@
 import { SidebarContainer, SidebarItem, SidebarItems, SidebarTitle } from './SidebarStyled';
 import { useEffect, useState } from 'react';
-import { getSidebarDirs } from './helper';
+import { getSidebarDirs, SIDEBAR_PLACES } from './helper';
 import { IDir } from '@/app/lib/types/dir';
 import { Icon } from '@/app/components/Icon/Icon';
 import { IconType } from '@/app/components/Icon/IconType';
@@ -16,7 +16,7 @@ type NavigationStatePayload = {
 const Sidebar = () => {
   const [sideBarDirs, setSideBarDirs] = useState<IDir.IDir[]>([]);
   const [homePath, setHomePath] = useState<string>('/');
-  const [currentPath, setCurrentPath] = useState<string>('/');
+  const [activePlace, setActivePlace] = useState<string | null>('Home');
 
   useEffect(() => {
     const fetchSidebarData = async () => {
@@ -31,7 +31,7 @@ const Sidebar = () => {
 
       if (typeof homeResponse === 'string') {
         setHomePath(homeResponse);
-        setCurrentPath(homeResponse);
+        setActivePlace('Home');
       }
     };
 
@@ -45,8 +45,20 @@ const Sidebar = () => {
       unlisten = await listen<NavigationStatePayload>(
         'navigation_state',
         (event: { payload?: NavigationStatePayload }) => {
-          if (event.payload?.currentPath) {
-            setCurrentPath(event.payload.currentPath);
+          const nextPath = event.payload?.currentPath;
+          if (!nextPath) return;
+
+          if (nextPath === homePath) {
+            if (activePlace !== 'Home') {
+              setActivePlace('Home');
+            }
+            return;
+          }
+
+          const matchedPlace = SIDEBAR_PLACES.find((place) => nextPath.includes(`/${place}`));
+
+          if (matchedPlace && matchedPlace !== activePlace) {
+            setActivePlace(matchedPlace);
           }
         },
       );
@@ -59,7 +71,7 @@ const Sidebar = () => {
         unlisten();
       }
     };
-  }, []);
+  }, [activePlace, homePath]);
 
   const onDirClick = (path: string) => {
     emit('navigation_action', { type: 'goto', path });
@@ -69,14 +81,18 @@ const Sidebar = () => {
     <SidebarContainer>
       <SidebarItems>
         <SidebarTitle>This PC</SidebarTitle>
-        <SidebarItem onClick={() => onDirClick(homePath)} isActive={homePath === currentPath}>
+        <SidebarItem onClick={() => onDirClick(homePath)} isActive={activePlace === 'Home'}>
           <Icon name='home' />
           <span>Home</span>
         </SidebarItem>
-        {sideBarDirs.map(({ folder_name, path }: IDir.IDir, index: number) => (
-          <SidebarItem key={index} onClick={() => onDirClick(path)} isActive={path === currentPath}>
+        {sideBarDirs.map(({ folder_name, path }: IDir.IDir) => (
+          <SidebarItem
+            key={path}
+            onClick={() => onDirClick(path)}
+            isActive={activePlace === folder_name}
+          >
             <Icon name={folder_name.toLowerCase() as IconType.IconName} />
-            <span>{folder_name}</span>
+            <p>{folder_name}</p>
           </SidebarItem>
         ))}
       </SidebarItems>
