@@ -37,7 +37,7 @@ const useContextMenu = () => {
         ),
         modalBody: (
           <ModalBodyMessage>
-            Are you sure you want to prmanentely delete &quot;
+            Are you sure you want to permanently delete &quot;
             <Mark>{getFileNameFromPath(targetPath)}</Mark>
             &quot;?
           </ModalBodyMessage>
