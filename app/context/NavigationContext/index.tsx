@@ -56,10 +56,7 @@ const NavigationContextProvider = (props: Props) => {
       switch (path) {
         // backward navigation
         case -1: {
-          if (
-            backwardStack.length === 0 ||
-            currentPath === getLastItemFromArray(backwardStack)
-          ) {
+          if (backwardStack.length === 0 || currentPath === getLastItemFromArray(backwardStack)) {
             return;
           }
           const backwardStackCopy = [...backwardStack];
@@ -74,10 +71,7 @@ const NavigationContextProvider = (props: Props) => {
         }
         // forward navigation
         case 1: {
-          if (
-            forwardStack.length === 0 ||
-            currentPath === getLastItemFromArray(forwardStack)
-          ) {
+          if (forwardStack.length === 0 || currentPath === getLastItemFromArray(forwardStack)) {
             return;
           }
           const forwardStackCopy = [...forwardStack];

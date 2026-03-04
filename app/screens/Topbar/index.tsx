@@ -22,16 +22,17 @@ const Topbar = () => {
     let unlisten: (() => void) | undefined;
 
     const setupListener = async () => {
-      unlisten = await listen<NavigationStatePayload>('navigation_state', (event: {
-        payload?: NavigationStatePayload;
-      }) => {
-        const payload = event.payload;
-        if (!payload) return;
+      unlisten = await listen<NavigationStatePayload>(
+        'navigation_state',
+        (event: { payload?: NavigationStatePayload }) => {
+          const payload = event.payload;
+          if (!payload) return;
 
-        setCurrentPath(payload.currentPath);
-        setIsForwardDisabled(payload.isForwardDisabled);
-        setIsBackDisabled(payload.isBackDisabled);
-      });
+          setCurrentPath(payload.currentPath);
+          setIsForwardDisabled(payload.isForwardDisabled);
+          setIsBackDisabled(payload.isBackDisabled);
+        },
+      );
     };
 
     setupListener();

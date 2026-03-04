@@ -4,11 +4,13 @@ This project is a Linux file manager built using Next.js and Tauri. While the fr
 
 ![fileX](https://github.com/mrsudarshanrai/FileX/blob/main/public/assets/fileX-01.jpg?raw=true)
 ![fileX](https://github.com/mrsudarshanrai/FileX/blob/main/public/assets/fileX-02.jpg?raw=true)
+
 ## Current Stage: Development
 
 FileX is currently under development. While core functionalities are implemented, it's not yet ready for production use. Further development is needed for stability, performance optimization, and additional features.
 
 ## Features (Current Status)
+
 - Basic File Listing: Lists files and directories in the current directory.
 - Directory Navigation: Allows users to navigate between directories.
 - File Creation: Supports creating new files.
@@ -16,7 +18,6 @@ FileX is currently under development. While core functionalities are implemented
 - File Renaming: Provides functionality to rename files.
 - File Copying: Implements basic file copying.
 - File Properties: Displays detailed information about selected files.
-
 
 ## Requirements
 
@@ -36,14 +37,17 @@ FileX is currently under development. While core functionalities are implemented
 To start the development server, run:
 
     yarn tauri dev
-    
+
 This will start the application in development mode.
 
 ## Build and Run
+
 [https://tauri.app/v1/guides/building/](https://tauri.app/v1/guides/building/)
+
 ```
 yarn tauri build
 ```
+
 linux build `.deb` and `.AppImage`
 
 ## License
