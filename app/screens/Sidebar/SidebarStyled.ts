@@ -26,12 +26,13 @@ const SidebarItem = styled.div<ISidebarItem>`
     align-items: center;
     cursor: pointer;
     color: #bbb;
+    width: 200px;
     background-color: ${isActive ? theme.grey.grey30 : 'transparent'};
     &:hover {
       background-color: ${theme.grey.grey50};
       transition: 0.2s;
     }
-    span {
+    p {
       font-size: 16px;
       /* font-weight: 300; */
     }
