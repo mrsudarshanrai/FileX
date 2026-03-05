@@ -37,7 +37,7 @@ const App = ({ Component, pageProps }: AppProps) => {
                   <DirectorySizeContextProvider>
                     <AppContainer>
                       <ContextMenuProvider>
-                        <MainContainer>
+                        <MainContainer id='main-scroll'>
                           <Component {...pageProps} />
                         </MainContainer>
                       </ContextMenuProvider>
@@ -63,6 +63,7 @@ const MainSection = styled.div`
   display: flex;
   flex-direction: column;
   height: 100vh;
+  min-height: 0;
   overflow: hidden;
 `;
 

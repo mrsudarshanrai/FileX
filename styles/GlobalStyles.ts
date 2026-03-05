@@ -6,8 +6,9 @@ export type Theme = {
 };
 const MainContainer = styled.div`
   border: 0;
-  height: 100vh;
-  overflow-y: scroll;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
   color: white;
   padding: 15px 0;
   width: 100%;
@@ -30,13 +31,16 @@ ${({ theme }) =>
       user-select: text;
     }
 
-    html {
+    html,
+    body,
+    #__next {
       background-color: ${theme.grey.grey100};
       color: #bbb;
       height: 100vh;
       overflow: hidden;
       font-family: 'Poppins', sans-serif;
-  `}}
+    }
+  `}
 `;
 
 export { GlobalStyles, MainContainer };
