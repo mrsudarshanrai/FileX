@@ -105,6 +105,14 @@ const NavigationContextProvider = (props: Props) => {
   }, [currentPath, navigationBtnStatus.isBackDisabled, navigationBtnStatus.isForwardDisabled]);
 
   useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const scrollEl = document.getElementById('main-scroll');
+    if (scrollEl) {
+      scrollEl.scrollTop = 0;
+    }
+  }, [currentPath]);
+
+  useEffect(() => {
     let unlisten: (() => void) | undefined;
 
     const setupListener = async () => {
