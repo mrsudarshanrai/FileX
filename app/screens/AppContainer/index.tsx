@@ -5,6 +5,7 @@ import { useContext } from 'react';
 import Modal from '@/app/components/Modal/Modal';
 import { listen } from '@tauri-apps/api/event';
 import DirectorySizeContext from '@/app/context/DirectorySizeContext/DirectorySizeContext';
+import OperationPanel from '@/app/components/OperationPanel/OperationPanel';
 
 const AppContainer = ({ children }: { children: React.ReactNode }) => {
   const { open } = useContext(ModalContext);
@@ -34,6 +35,7 @@ const AppContainer = ({ children }: { children: React.ReactNode }) => {
     <AppWrapper onClick={onMousedown}>
       {open && <Modal />}
       {children}
+      <OperationPanel />
     </AppWrapper>
   );
 };
