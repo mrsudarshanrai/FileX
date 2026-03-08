@@ -117,9 +117,8 @@ const ContextMenuModal = (props: ContextMenuModalProps) => {
         await invoke('copy_to_path', {
           from: sorucePathToCopy,
           to: currentPath,
+          operationId: opId,
         });
-        fetch(currentPath, 'get_files_in_path');
-        finishOperation(opId, 'completed');
       } catch (error: any) {
         // eslint-disable-next-line no-console
         console.error(error);
