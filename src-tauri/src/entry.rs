@@ -4,6 +4,7 @@ use crate::folder_manager::CreateFolderResponse;
 use crate::folder_manager::Folder;
 use crate::helper;
 use crate::utils;
+use serde::Serialize;
 use std::path::Path;
 use std::time::Duration;
 use tauri::Manager;
@@ -46,27 +47,55 @@ pub fn delete_path(path: String) -> String {
     }
 }
 
-/** Copy File/Folder */
+#[derive(Clone, Serialize, Debug)]
+pub struct CopyDonePayload {
+    pub operation_id: Option<String>,
+    pub success: bool,
+    pub message: String,
+    pub from: String,
+    pub to: String,
+}
+
+/** Copy File/Folder (runs in background and emits 'copy_done') */
 #[tauri::command]
-pub async fn copy_to_path(from: String, to: String) -> String {
-    if File::has_valid_metadata(&from) && File::has_valid_metadata(&to) {
-        if File::is_file(&from) && !File::is_file(&to) {
-            let result = File::copy(&from, &to).await;
-            match result {
-                Ok(_) => String::from("File copied"),
-                Err(_) => String::from("Failed to copy"),
+pub async fn copy_to_path(
+    app: tauri::AppHandle,
+    from: String,
+    to: String,
+    operation_id: Option<String>,
+) -> Result<(), String> {
+    if !(File::has_valid_metadata(&from) && File::has_valid_metadata(&to)) {
+        return Err(String::from("Not a valid path"));
+    }
+
+    let app_handle = app.clone();
+
+    tokio::spawn(async move {
+        let (success, message) = if File::is_file(&from) && !File::is_file(&to) {
+            match File::copy(&from, &to).await {
+                Ok(_) => (true, String::from("File copied")),
+                Err(_) => (false, String::from("Failed to copy file")),
             }
         } else {
             let dest_path = format!("{}/{}", to, utils::get_full_filename_from_path(&from));
-            let result = Folder::copy(&from, &dest_path).await;
-            match result {
-                Ok(_) => String::from("Folder copied"),
-                Err(_) => String::from("Failed to copy Folder"),
+            match Folder::copy(&from, &dest_path).await {
+                Ok(_) => (true, String::from("Folder copied")),
+                Err(_) => (false, String::from("Failed to copy folder")),
             }
-        }
-    } else {
-        String::from("Not a valid path")
-    }
+        };
+
+        let payload = CopyDonePayload {
+            operation_id,
+            success,
+            message,
+            from,
+            to,
+        };
+
+        let _ = app_handle.emit_all("copy_done", payload);
+    });
+
+    Ok(())
 }
 
 #[tauri::command]
