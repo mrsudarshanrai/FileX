@@ -25,10 +25,8 @@ const ContextMenuProvider = ({ children }: { children: React.ReactNode }) => {
   const [sorucePathToCopy, setSorucePathToCopy] = useState<undefined | string>(undefined);
 
   const onContextMenu = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    setShow((prev: Display) => (prev === DisplayEnum.none ? DisplayEnum.block : DisplayEnum.none));
-    if (show !== DisplayEnum.none) return null;
     event.preventDefault();
-
+    setShow(DisplayEnum.block);
     const { clientX, clientY } = event;
     setTop(clientY);
     setLeft(clientX);
