@@ -15,19 +15,27 @@ const ContextMenuWrapper = styled.div<
     | 'setFileRenamePath'
   >
 >`
-  ${(props) => css`
-    background-color: ${props.theme.grey.grey90};
-    border-radius: 14px;
-    width: 260px;
-    height: ${props.itemCount * CONTEXT_MENU_ITEM_HEIGHT}px;
-    position: fixed;
-    z-index: 999999999;
-    display: ${props.display};
-    top: ${props.top + 2}px;
-    left: ${props.left + 2}px;
-    overflow: hidden;
-    cursor: pointer;
-  `}
+  ${(props) => {
+    const MENU_HEIGHT = props.itemCount * CONTEXT_MENU_ITEM_HEIGHT;
+    const MENU_WIDTH = 260;
+    
+    const PADDING = 10;
+    
+
+    return css`
+      background-color: ${props.theme.grey.grey90};
+      border-radius: 14px;
+      width: ${MENU_WIDTH}px;
+      height: ${MENU_HEIGHT}px;
+      position: fixed;
+      z-index: 999999999;
+      display: ${props.display};
+      top: min(${Math.max(0, props.top + 2)}px, calc(100vh - ${MENU_HEIGHT + PADDING}px));
+      left: min(${Math.max(0, props.left + 2)}px, calc(100vw - ${MENU_WIDTH + PADDING}px));
+      overflow: hidden;
+      cursor: pointer;
+    `;
+  }}
 `;
 
 const ContextMenuItem = styled.div<ContextMenuItemElement>`

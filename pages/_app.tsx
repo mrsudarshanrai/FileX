@@ -28,7 +28,7 @@ const App = ({ Component, pageProps }: AppProps) => {
       <ThemeProvider theme={colors}>
         <GlobalStyles theme={colors} />
         <Toaster position='top-right' />
-        <RootLayout>
+        <RootLayout onContextMenu={(e) => e.preventDefault()}>
           <Sidebar />
           <MainSection>
             <Topbar />
