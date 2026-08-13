@@ -7,9 +7,6 @@ const nextConfig = {
   compiler: {
     styledComponents: true,
   },
-  experimental: {
-    appDir: false,
-  },
   webpack: (config, { isServer }) => {
     config.module.rules.push({
       test: /\.svg$/,
