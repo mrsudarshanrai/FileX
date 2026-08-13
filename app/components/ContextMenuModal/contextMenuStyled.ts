@@ -18,9 +18,8 @@ const ContextMenuWrapper = styled.div<
   ${(props) => {
     const MENU_HEIGHT = props.itemCount * CONTEXT_MENU_ITEM_HEIGHT;
     const MENU_WIDTH = 260;
-    
+
     const PADDING = 10;
-    
 
     return css`
       background-color: ${props.theme.grey.grey90};

@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import ContextMenu from '../context/ContextMenu';
 import { getFileNameFromPath } from '../utils';
-import { invoke } from '@tauri-apps/api/tauri';
+import { invoke } from '@tauri-apps/api/core';
 import { NavigationContext } from '../context/NavigationContext';
 import DirContext from '../context/DirectoryContext';
 

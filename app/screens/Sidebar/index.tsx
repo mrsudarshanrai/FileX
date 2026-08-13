@@ -4,7 +4,7 @@ import { getSidebarDirs, SIDEBAR_PLACES } from './helper';
 import { IDir } from '@/app/lib/types/dir';
 import { Icon } from '@/app/components/Icon/Icon';
 import { IconType } from '@/app/components/Icon/IconType';
-import { invoke } from '@tauri-apps/api/tauri';
+import { invoke } from '@tauri-apps/api/core';
 import {
   emitNavigationActionGoto,
   listenNavigationState,

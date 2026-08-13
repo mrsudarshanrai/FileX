@@ -11,7 +11,7 @@ import {
   ModalFooterButtonContainer,
 } from '../../components/Modal/ModalStyled';
 import Button from '../../components/Button';
-import { invoke } from '@tauri-apps/api/tauri';
+import { invoke } from '@tauri-apps/api/core';
 import { UseContextMenuType } from './useContextMenuType';
 import { openFileErrorModalMessage } from './useContextMenuUtils';
 import { PropertiesModal } from '@/app/components/PropertiesModal';

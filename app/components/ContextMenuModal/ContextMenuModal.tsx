@@ -7,7 +7,7 @@ import {
 } from './contextMenuStyled';
 import { useContext, useEffect, useState } from 'react';
 import { NavigationContext } from '@/app/context/NavigationContext';
-import { invoke } from '@tauri-apps/api/tauri';
+import { invoke } from '@tauri-apps/api/core';
 import DirContext from '@/app/context/DirectoryContext';
 import {
   ContextMenuModalProps,
