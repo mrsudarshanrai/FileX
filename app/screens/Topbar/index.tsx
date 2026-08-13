@@ -8,7 +8,8 @@ import { NavigationContext } from '@/app/context/NavigationContext';
 
 const Topbar = () => {
   const { changeDir } = useDirRoute();
-  const { navigate, currentPath, isForwardDisabled, isBackDisabled } = useContext(NavigationContext);
+  const { navigate, currentPath, isForwardDisabled, isBackDisabled } =
+    useContext(NavigationContext);
 
   const onClick = (path: string, dir: string) => {
     const pathToRoute = changeDir(path, dir);

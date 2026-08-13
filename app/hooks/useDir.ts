@@ -13,7 +13,7 @@ const useDir = (funcName?: string) => {
   const getFile = async (
     path: string,
     funcName = 'get_all_dir',
-    isInitial = false
+    isInitial = false,
   ): Promise<unknown> =>
     await invoke(funcName, { path })
       .then((res: IDir.IDir[] | unknown) => {
