@@ -1,91 +1,31 @@
 import { SidebarContainer, SidebarItem, SidebarItems, SidebarTitle } from './SidebarStyled';
-import { useEffect, useState } from 'react';
-import { getSidebarDirs, SIDEBAR_PLACES } from './helper';
+import { useContext, useMemo } from 'react';
+import DirContext from '@/app/context/DirectoryContext';
+import { getSidebarDirs } from './helper';
 import { IDir } from '@/app/lib/types/dir';
+import { NavigationContext } from '@/app/context/NavigationContext';
 import { Icon } from '@/app/components/Icon/Icon';
 import { IconType } from '@/app/components/Icon/IconType';
-import { invoke } from '@tauri-apps/api/core';
-import {
-  emitNavigationActionGoto,
-  listenNavigationState,
-  type NavigationStatePayload,
-} from '@/app/lib/navigationEvents';
 
 const Sidebar = () => {
-  const [sideBarDirs, setSideBarDirs] = useState<IDir.IDir[]>([]);
-  const [homePath, setHomePath] = useState<string>('/');
-  const [activePlace, setActivePlace] = useState<string | null>('Home');
-
-  useEffect(() => {
-    const fetchSidebarData = async () => {
-      const [dirsResponse, homeResponse] = await Promise.all([
-        invoke<IDir.IDir[]>('get_all_dir', { path: 'null' }).catch(() => []),
-        invoke<string>('get_home', {}).catch(() => '/'),
-      ]);
-
-      if (Array.isArray(dirsResponse)) {
-        setSideBarDirs(getSidebarDirs(dirsResponse));
-      }
-
-      if (typeof homeResponse === 'string') {
-        setHomePath(homeResponse);
-        setActivePlace('Home');
-      }
-    };
-
-    fetchSidebarData();
-  }, []);
-
-  useEffect(() => {
-    let unlisten: (() => void) | undefined;
-
-    const setupListener = async () => {
-      unlisten = await listenNavigationState((payload: NavigationStatePayload) => {
-        const nextPath = payload.currentPath;
-        if (!nextPath) return;
-
-        if (nextPath === homePath) {
-          if (activePlace !== 'Home') {
-            setActivePlace('Home');
-          }
-          return;
-        }
-
-        const matchedPlace = SIDEBAR_PLACES.find((place) => nextPath.includes(`/${place}`));
-
-        if (matchedPlace && matchedPlace !== activePlace) {
-          setActivePlace(matchedPlace);
-        }
-      });
-    };
-
-    setupListener();
-
-    return () => {
-      if (unlisten) {
-        unlisten();
-      }
-    };
-  }, [activePlace, homePath]);
+  const { placesDirs, homePath } = useContext(DirContext);
+  const { navigate, currentPath } = useContext(NavigationContext);
+  const sideBarDirs = useMemo(() => getSidebarDirs(placesDirs), [placesDirs]);
 
   const onDirClick = (path: string) => {
-    emitNavigationActionGoto(path);
+    navigate(path);
   };
 
   return (
     <SidebarContainer>
       <SidebarItems>
         <SidebarTitle>This PC</SidebarTitle>
-        <SidebarItem onClick={() => onDirClick(homePath)} isActive={activePlace === 'Home'}>
+        <SidebarItem onClick={() => onDirClick(homePath)} isActive={homePath === currentPath}>
           <Icon name='home' />
-          <span>Home</span>
+          <p>Home</p>
         </SidebarItem>
         {sideBarDirs.map(({ folder_name, path }: IDir.IDir) => (
-          <SidebarItem
-            key={path}
-            onClick={() => onDirClick(path)}
-            isActive={activePlace === folder_name}
-          >
+          <SidebarItem key={path} onClick={() => onDirClick(path)} isActive={path === currentPath}>
             <Icon name={folder_name.toLowerCase() as IconType.IconName} />
             <p>{folder_name}</p>
           </SidebarItem>

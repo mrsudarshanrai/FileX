@@ -1,12 +1,6 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { getLastItemFromArray } from '@/app/utils';
 import DirContext from '../DirectoryContext';
-import {
-  emitNavigationState,
-  listenNavigationAction,
-  type NavigationActionPayload,
-  type NavigationStatePayload,
-} from '@/app/lib/navigationEvents';
 
 type Props = {
   children: React.ReactNode;
@@ -95,54 +89,12 @@ const NavigationContextProvider = (props: Props) => {
   }, [forwardStack.length, backwardStack.length]);
 
   useEffect(() => {
-    const payload: NavigationStatePayload = {
-      currentPath,
-      isForwardDisabled: navigationBtnStatus.isForwardDisabled,
-      isBackDisabled: navigationBtnStatus.isBackDisabled,
-    };
-
-    emitNavigationState(payload);
-  }, [currentPath, navigationBtnStatus.isBackDisabled, navigationBtnStatus.isForwardDisabled]);
-
-  useEffect(() => {
     if (typeof window === 'undefined') return;
     const scrollEl = document.getElementById('main-scroll');
     if (scrollEl) {
       scrollEl.scrollTop = 0;
     }
   }, [currentPath]);
-
-  useEffect(() => {
-    let unlisten: (() => void) | undefined;
-
-    const setupListener = async () => {
-      unlisten = await listenNavigationAction((action: NavigationActionPayload) => {
-        switch (action.type) {
-          case 'back':
-            navigate(-1);
-            break;
-          case 'forward':
-            navigate(1);
-            break;
-          case 'goto':
-            if (action.path) {
-              navigate(action.path);
-            }
-            break;
-          default:
-            break;
-        }
-      });
-    };
-
-    setupListener();
-
-    return () => {
-      if (unlisten) {
-        unlisten();
-      }
-    };
-  }, [navigate]);
 
   useEffect(() => {
     setCurrentPath(homePath);

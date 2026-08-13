@@ -1,55 +1,27 @@
-import { useEffect, useState } from 'react';
+import { useContext } from 'react';
 import NavigationPath from '@/app/components/NavigationPath';
 import { useDirRoute } from '@/app/hooks/useDirRoute';
 import { NavigationButtonType } from '@/app/components/NavigationButton/NavigationButtonType';
 import NavigationButton from '@/app/components/NavigationButton';
 import { TopbarContainer } from './TopbarStyled';
-import {
-  emitNavigationActionBack,
-  emitNavigationActionForward,
-  emitNavigationActionGoto,
-  listenNavigationState,
-  type NavigationStatePayload,
-} from '@/app/lib/navigationEvents';
+import { NavigationContext } from '@/app/context/NavigationContext';
 
 const Topbar = () => {
   const { changeDir } = useDirRoute();
-  const [currentPath, setCurrentPath] = useState<string>('/');
-  const [isForwardDisabled, setIsForwardDisabled] = useState<boolean>(false);
-  const [isBackDisabled, setIsBackDisabled] = useState<boolean>(false);
-
-  useEffect(() => {
-    let unlisten: (() => void) | undefined;
-
-    const setupListener = async () => {
-      unlisten = await listenNavigationState((payload: NavigationStatePayload) => {
-        setCurrentPath((prev) => (prev === payload.currentPath ? prev : payload.currentPath));
-        setIsForwardDisabled(payload.isForwardDisabled);
-        setIsBackDisabled(payload.isBackDisabled);
-      });
-    };
-
-    setupListener();
-
-    return () => {
-      if (unlisten) {
-        unlisten();
-      }
-    };
-  }, []);
+  const { navigate, currentPath, isForwardDisabled, isBackDisabled } = useContext(NavigationContext);
 
   const onClick = (path: string, dir: string) => {
     const pathToRoute = changeDir(path, dir);
-    emitNavigationActionGoto(pathToRoute);
+    navigate(pathToRoute);
   };
 
   const handleNavigation = (type: NavigationButtonType.NavigationType) => {
     switch (type) {
       case NavigationButtonType.NavigationTypeEnum.backward:
-        emitNavigationActionBack();
+        navigate(-1);
         break;
       case NavigationButtonType.NavigationTypeEnum.forward:
-        emitNavigationActionForward();
+        navigate(1);
         break;
     }
   };

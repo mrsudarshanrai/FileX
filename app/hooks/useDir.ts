@@ -5,16 +5,22 @@ import { sortArrayByBoolean } from '../utils';
 
 const useDir = (funcName?: string) => {
   const [dirs, setDirs] = useState<IDir.IDir[]>([]);
+  const [placesDirs, setPlacesDirs] = useState<IDir.IDir[]>([]);
   const [homePath, setHomePath] = useState('/');
   const [isLoading, setIsLoading] = useState(false);
   const [activeDir, setActiveDir] = useState<Partial<IDir.IDir>>({});
 
-  const getFile = async (path: string, funcName = 'get_all_dir'): Promise<unknown> =>
+  const getFile = async (
+    path: string,
+    funcName = 'get_all_dir',
+    isInitial = false
+  ): Promise<unknown> =>
     await invoke(funcName, { path })
       .then((res: IDir.IDir[] | unknown) => {
         if (Array.isArray(res)) {
           res.sort(sortArrayByBoolean);
           setDirs(res);
+          if (isInitial) setPlacesDirs(res);
         }
       })
       .finally(() => setIsLoading(false));
@@ -27,7 +33,7 @@ const useDir = (funcName?: string) => {
 
   useEffect(() => {
     setIsLoading(true);
-    getFile('null', funcName);
+    getFile('null', funcName, true);
     getHomePath();
   }, [funcName]);
 
@@ -36,6 +42,7 @@ const useDir = (funcName?: string) => {
   };
   return {
     dirs,
+    placesDirs,
     isLoading,
     fetch,
     homePath,

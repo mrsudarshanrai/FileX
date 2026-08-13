@@ -29,11 +29,11 @@ const App = ({ Component, pageProps }: AppProps) => {
         <GlobalStyles theme={colors} />
         <Toaster position='top-right' />
         <RootLayout onContextMenu={(e) => e.preventDefault()}>
-          <Sidebar />
-          <MainSection>
-            <Topbar />
-            <DirContextProvider>
-              <NavigationContextProvider>
+          <DirContextProvider>
+            <NavigationContextProvider>
+              <Sidebar />
+              <MainSection>
+                <Topbar />
                 <ModalContextProvider>
                   <DirectorySizeContextProvider>
                     <OperationContextProvider>
@@ -47,9 +47,9 @@ const App = ({ Component, pageProps }: AppProps) => {
                     </OperationContextProvider>
                   </DirectorySizeContextProvider>
                 </ModalContextProvider>
-              </NavigationContextProvider>
-            </DirContextProvider>
-          </MainSection>
+              </MainSection>
+            </NavigationContextProvider>
+          </DirContextProvider>
         </RootLayout>
       </ThemeProvider>
     </>
