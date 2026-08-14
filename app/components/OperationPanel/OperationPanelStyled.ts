@@ -1,4 +1,3 @@
-import { colors } from '@/app/theme/colors';
 import styled from 'styled-components';
 
 const PanelWrapper = styled.div`
@@ -14,16 +13,16 @@ const PanelWrapper = styled.div`
 `;
 
 const OperationCard = styled.div<{ isActive: boolean }>`
-  background-color: ${({ theme }) => theme.grey.grey105};
-  border: 1px solid ${({ theme }) => theme.grey.grey50};
-  border-radius: 8px;
+  background-color: ${({ theme }) => theme.bg.elevated};
+  border: 1px solid ${({ theme }) => theme.border.subtle};
+  border-radius: ${({ theme }) => theme.radius.md};
   padding: 8px 10px;
   display: flex;
   align-items: center;
   gap: 8px;
   font-size: 12px;
-  color: ${({ theme }) => theme.grey.grey5};
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  color: ${({ theme }) => theme.text.primary};
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
   opacity: ${({ isActive }) => (isActive ? 1 : 0.7)};
   pointer-events: auto;
 `;
@@ -36,11 +35,11 @@ const StatusDot = styled.span<{ status: 'pending' | 'in_progress' | 'completed' 
   background-color: ${({ status, theme }) => {
     switch (status) {
       case 'completed':
-        return theme.green?.green100;
+        return theme.status.success;
       case 'failed':
-        return theme.red?.red200;
+        return theme.status.danger;
       default:
-        return theme.blue?.blue100;
+        return theme.status.info;
     }
   }};
   flex-shrink: 0;
@@ -48,7 +47,7 @@ const StatusDot = styled.span<{ status: 'pending' | 'in_progress' | 'completed' 
 
 const StatusText = styled.span`
   font-size: 11px;
-  color: ${colors.grey.grey10};
+  color: ${({ theme }) => theme.text.muted};
 `;
 
 const LabelText = styled.span`

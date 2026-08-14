@@ -1,4 +1,3 @@
-import { colors } from '@/app/theme/colors';
 import styled from 'styled-components';
 
 const ModalWrapper = styled.div`
@@ -18,43 +17,46 @@ const ModalContainer = styled.div`
 `;
 
 const ModalContent = styled.div<{ modalHeight?: string; modalWidth?: string }>`
-  width: ${({ modalWidth }) => modalWidth || '500px'};
+  width: ${({ modalWidth }) => modalWidth || '480px'};
   position: absolute;
   height: ${({ modalHeight }) => modalHeight || 'fit-content'};
-  position: absolute;
   overflow: hidden;
 
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  border-radius: 15px;
-  box-shadow: -1px 0px 51px -5px rgba(0, 0, 0, 0.45);
-  border: 1px solid ${({ theme }) => theme.grey.grey50};
-  background-color: ${({ theme }) => theme.grey.grey100};
+  border-radius: ${({ theme }) => theme.radius.lg};
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  border: 1px solid ${({ theme }) => theme.border.subtle};
+  background-color: ${({ theme }) => theme.bg.elevated};
 `;
 const ModalHeader = styled.div`
   height: 40px;
-  border-bottom: 1px solid ${({ theme }) => theme.grey.grey50};
+  border-bottom: 1px solid ${({ theme }) => theme.border.subtle};
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  padding: 10px 15px;
+  padding: 0 15px;
   cursor: move;
+  font-size: 13px;
+  font-weight: 600;
+  color: ${({ theme }) => theme.text.primary};
 `;
 
 const ModalHeaderRightContainer = styled.div`
   display: flex;
   align-items: center;
   svg {
-    width: 17px;
-    height: 17px;
+    width: 15px;
+    height: 15px;
     cursor: pointer;
     path {
-      fill: ${({ theme }) => theme.grey.grey20};
+      fill: ${({ theme }) => theme.text.muted};
     }
 
     &:hover {
       path {
-        fill: ${({ theme }) => theme.grey.grey10};
+        fill: ${({ theme }) => theme.text.primary};
       }
     }
   }
@@ -71,6 +73,7 @@ const ModalBody = styled.div`
   min-height: 100px;
   height: fit-content;
   padding-bottom: 10px;
+  color: ${({ theme }) => theme.text.secondary};
 `;
 
 const ModalFooter = styled.div`
@@ -85,15 +88,16 @@ const ModalFooterButtonContainer = styled.div`
 `;
 
 const ModalBodyMessage = styled.div`
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 500;
   margin: 10px 0;
   height: fit-content;
+  color: ${({ theme }) => theme.text.primary};
 `;
 
 const Mark = styled.mark`
   background-color: transparent;
-  color: ${colors.red.red200};
+  color: ${({ theme }) => theme.status.danger};
 `;
 
 export {

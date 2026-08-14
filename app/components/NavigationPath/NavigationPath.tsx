@@ -20,7 +20,7 @@ const NavigationPath = (props: NavigationPathType.Props) => {
         .map((dir, index) => {
           return (
             <Paths key={index} onClick={() => onClick(path, dir)}>
-              <Icon name='chevron-right' width='15px' height='15px' />
+              <Icon name='chevron-right' width='13px' height='13px' />
               <span>{dir}</span>
             </Paths>
           );

@@ -1,28 +1,41 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 const PathContainer = styled.div`
   display: flex;
   align-items: center;
-  column-gap: 0.3em;
-  background-color: #13141b;
-  border-radius: 8px;
-  padding: 3px 10px;
+  column-gap: 2px;
+  min-width: 0;
 `;
 
 const Paths = styled.div`
-  display: flex;
-  align-items: center;
-  flex-wrap: nowrap;
-  min-width: fit-content;
-  span {
-    cursor: pointer;
-    border-radius: 3px;
-    padding: 4px;
+  ${({ theme }) => css`
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    min-width: fit-content;
 
-    &:hover {
-      color: #fff;
+    span {
+      cursor: pointer;
+      border-radius: ${theme.radius.sm};
+      padding: 3px 4px;
+      font-size: 13px;
+      color: ${theme.text.secondary};
+      transition: color 0.15s ease;
     }
-  }
+
+    span:hover {
+      color: ${theme.text.primary};
+    }
+
+    svg path {
+      fill: ${theme.text.muted};
+    }
+
+    &:last-child span {
+      color: ${theme.text.primary};
+      font-weight: 500;
+    }
+  `}
 `;
 
 interface IArrowIcon {
@@ -30,20 +43,32 @@ interface IArrowIcon {
 }
 
 const ArrowIcon = styled.button<IArrowIcon>`
-  width: 36px;
-  min-width: 36px;
-  border: 0;
-  /* border: 1px solid ${({ theme }) => theme.grey.grey50}; */
-  padding: 3px;
-  height: 30px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 3px;
-  cursor: pointer;
-  background: transparent;
-  opacity: ${(props) => (props.disabled ? 0.5 : 1)};
-  cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
+  ${({ theme, disabled }) => css`
+    width: 30px;
+    min-width: 30px;
+    height: 30px;
+    border: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: ${theme.radius.md};
+    cursor: ${disabled ? 'not-allowed' : 'pointer'};
+    background: transparent;
+    opacity: ${disabled ? 0.35 : 1};
+    transition: background-color 0.15s ease;
+
+    svg path {
+      fill: ${theme.text.secondary};
+    }
+
+    ${!disabled &&
+    css`
+      &:hover {
+        background-color: ${theme.bg.surfaceHover};
+      }
+    `}
+  `}
 `;
 
 export { PathContainer, Paths, ArrowIcon };

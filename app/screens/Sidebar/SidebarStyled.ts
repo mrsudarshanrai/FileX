@@ -1,52 +1,79 @@
-import { colors } from '@/app/theme/colors';
-import { Theme } from '@/styles/GlobalStyles';
 import styled, { css } from 'styled-components';
 
 type ISidebarItem = {
   isActive: boolean;
 };
+
 const SidebarContainer = styled.div`
-  border: 0;
-  border-right: 1px solid ${colors.grey.grey50};
-  height: 100vh;
-  background-color: ${colors.grey.grey100};
-  color: #fff;
+  ${({ theme }) => css`
+    border: 0;
+    border-right: 1px solid ${theme.border.subtle};
+    height: 100vh;
+    background-color: ${theme.bg.surface};
+    color: ${theme.text.primary};
+    padding: ${theme.spacing.sm} 0;
+  `}
 `;
 
 const SidebarItems = styled.div`
-  display: flex;
-  flex-direction: column;
+  ${({ theme }) => css`
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 0 ${theme.spacing.sm};
+  `}
 `;
 
 const SidebarItem = styled.div<ISidebarItem>`
   ${({ theme, isActive }) => css`
-    padding: 15px;
-    height: 40px;
+    position: relative;
+    padding: 8px 10px 8px 12px;
+    height: 34px;
     display: flex;
     align-items: center;
     cursor: pointer;
-    color: #bbb;
-    width: 100%;
-    background-color: ${isActive ? theme.grey.grey30 : 'transparent'};
-    &:hover {
-      background-color: ${theme.grey.grey50};
-      transition: 0.2s;
+    border-radius: ${theme.radius.md};
+    color: ${isActive ? theme.text.primary : theme.text.secondary};
+    background-color: ${isActive ? theme.accent.muted : 'transparent'};
+    transition: background-color 0.15s ease, color 0.15s ease;
+
+    &::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 6px;
+      bottom: 6px;
+      width: 3px;
+      border-radius: ${theme.radius.pill};
+      background-color: ${isActive ? theme.accent.default : 'transparent'};
     }
+
+    &:hover {
+      background-color: ${isActive ? theme.accent.muted : theme.bg.surfaceHover};
+    }
+
     p {
-      font-size: 16px;
-      /* font-weight: 300; */
+      font-size: 13px;
+      font-weight: ${isActive ? 500 : 400};
     }
 
     svg {
-      margin: 0 12px 0 0;
-      width: 18px;
-      height: 18px;
+      margin: 0 10px 0 0;
+      width: 16px;
+      height: 16px;
     }
   `}
 `;
 
 const SidebarTitle = styled.h4`
-  padding: 10px;
+  ${({ theme }) => css`
+    padding: 6px 10px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: ${theme.text.muted};
+  `}
 `;
 
 export { SidebarContainer, SidebarItems, SidebarItem, SidebarTitle };

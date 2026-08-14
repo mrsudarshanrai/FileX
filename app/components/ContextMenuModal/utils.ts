@@ -16,18 +16,18 @@ const switchContextMenuItemDisabledStyle = (disabled: boolean | undefined, theme
     ? css`
         ${Item} {
           cursor: not-allowed;
-          color: ${theme.grey.grey20};
+          color: ${theme.text.muted};
           svg {
-            fill: ${theme.grey.grey20};
+            fill: ${theme.text.muted};
             path {
-              fill: ${theme.grey.grey20};
+              fill: ${theme.text.muted};
             }
           }
         }
       `
     : css`
         &:hover {
-          background-color: ${theme.grey.grey50};
+          background-color: ${theme.bg.surfaceHover};
         }
       `;
 };

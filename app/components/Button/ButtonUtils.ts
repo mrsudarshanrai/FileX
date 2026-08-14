@@ -3,28 +3,29 @@ import { ButtonType } from './ButtonType';
 
 const defaultButtonTheme: ButtonType.ButtonThemeColor = {
   background: 'transparent',
-  hoverBackground: colors.grey.grey90,
-  shadowColor: colors.grey.grey50,
-  disabledColor: colors.grey.grey100,
-  borderColor: colors.grey.grey50,
+  hoverBackground: colors.bg.surfaceHover,
+  shadowColor: colors.accent.border,
+  disabledColor: colors.bg.surface,
+  borderColor: colors.border.default,
+  textColor: colors.text.primary,
 };
 
 const errorButtonTheme: ButtonType.ButtonThemeColor = {
-  background: colors.red.red400,
-  hoverBackground: colors.grey.grey90,
-  shadowColor: colors.red.red50,
-  disabledColor: colors.grey.grey100,
-  borderColor: colors.red.red400,
-  textColor: colors.white.white,
+  background: colors.status.danger,
+  hoverBackground: '#ef6a62',
+  shadowColor: 'rgba(229, 83, 75, 0.35)',
+  disabledColor: colors.bg.surface,
+  borderColor: colors.status.danger,
+  textColor: colors.text.onAccent,
 };
 
 const successButtonTheme: ButtonType.ButtonThemeColor = {
-  background: colors.green.green400,
-  hoverBackground: colors.grey.grey90,
-  shadowColor: colors.green.green50,
-  disabledColor: colors.grey.grey100,
-  borderColor: colors.green.green400,
-  textColor: colors.white.white,
+  background: colors.status.success,
+  hoverBackground: '#57cf8d',
+  shadowColor: 'rgba(63, 187, 117, 0.35)',
+  disabledColor: colors.bg.surface,
+  borderColor: colors.status.success,
+  textColor: colors.text.onAccent,
 };
 
 const buttonThemes = {

@@ -1,23 +1,23 @@
-import { Theme } from '@/styles/GlobalStyles';
 import styled, { css } from 'styled-components';
 
-const TopbarContainer = styled.div<Theme>`
+const TopbarContainer = styled.div`
   ${({ theme }) => css`
-    background-color: ${theme.grey.grey100};
-    height: 60px;
+    background-color: ${theme.bg.surface};
+    height: 52px;
     border: 0;
-    border-bottom: 1px solid ${({ theme }) => theme.grey.grey50};
-    padding: 15px;
+    border-bottom: 1px solid ${theme.border.subtle};
+    padding: 0 ${theme.spacing.lg};
     display: flex;
     align-items: center;
     justify-content: space-between;
-    column-gap: 0.3em;
+    column-gap: ${theme.spacing.sm};
+
+    .left_container {
+      display: flex;
+      align-items: center;
+      column-gap: ${theme.spacing.sm};
+      height: 100%;
+    }
   `}
-  .left_container {
-    display: flex;
-    align-items: center;
-    column-gap: 0.3em;
-    height: 100%;
-  }
 `;
 export { TopbarContainer };
