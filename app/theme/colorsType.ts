@@ -40,5 +40,49 @@ type Color = {
     blue50: string;
     blue100: string;
   };
+  bg: {
+    canvas: string;
+    surface: string;
+    surfaceHover: string;
+    elevated: string;
+  };
+  border: {
+    subtle: string;
+    default: string;
+  };
+  text: {
+    primary: string;
+    secondary: string;
+    muted: string;
+    onAccent: string;
+  };
+  accent: {
+    default: string;
+    hover: string;
+    muted: string;
+    border: string;
+  };
+  status: {
+    success: string;
+    danger: string;
+    info: string;
+    warning: string;
+  };
+  spacing: {
+    xs: string;
+    sm: string;
+    md: string;
+    lg: string;
+    xl: string;
+    xxl: string;
+    xxxl: string;
+  };
+  radius: {
+    sm: string;
+    md: string;
+    lg: string;
+    xl: string;
+    pill: string;
+  };
 };
 export type { Color };

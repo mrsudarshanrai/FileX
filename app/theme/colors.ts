@@ -42,6 +42,50 @@ const colors: Color = {
     blue100: '#005a9e',
     blue50: '#0078d4',
   },
+  bg: {
+    canvas: '#17181f',
+    surface: '#1b1d26',
+    surfaceHover: '#242631',
+    elevated: '#20222c',
+  },
+  border: {
+    subtle: 'rgba(255, 255, 255, 0.08)',
+    default: 'rgba(255, 255, 255, 0.14)',
+  },
+  text: {
+    primary: '#f2f2f4',
+    secondary: '#a8a9b3',
+    muted: '#6f707a',
+    onAccent: '#ffffff',
+  },
+  accent: {
+    default: '#7c6cf0',
+    hover: '#8f81f5',
+    muted: 'rgba(124, 108, 240, 0.16)',
+    border: 'rgba(124, 108, 240, 0.4)',
+  },
+  status: {
+    success: '#3fbb75',
+    danger: '#e5534b',
+    info: '#4c9be8',
+    warning: '#e0a638',
+  },
+  spacing: {
+    xs: '4px',
+    sm: '8px',
+    md: '12px',
+    lg: '16px',
+    xl: '20px',
+    xxl: '24px',
+    xxxl: '32px',
+  },
+  radius: {
+    sm: '4px',
+    md: '6px',
+    lg: '10px',
+    xl: '14px',
+    pill: '999px',
+  },
 };
 
 export { colors };
