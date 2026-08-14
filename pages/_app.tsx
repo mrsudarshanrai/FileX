@@ -11,7 +11,6 @@ import { colors } from '@/app/theme/colors';
 import { GlobalStyles, MainContainer } from '@/styles/GlobalStyles';
 import { Toaster } from 'react-hot-toast';
 import { ModalContextProvider } from '@/app/context/ModalContext';
-import '../styles/index.css';
 import { DirectorySizeContextProvider } from '@/app/context/DirectorySizeContext/DirectorySizeContext';
 import { OperationContextProvider } from '@/app/context/OperationContext';
 const App = ({ Component, pageProps }: AppProps) => {

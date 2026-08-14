@@ -8,21 +8,23 @@ const MainContainer = styled.div`
   border: 0;
   height: 100vh;
   overflow-y: scroll;
-  color: white;
+  color: ${({ theme }) => theme.text.primary};
   padding: 15px 0;
   width: 100%;
 `;
 
+const SYSTEM_FONT_STACK =
+  '-apple-system, BlinkMacSystemFont, "Segoe UI", Ubuntu, Cantarell, "Noto Sans", sans-serif';
+
 const GlobalStyles = createGlobalStyle<Theme>`
 ${({ theme }) =>
   css`
-  
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
       user-select: none;
-      font-family: 'Poppins', sans-serif;
+      font-family: ${SYSTEM_FONT_STACK};
     }
 
     input,
@@ -31,11 +33,12 @@ ${({ theme }) =>
     }
 
     html {
-      background-color: ${theme.grey.grey100};
-      color: #bbb;
+      background-color: ${theme.bg.canvas};
+      color: ${theme.text.secondary};
       height: 100vh;
       overflow: hidden;
-      font-family: 'Poppins', sans-serif;
+      font-family: ${SYSTEM_FONT_STACK};
+    }
   `}
 `;
 
