@@ -1,54 +1,53 @@
 # FileX
 
-This project is a Linux file manager built using Next.js and Tauri. While the frontend is developed in Next.js, the backend and system interactions are handled using Rust and Tauri. The primary goal of this project was to explore Tauri and learn Rust for me.
+FileX is a lightweight, native-feeling file manager for Linux, built with Tauri and Next.js. The UI runs in Next.js while file system operations are handled natively through Rust.
 
 ![fileX](https://github.com/mrsudarshanrai/FileX/blob/main/public/assets/fileX-01.jpg?raw=true)
 ![fileX](https://github.com/mrsudarshanrai/FileX/blob/main/public/assets/fileX-02.jpg?raw=true)
 
-## Current Stage: Development
+## Features
 
-FileX is currently under development. While core functionalities are implemented, it's not yet ready for production use. Further development is needed for stability, performance optimization, and additional features.
-
-## Features (Current Status)
-
-- Basic File Listing: Lists files and directories in the current directory.
-- Directory Navigation: Allows users to navigate between directories.
-- File Creation: Supports creating new files.
-- File Deletion: Enables users to delete files.
-- File Renaming: Provides functionality to rename files.
-- File Copying: Implements basic file copying.
-- File Properties: Displays detailed information about selected files.
+- Sidebar with quick access to Home and other common places
+- Directory navigation with back/forward and breadcrumb path
+- Create, rename, delete, copy, and paste files and folders
+- Right-click context menu for file and folder actions
+- File properties (size, type, location, dates)
+- Progress feedback for in-progress operations like copying
 
 ## Requirements
 
-- Node.js (v14 or higher)
+- Node.js (v18.18 or higher)
 - Rust
-- [Tauri requirments](https://tauri.app/v1/guides/getting-started/prerequisites)
-- Tauri CLI (`yarn global add tauri`)
+- [Tauri requirements](https://tauri.app/start/prerequisites/)
+- Tauri CLI (`cargo install tauri-cli`)
 
 ## Running In your machine
 
-    https://github.com/mrsudarshanrai/FileX.git](https://github.com/mrsudarshanrai/FileX.git
+    git clone https://github.com/mrsudarshanrai/FileX.git
 
     cd FileX
 
-    yarn install
+    npm install
 
 To start the development server, run:
 
-    yarn tauri dev
+    cd src-tauri
+    cargo tauri dev
 
 This will start the application in development mode.
 
 ## Build and Run
 
-[https://tauri.app/v1/guides/building/](https://tauri.app/v1/guides/building/)
+[https://tauri.app/distribute/](https://tauri.app/distribute/)
 
 ```
-yarn tauri build
+cd src-tauri
+cargo tauri build
+# or
+cargo tauri build --bundles deb, appimage
 ```
 
-linux build `.deb` and `.AppImage`
+linux build `.deb` and `.AppImage`. AUR package coming soon.
 
 ## License
 
