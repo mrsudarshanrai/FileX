@@ -25,6 +25,13 @@ tokio = { version = "1.36.0", features = ["full"] }
 proc-macro2 = "1.0.60"
 
 
+[profile.release]
+codegen-units = 1
+lto = true
+opt-level = "s"
+panic = "abort"
+strip = true
+
 [features]
 # by default Tauri runs in production mode
 # when `tauri dev` runs it is executed with `cargo run --no-default-features` if `devPath` is an URL
