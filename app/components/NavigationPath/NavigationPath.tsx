@@ -1,4 +1,4 @@
-import { PathContainer, Paths } from './PathStyled';
+import { BreadcrumbBar, PathContainer, Paths } from './PathStyled';
 import { NavigationPathType } from './NavigationPathType';
 import { splitPathOnSlash } from '@/app/utils';
 import { Icon } from '../Icon/Icon';
@@ -14,18 +14,20 @@ const NavigationPath = (props: NavigationPathType.Props) => {
   }, [path]);
 
   return (
-    <PathContainer>
-      {paths
-        .filter((item) => item.length)
-        .map((dir, index) => {
-          return (
-            <Paths key={index} onClick={() => onClick(path, dir)}>
-              <Icon name='chevron-right' width='13px' height='13px' />
-              <span>{dir}</span>
-            </Paths>
-          );
-        })}
-    </PathContainer>
+    <BreadcrumbBar>
+      <PathContainer>
+        {paths
+          .filter((item) => item.length)
+          .map((dir, index) => {
+            return (
+              <Paths key={index} onClick={() => onClick(path, dir)}>
+                <Icon name='chevron-right' width='13px' height='13px' />
+                <span>{dir}</span>
+              </Paths>
+            );
+          })}
+      </PathContainer>
+    </BreadcrumbBar>
   );
 };
 

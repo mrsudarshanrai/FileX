@@ -1,5 +1,35 @@
 import styled, { css } from 'styled-components';
 
+const NavSegment = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    align-items: center;
+    border-radius: ${theme.radius.md};
+    background-color: ${theme.bg.surfaceHover};
+    overflow: hidden;
+  `}
+`;
+
+const NavDivider = styled.div`
+  ${({ theme }) => css`
+    width: 1px;
+    height: 16px;
+    background-color: ${theme.border.default};
+  `}
+`;
+
+const BreadcrumbBar = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    align-items: center;
+    height: 32px;
+    padding: 0 ${theme.spacing.sm};
+    border-radius: ${theme.radius.md};
+    background-color: ${theme.bg.surfaceHover};
+    min-width: 0;
+  `}
+`;
+
 const PathContainer = styled.div`
   display: flex;
   align-items: center;
@@ -44,19 +74,17 @@ interface IArrowIcon {
 
 const ArrowIcon = styled.button<IArrowIcon>`
   ${({ theme, disabled }) => css`
-    width: 30px;
-    min-width: 30px;
-    height: 30px;
+    width: 32px;
+    height: 32px;
     border: 0;
     padding: 0;
     display: flex;
     justify-content: center;
     align-items: center;
-    border-radius: ${theme.radius.md};
     cursor: ${disabled ? 'not-allowed' : 'pointer'};
     background: transparent;
     opacity: ${disabled ? 0.35 : 1};
-    transition: background-color 0.15s ease;
+    transition: opacity 0.15s ease;
 
     svg path {
       fill: ${theme.text.secondary};
@@ -64,11 +92,11 @@ const ArrowIcon = styled.button<IArrowIcon>`
 
     ${!disabled &&
     css`
-      &:hover {
-        background-color: ${theme.bg.surfaceHover};
+      &:hover svg path {
+        fill: ${theme.text.primary};
       }
     `}
   `}
 `;
 
-export { PathContainer, Paths, ArrowIcon };
+export { PathContainer, Paths, ArrowIcon, NavSegment, NavDivider, BreadcrumbBar };
