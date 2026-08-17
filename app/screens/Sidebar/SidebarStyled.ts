@@ -11,7 +11,28 @@ const SidebarContainer = styled.div`
     height: 100vh;
     background-color: ${theme.bg.surface};
     color: ${theme.text.primary};
-    padding: ${theme.spacing.sm} 0;
+    display: flex;
+    flex-direction: column;
+  `}
+`;
+
+const SidebarHeader = styled.div`
+  ${({ theme }) => css`
+    height: 52px;
+    min-height: 52px;
+    display: flex;
+    align-items: center;
+    column-gap: 10px;
+    font-size: 13px;
+    color: ${theme.text.primary};
+    padding: ${theme.spacing.lg} ${theme.spacing.sm} ${theme.spacing.sm};
+
+    p {
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      color: ${theme.text.primary};
+    }
   `}
 `;
 
@@ -20,33 +41,21 @@ const SidebarItems = styled.div`
     display: flex;
     flex-direction: column;
     gap: 2px;
-    padding: 0 ${theme.spacing.sm};
+    padding: ${theme.spacing.md} ${theme.spacing.sm} ${theme.spacing.sm};
   `}
 `;
 
 const SidebarItem = styled.div<ISidebarItem>`
   ${({ theme, isActive }) => css`
-    position: relative;
-    padding: 8px 10px 8px 12px;
-    height: 34px;
     display: flex;
     align-items: center;
+    gap: ${theme.spacing.sm};
+    padding: 5px ${theme.spacing.sm} 5px 5px;
+    height: 36px;
     cursor: pointer;
     border-radius: ${theme.radius.md};
-    color: ${isActive ? theme.text.primary : theme.text.secondary};
     background-color: ${isActive ? theme.accent.muted : 'transparent'};
-    transition: background-color 0.15s ease, color 0.15s ease;
-
-    &::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 6px;
-      bottom: 6px;
-      width: 3px;
-      border-radius: ${theme.radius.pill};
-      background-color: ${isActive ? theme.accent.default : 'transparent'};
-    }
+    transition: background-color 0.15s ease;
 
     &:hover {
       background-color: ${isActive ? theme.accent.muted : theme.bg.surfaceHover};
@@ -54,13 +63,27 @@ const SidebarItem = styled.div<ISidebarItem>`
 
     p {
       font-size: 13px;
-      font-weight: ${isActive ? 500 : 400};
+      font-weight: 600;
+      color: ${isActive ? theme.text.primary : theme.text.secondary};
     }
+  `}
+`;
+
+const IconChip = styled.div<ISidebarItem>`
+  ${({ theme, isActive }) => css`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    flex-shrink: 0;
+    border-radius: ${theme.radius.sm};
+    background-color: ${isActive ? theme.accent.default : 'transparent'};
+    transition: background-color 0.5s ease;
 
     svg {
-      margin: 0 10px 0 0;
-      width: 16px;
-      height: 16px;
+      /* width: 15px;1 */
+      /* height: 15px; */
     }
   `}
 `;
@@ -76,4 +99,4 @@ const SidebarTitle = styled.h4`
   `}
 `;
 
-export { SidebarContainer, SidebarItems, SidebarItem, SidebarTitle };
+export { SidebarContainer, SidebarHeader, SidebarItems, SidebarItem, IconChip, SidebarTitle };
