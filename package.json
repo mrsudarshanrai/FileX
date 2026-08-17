@@ -11,7 +11,7 @@
     "format": "prettier --write './/**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc.json"
   },
   "dependencies": {
-    "next": "15.5.20",
+    "next": "^15.5.23",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hot-toast": "^2.4.1",
@@ -24,14 +24,14 @@
     "@types/node": "18.15.5",
     "@types/react": "18.0.28",
     "@types/react-dom": "18.0.11",
-    "@types/styled-components": "^5.1.26",
+    "@types/styled-components": "5.1.26",
     "eslint": "8.57.1",
     "eslint-config-next": "15.5.20",
     "husky": "^8.0.3",
     "prettier": "2.8.7",
     "typescript": "5.0.2"
   },
-  "resolutions": {
+  "overrides": {
     "lodash": "^4.18.0",
     "@babel/traverse": "^7.28.5",
     "@babel/core": "^7.29.6",
