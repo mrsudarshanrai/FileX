@@ -3,6 +3,21 @@
 version = 3
 
 [[package]]
+name = "FileX"
+version = "0.1.0"
+dependencies = [
+ "async-recursion",
+ "chrono",
+ "open",
+ "proc-macro2",
+ "serde",
+ "serde_json",
+ "tauri",
+ "tauri-build",
+ "tokio",
+]
+
+[[package]]
 name = "adler2"
 version = "2.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -46,21 +61,6 @@ name = "anyhow"
 version = "1.0.103"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2a4385e2e34eb35d6b3efe798b9eb88096925d87726c0798709bf56d9ed84af3"
-
-[[package]]
-name = "app"
-version = "0.1.0"
-dependencies = [
- "async-recursion",
- "chrono",
- "open",
- "proc-macro2",
- "serde",
- "serde_json",
- "tauri",
- "tauri-build",
- "tokio",
-]
 
 [[package]]
 name = "async-recursion"

@@ -1,11 +1,11 @@
 [package]
-name = "app"
+name = "FileX"
 version = "0.1.0"
-description = "A Tauri App"
-authors = ["you"]
-license = ""
-repository = ""
-default-run = "app"
+description = "Yet Another File Manager"
+authors = ["mrsudarshanrai"]
+license = "MIT"
+repository = "https://github.com/mrsudarshanrai/FileX"
+default-run = "FileX"
 edition = "2021"
 rust-version = "1.77.2"
 
