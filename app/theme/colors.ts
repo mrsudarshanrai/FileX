@@ -59,7 +59,7 @@ const colors: Color = {
     onAccent: '#ffffff',
   },
   accent: {
-    default: '#7c6cf0',
+    default: '#8651C9',
     hover: '#8f81f5',
     muted: 'rgba(124, 108, 240, 0.16)',
     border: 'rgba(124, 108, 240, 0.4)',
