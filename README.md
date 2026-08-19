@@ -1,6 +1,13 @@
-# FileX
+<p align="center">
+  <img src="https://raw.githubusercontent.com/mrsudarshanrai/FileX/refs/heads/main/public/fileX-icon.svg" alt="FileX icon" width="96" height="96" />
+  </p>
+<h1 align="center">
+FileX
+</h1>
 
 FileX is a lightweight, native-feeling file manager for Linux, built with Tauri and Next.js. The UI runs in Next.js while file system operations are handled natively through Rust.
+
+FileX is still in development — contributions are welcome!
 
 ![fileX](https://github.com/mrsudarshanrai/FileX/blob/main/public/assets/fileX-01.jpg?raw=true)
 ![fileX](https://github.com/mrsudarshanrai/FileX/blob/main/public/assets/fileX-02.jpg?raw=true)
@@ -53,6 +60,30 @@ cargo tauri build --bundles deb, appimage
 ```
 
 linux build `.deb` and `.AppImage`. AUR package coming soon.
+
+## Contributing
+
+Contributions of any size are welcome — bug fixes, features, or just cleaning things up.
+
+1. Fork the repo and clone your fork
+   ```
+   git clone https://github.com/<your-username>/FileX.git
+   cd FileX
+   ```
+2. Create a branch for your change
+   ```
+   git checkout -b feature/your-change
+   ```
+3. Install dependencies and start the dev server (see [Running In your machine](#running-in-your-machine) above)
+4. Make your changes, then verify them locally
+
+5. Commit and push, then open a pull request against `main`
+   ```
+   git commit -m "short description of your change"
+   git push origin feature/your-change
+   ```
+
+For larger changes, it's worth opening an issue first to discuss the approach before you invest a lot of time.
 
 ## License
 
