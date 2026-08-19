@@ -1,6 +1,6 @@
-import { Color } from './colorsType';
+import { Color, ThemeMode } from './colorsType';
 
-const colors: Color = {
+const legacyRamps = {
   grey: {
     grey105: '#1e1e1e',
     grey100: '#1b1d26',
@@ -42,22 +42,9 @@ const colors: Color = {
     blue100: '#005a9e',
     blue50: '#0078d4',
   },
-  bg: {
-    canvas: '#17181f',
-    surface: '#1b1d26',
-    surfaceHover: '#242631',
-    elevated: '#20222c',
-  },
-  border: {
-    subtle: 'rgba(255, 255, 255, 0.08)',
-    default: 'rgba(255, 255, 255, 0.14)',
-  },
-  text: {
-    primary: '#f2f2f4',
-    secondary: '#a8a9b3',
-    muted: '#6f707a',
-    onAccent: '#ffffff',
-  },
+};
+
+const sharedTokens = {
   accent: {
     default: '#8651C9',
     hover: '#8f81f5',
@@ -88,4 +75,53 @@ const colors: Color = {
   },
 };
 
-export { colors };
+const darkColors: Color = {
+  ...legacyRamps,
+  ...sharedTokens,
+  bg: {
+    canvas: '#17181f',
+    surface: '#1b1d26',
+    surfaceHover: '#242631',
+    elevated: '#20222c',
+  },
+  border: {
+    subtle: 'rgba(255, 255, 255, 0.08)',
+    default: 'rgba(255, 255, 255, 0.14)',
+  },
+  text: {
+    primary: '#f2f2f4',
+    secondary: '#a8a9b3',
+    muted: '#6f707a',
+    onAccent: '#ffffff',
+  },
+};
+
+const lightColors: Color = {
+  ...legacyRamps,
+  ...sharedTokens,
+  bg: {
+    canvas: '#1',
+    surface: '#ffffff',
+    surfaceHover: '#eceef1',
+    elevated: '#ffffff',
+  },
+  border: {
+    subtle: 'rgba(0, 0, 0, 0.08)',
+    default: 'rgba(0, 0, 0, 0.14)',
+  },
+  text: {
+    primary: '#1c1d21',
+    secondary: '#5b5d66',
+    muted: '#8b8d96',
+    onAccent: '#ffffff',
+  },
+};
+
+const themes: Record<ThemeMode, Color> = {
+  dark: darkColors,
+  light: lightColors,
+};
+
+const colors = darkColors;
+
+export { colors, darkColors, lightColors, themes };
