@@ -100,7 +100,7 @@ const lightColors: Color = {
   ...legacyRamps,
   ...sharedTokens,
   bg: {
-    canvas: '#1',
+    canvas: '#f2f2f2',
     surface: '#ffffff',
     surfaceHover: '#eceef1',
     elevated: '#ffffff',
