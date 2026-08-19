@@ -1,14 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: 'export',
   reactStrictMode: true,
   images: {
     unoptimized: true,
   },
   compiler: {
     styledComponents: true,
-  },
-  experimental: {
-    appDir: false,
   },
   webpack: (config, { isServer }) => {
     config.module.rules.push({
@@ -20,4 +18,4 @@ const nextConfig = {
   },
 };
 
-module.exports = nextConfig;
+export default nextConfig;

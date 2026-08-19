@@ -44,7 +44,7 @@ impl File {
         while fs::metadata(&new_destination_path).is_ok() {
             attempt += 1;
             new_destination_path =
-                format!("{}/{}-{}(Copy){}", to, filename, attempt, file_extension);
+                format!("{}/{}-{}(Copy).{}", to, filename, attempt, file_extension);
         }
 
         fs::copy(from, &new_destination_path)?;

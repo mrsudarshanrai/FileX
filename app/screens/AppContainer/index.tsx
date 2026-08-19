@@ -5,10 +5,17 @@ import { useContext } from 'react';
 import Modal from '@/app/components/Modal/Modal';
 import { listen } from '@tauri-apps/api/event';
 import DirectorySizeContext from '@/app/context/DirectorySizeContext/DirectorySizeContext';
+import OperationPanel from '@/app/components/OperationPanel/OperationPanel';
+import { useOperations } from '@/app/context/OperationContext';
+import { NavigationContext } from '@/app/context/NavigationContext';
+import DirContext from '@/app/context/DirectoryContext';
 
 const AppContainer = ({ children }: { children: React.ReactNode }) => {
   const { open } = useContext(ModalContext);
   const { setDirectorySizeFunc, setIsFetchingFunc } = useContext(DirectorySizeContext);
+  const { finishOperation } = useOperations();
+  const { currentPath } = useContext(NavigationContext);
+  const { fetch } = useContext(DirContext);
 
   const onMousedown = (event: MouseEvent<HTMLDivElement>) => {
     // event.preventDefault();
@@ -30,10 +37,35 @@ const AppContainer = ({ children }: { children: React.ReactNode }) => {
       if (unListen) unListen();
     };
   }, []);
+
+  useEffect(() => {
+    let unListen: () => void;
+
+    const initializeCopyListener = async () => {
+      unListen = await listen('copy_done', ({ payload }: any) => {
+        const { operation_id, success, to } = payload || {};
+
+        if (operation_id) {
+          finishOperation(operation_id, success ? 'completed' : 'failed');
+        }
+
+        if (success && typeof to === 'string' && to === currentPath) {
+          fetch(currentPath, 'get_files_in_path');
+        }
+      });
+    };
+
+    initializeCopyListener();
+
+    return () => {
+      if (unListen) unListen();
+    };
+  }, [currentPath, fetch, finishOperation]);
   return (
     <AppWrapper onClick={onMousedown}>
       {open && <Modal />}
       {children}
+      <OperationPanel />
     </AppWrapper>
   );
 };
@@ -41,6 +73,8 @@ const AppContainer = ({ children }: { children: React.ReactNode }) => {
 export default AppContainer;
 
 const AppWrapper = styled.div`
-  display: grid;
-  grid-template-columns: 190px 1fr;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
 `;

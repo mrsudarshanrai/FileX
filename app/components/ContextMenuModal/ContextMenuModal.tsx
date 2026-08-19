@@ -7,7 +7,7 @@ import {
 } from './contextMenuStyled';
 import { useContext, useEffect, useState } from 'react';
 import { NavigationContext } from '@/app/context/NavigationContext';
-import { invoke } from '@tauri-apps/api/tauri';
+import { invoke } from '@tauri-apps/api/core';
 import DirContext from '@/app/context/DirectoryContext';
 import {
   ContextMenuModalProps,
@@ -17,11 +17,11 @@ import {
 } from './contextmenuModalType';
 import { contextMenuItems } from './contextMenuItems';
 import { isOptionDisabled } from './utils';
-import { toast } from 'react-hot-toast';
 import { useContextMenu } from '@/app/hooks/useContextMenu';
 import DirectorySizeContext from '@/app/context/DirectorySizeContext/DirectorySizeContext';
 import { Icon } from '../Icon/Icon';
 import { IconType } from '../Icon/IconType';
+import { useOperations } from '@/app/context/OperationContext';
 
 const CONDITIONAL_ITEM = ['delete', 'copy', 'open', 'rename'];
 
@@ -47,6 +47,7 @@ const ContextMenuModal = (props: ContextMenuModalProps) => {
     success: string;
   };
   const [items, setItems] = useState<IContextMenuItem[]>([]);
+  const { startOperation, finishOperation } = useOperations();
 
   const onContextItemClick = async (name: string) => {
     /** on new folder click */
@@ -106,23 +107,25 @@ const ContextMenuModal = (props: ContextMenuModalProps) => {
 
     /**  on file/folder paste */
     if (name === IContextMenuItemEnum.paste) {
-      const toastId = toast.loading('Copying');
       setShow(DisplayEnum.none);
 
-      await invoke('copy_to_path', {
-        from: sorucePathToCopy,
-        to: currentPath,
-      })
-        .then(() => {
-          fetch(currentPath, 'get_files_in_path');
-        })
-        .catch(console.error)
-        .finally(() =>
-          toast.success('The file has been successfully copied.', {
-            id: toastId,
-          }),
-        );
-      setShow(DisplayEnum.none);
+      const opId = startOperation({
+        label: 'Copying item…',
+      });
+
+      try {
+        await invoke('copy_to_path', {
+          from: sorucePathToCopy,
+          to: currentPath,
+          operationId: opId,
+        });
+      } catch (error: any) {
+        // eslint-disable-next-line no-console
+        console.error(error);
+        finishOperation(opId, 'failed', String(error));
+      } finally {
+        setShow(DisplayEnum.none);
+      }
     }
   };
 

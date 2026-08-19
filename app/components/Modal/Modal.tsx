@@ -15,8 +15,6 @@ import ModalContext from '@/app/context/ModalContext';
 import { isString } from '@/app/utils';
 import { Icon } from '../Icon/Icon';
 
-const Modal_HEADER_ID = 'modal_header';
-
 const renderContent = (content: React.ReactNode | string) => {
   if (isString(content)) return <p>{content}</p>;
   return content;
@@ -27,13 +25,13 @@ const Modal = () => {
   const modalHeaderRef = useRef<HTMLDivElement>(null);
   const { show, modalFooter, modalHeader, modalBody, modalHeight, modalWidth } =
     useContext(ModalContext);
-  const _ = useDraggable(modalContentRef, modalHeaderRef, Modal_HEADER_ID);
+  useDraggable(modalContentRef, modalHeaderRef);
 
   return (
     <ModalWrapper>
       <ModalContainer>
         <ModalContent ref={modalContentRef} modalHeight={modalHeight} modalWidth={modalWidth}>
-          <ModalHeader id={Modal_HEADER_ID} ref={modalHeaderRef}>
+          <ModalHeader ref={modalHeaderRef}>
             <ModalHeaderLeftContainer>{renderContent(modalHeader)}</ModalHeaderLeftContainer>
             <ModalHeaderRightContainer>
               <div

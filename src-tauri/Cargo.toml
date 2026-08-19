@@ -1,29 +1,36 @@
 [package]
-name = "app"
+name = "FileX"
 version = "0.1.0"
-description = "A Tauri App"
-authors = ["you"]
-license = ""
-repository = ""
-default-run = "app"
+description = "Yet Another File Manager"
+authors = ["mrsudarshanrai"]
+license = "MIT"
+repository = "https://github.com/mrsudarshanrai/FileX"
+default-run = "FileX"
 edition = "2021"
-rust-version = "1.59"
+rust-version = "1.77.2"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [build-dependencies]
-tauri-build = { version = "1.2.1", features = [] }
+tauri-build = { version = "2", features = [] }
 
 [dependencies]
 serde_json = "1.0"
 serde = { version = "1.0", features = ["derive"] }
-tauri = { version = "1.2.4", features = ["path-all", "shell-all"] }
+tauri = { version = "2", features = [] }
 open = "5.0.0"
 async-recursion = "1.0.5"
 chrono = "0.4.32"
 tokio = { version = "1.36.0", features = ["full"] }
 proc-macro2 = "1.0.60"
 
+
+[profile.release]
+codegen-units = 1
+lto = true
+opt-level = "s"
+panic = "abort"
+strip = true
 
 [features]
 # by default Tauri runs in production mode

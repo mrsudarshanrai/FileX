@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import ContextMenu from '../context/ContextMenu';
 import { getFileNameFromPath } from '../utils';
-import { invoke } from '@tauri-apps/api/tauri';
+import { invoke } from '@tauri-apps/api/core';
 import { NavigationContext } from '../context/NavigationContext';
 import DirContext from '../context/DirectoryContext';
 
@@ -25,7 +25,10 @@ const useRenameFile = () => {
 
   useEffect(() => {
     if (fileRenamePath) {
-      setFileName(getFileNameFromPath(fileRenamePath) as string);
+      const nameFromPath = getFileNameFromPath(fileRenamePath);
+      setFileName(nameFromPath ?? '');
+    } else {
+      setFileName('');
     }
   }, [fileRenamePath]);
 

@@ -2,7 +2,7 @@ import styled, { css } from 'styled-components';
 import { ContextMenuItemElement, ContextMenuWrapperProps } from './contextmenuModalType';
 import { switchContextMenuItemDisabledStyle } from './utils';
 
-const CONTEXT_MENU_ITEM_HEIGHT = 47;
+const CONTEXT_MENU_ITEM_HEIGHT = 40;
 
 const ContextMenuWrapper = styled.div<
   Omit<
@@ -15,36 +15,41 @@ const ContextMenuWrapper = styled.div<
     | 'setFileRenamePath'
   >
 >`
-  ${(props) => css`
-    background-color: ${props.theme.grey.grey90};
-    border-radius: 14px;
-    width: 260px;
-    height: ${props.itemCount * CONTEXT_MENU_ITEM_HEIGHT}px;
-    position: fixed;
-    z-index: 999999999;
-    display: ${props.display};
-    top: ${props.top + 2}px;
-    left: ${props.left + 2}px;
-    overflow: hidden;
-    cursor: pointer;
-  `}
+  ${(props) => {
+    const MENU_HEIGHT = props.itemCount * CONTEXT_MENU_ITEM_HEIGHT;
+    const MENU_WIDTH = 240;
+
+    const PADDING = 10;
+
+    return css`
+      background-color: ${props.theme.bg.elevated};
+      border: 1px solid ${props.theme.border.subtle};
+      border-radius: ${props.theme.radius.lg};
+      width: ${MENU_WIDTH}px;
+      height: ${MENU_HEIGHT}px;
+      position: fixed;
+      z-index: 999999999;
+      display: ${props.display};
+      top: min(${Math.max(0, props.top + 2)}px, calc(100vh - ${MENU_HEIGHT + PADDING}px));
+      left: min(${Math.max(0, props.left + 2)}px, calc(100vw - ${MENU_WIDTH + PADDING}px));
+      overflow: hidden;
+      cursor: pointer;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    `;
+  }}
 `;
 
 const ContextMenuItem = styled.div<ContextMenuItemElement>`
   ${({ disabled, theme }) => css`
     height: ${CONTEXT_MENU_ITEM_HEIGHT}px;
-    padding: 0 16px;
-    /* background-color: red; */
+    padding: 0 14px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 1px solid rgba(119, 119, 119, 0.17);
-    font-size: 15px;
-    color: #fff;
-    font-style: normal;
+    border-bottom: 1px solid ${theme.border.subtle};
+    font-size: 13px;
+    color: ${theme.text.primary};
     font-weight: 400;
-    font-size: 14px;
-    line-height: 15px;
 
     ${switchContextMenuItemDisabledStyle(disabled, theme)}
   `}
@@ -53,20 +58,19 @@ const ContextMenuItem = styled.div<ContextMenuItemElement>`
 const Item = styled.div`
   display: flex;
   align-items: center;
-  column-gap: 18px;
+  column-gap: 14px;
 `;
 
 const ContentMenuItemShortcut = styled.div`
-  font-style: normal;
   font-weight: 500;
   font-size: 11px;
-  line-height: 12px;
-  word-spacing: -3px;
-  color: #767676;
+  color: ${({ theme }) => theme.text.muted};
 `;
 
 const IconContainer = styled.div`
-  width: 20px;
+  width: 18px;
+  display: flex;
+  align-items: center;
 `;
 
 export { ContextMenuWrapper, ContextMenuItem, Item, ContentMenuItemShortcut, IconContainer };

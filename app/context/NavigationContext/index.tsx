@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { getLastItemFromArray } from '@/app/utils';
 import DirContext from '../DirectoryContext';
 
@@ -27,7 +27,6 @@ const NavigationContextProvider = (props: Props) => {
   const { fetch, homePath } = useContext(DirContext);
 
   const [currentPath, setCurrentPath] = useState(homePath);
-  /** all forward and backward paths */
   const [forwardStack, setForwardStack] = useState<string[]>([]);
   const [backwardStack, setBackwardStack] = useState<string[]>([]);
 
@@ -39,48 +38,48 @@ const NavigationContextProvider = (props: Props) => {
     isBackDisabled: false,
   });
 
-  const navigate = (path: number | string) => {
-    switch (path) {
-      // backward navigation
-      case -1: {
-        if (backwardStack.length === 0 || currentPath === getLastItemFromArray(backwardStack)) {
-          return;
+  const navigate = useCallback(
+    (path: number | string) => {
+      switch (path) {
+        case -1: {
+          if (backwardStack.length === 0 || currentPath === getLastItemFromArray(backwardStack)) {
+            return;
+          }
+          const backwardStackCopy = [...backwardStack];
+          const poppedItem = backwardStackCopy.pop();
+          setBackwardStack(backwardStackCopy);
+          if (poppedItem) {
+            pushToForwardStack(currentPath);
+            setCurrentPath(poppedItem);
+            fetch(poppedItem, 'get_files_in_path');
+          }
+          break;
         }
-        const backwardStackCopy = [...backwardStack];
-        const poppedItem = backwardStackCopy.pop();
-        setBackwardStack(backwardStackCopy);
-        if (poppedItem) {
-          pushToForwardStack(currentPath);
-          setCurrentPath(poppedItem);
-          fetch(poppedItem, 'get_files_in_path');
+        case 1: {
+          if (forwardStack.length === 0 || currentPath === getLastItemFromArray(forwardStack)) {
+            return;
+          }
+          const forwardStackCopy = [...forwardStack];
+          const poppedItem = forwardStackCopy.pop();
+          setForwardStack(forwardStackCopy);
+          if (poppedItem) {
+            pushToBackwardStack(currentPath);
+            setCurrentPath(poppedItem);
+            fetch(poppedItem, 'get_files_in_path');
+          }
+          break;
         }
-        break;
+        default:
+          if (typeof path === 'string') {
+            pushToBackwardStack(currentPath);
+            setCurrentPath(path);
+            fetch(path, 'get_files_in_path');
+          }
+          break;
       }
-      // forward navigation
-      case 1: {
-        if (forwardStack.length === 0 || currentPath === getLastItemFromArray(forwardStack)) {
-          return;
-        }
-        const forwardStackCopy = [...forwardStack];
-        const poppedItem = forwardStackCopy.pop();
-        setForwardStack(forwardStackCopy);
-        if (poppedItem) {
-          pushToBackwardStack(currentPath);
-          setCurrentPath(poppedItem);
-          fetch(poppedItem, 'get_files_in_path');
-        }
-        break;
-      }
-      // default navigates to provided path string
-      default:
-        if (typeof path === 'string') {
-          pushToBackwardStack(currentPath);
-          setCurrentPath(path);
-          fetch(path, 'get_files_in_path');
-        }
-        break;
-    }
-  };
+    },
+    [backwardStack, currentPath, fetch, forwardStack],
+  );
 
   useEffect(() => {
     setNavigationBtnStatus({
@@ -88,6 +87,14 @@ const NavigationContextProvider = (props: Props) => {
       isBackDisabled: backwardStack.length === 0,
     });
   }, [forwardStack.length, backwardStack.length]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const scrollEl = document.getElementById('main-scroll');
+    if (scrollEl) {
+      scrollEl.scrollTop = 0;
+    }
+  }, [currentPath]);
 
   useEffect(() => {
     setCurrentPath(homePath);

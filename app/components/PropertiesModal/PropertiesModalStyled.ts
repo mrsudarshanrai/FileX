@@ -15,18 +15,17 @@ const PropertiesModalWrapper = styled.div`
 
 const Info = styled.div`
   display: grid;
-  grid-template-columns: 150px 1fr;
+  grid-template-columns: 130px 1fr;
 
   h4 {
-    font-size: 15px;
-    font-weight: 700;
-  }
-  h4,
-  p {
-    font-size: 15px;
+    font-size: 13px;
+    font-weight: 600;
+    color: ${({ theme }) => theme.text.secondary};
   }
 
   p {
+    font-size: 13px;
+    color: ${({ theme }) => theme.text.primary};
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;

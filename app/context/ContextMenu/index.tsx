@@ -1,4 +1,5 @@
 import { createContext, useEffect, useState } from 'react';
+import styled from 'styled-components';
 import ContextMenuModal from '@/app/components/ContextMenuModal';
 import { Display, DisplayEnum } from '@/app/components/ContextMenuModal/contextmenuModalType';
 import { ContextMenuType } from './ContextMenuType';
@@ -25,10 +26,8 @@ const ContextMenuProvider = ({ children }: { children: React.ReactNode }) => {
   const [sorucePathToCopy, setSorucePathToCopy] = useState<undefined | string>(undefined);
 
   const onContextMenu = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    setShow((prev: Display) => (prev === DisplayEnum.none ? DisplayEnum.block : DisplayEnum.none));
-    if (show !== DisplayEnum.none) return null;
     event.preventDefault();
-
+    setShow(DisplayEnum.block);
     const { clientX, clientY } = event;
     setTop(clientY);
     setLeft(clientX);
@@ -67,10 +66,17 @@ const ContextMenuProvider = ({ children }: { children: React.ReactNode }) => {
         isTargetPathFile={isTargetPathFile}
         setFileRenamePath={setFileRenamePath}
       />
-      <div onContextMenu={(event) => onContextMenu(event)}>{children}</div>
+      <ContextMenuRoot onContextMenu={(event) => onContextMenu(event)}>{children}</ContextMenuRoot>
     </ContextMenu.Provider>
   );
 };
 
 export { ContextMenuProvider };
 export default ContextMenu;
+
+const ContextMenuRoot = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+`;
