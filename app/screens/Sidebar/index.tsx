@@ -7,25 +7,27 @@ import {
   SidebarTitle,
 } from './SidebarStyled';
 import { useContext, useMemo } from 'react';
+import { useTheme } from 'styled-components';
 import DirContext from '@/app/context/DirectoryContext';
 import { getSidebarDirs } from './helper';
 import { IDir } from '@/app/lib/types/dir';
 import { NavigationContext } from '@/app/context/NavigationContext';
 import { Icon } from '@/app/components/Icon/Icon';
 import { IconType } from '@/app/components/Icon/IconType';
-import { colors } from '@/app/theme/colors';
+import { Color } from '@/app/theme/colorsType';
 import Image from 'next/image';
 
 const Sidebar = () => {
   const { placesDirs, homePath } = useContext(DirContext);
   const { navigate, currentPath } = useContext(NavigationContext);
   const sideBarDirs = useMemo(() => getSidebarDirs(placesDirs), [placesDirs]);
+  const theme = useTheme() as Color;
 
   const onDirClick = (path: string) => {
     navigate(path);
   };
 
-  const iconFill = (isActive: boolean) => (isActive ? colors.text.onAccent : colors.text.secondary);
+  const iconFill = (isActive: boolean) => (isActive ? theme.text.onAccent : theme.text.secondary);
 
   return (
     <SidebarContainer>
