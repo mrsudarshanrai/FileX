@@ -105,6 +105,15 @@ pub struct Place {
   pub path: String,
 }
 
+fn xdg_user_dir(key: &str) -> Option<String> {
+  let output = Command::new("xdg-user-dir").arg(key).output().ok()?;
+  if !output.status.success() {
+    return None;
+  }
+  let path = String::from_utf8_lossy(&output.stdout).trim().to_string();
+  if path.is_empty() { None } else { Some(path) }
+}
+
 pub fn get_places() -> Vec<Place> {
   let home = get_home();
   let categories = [
@@ -119,12 +128,8 @@ pub fn get_places() -> Vec<Place> {
   categories
     .iter()
     .filter_map(|(key, label)| {
-      let output = Command::new("xdg-user-dir").arg(key).output().ok()?;
-      if !output.status.success() {
-        return None;
-      }
-      let path = String::from_utf8_lossy(&output.stdout).trim().to_string();
-      if path.is_empty() || path == home || !Path::new(&path).is_dir() {
+      let path = xdg_user_dir(key).unwrap_or_else(|| format!("{}/{}", home, label));
+      if path == home || !Path::new(&path).is_dir() {
         return None;
       }
       Some(Place { name: label.to_string(), path })
