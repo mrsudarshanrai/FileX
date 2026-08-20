@@ -1,20 +1,13 @@
 import { useContext } from 'react';
 import NavigationPath from '@/app/components/NavigationPath';
-import { useDirRoute } from '@/app/hooks/useDirRoute';
 import { NavigationButtonType } from '@/app/components/NavigationButton/NavigationButtonType';
 import NavigationButton from '@/app/components/NavigationButton';
 import { TopbarContainer } from './TopbarStyled';
 import { NavigationContext } from '@/app/context/NavigationContext';
 
 const Topbar = () => {
-  const { changeDir } = useDirRoute();
   const { navigate, currentPath, isForwardDisabled, isBackDisabled } =
     useContext(NavigationContext);
-
-  const onClick = (path: string, dir: string) => {
-    const pathToRoute = changeDir(path, dir);
-    navigate(pathToRoute);
-  };
 
   const handleNavigation = (type: NavigationButtonType.NavigationType) => {
     switch (type) {
@@ -35,7 +28,7 @@ const Topbar = () => {
           isForwardBtnDisabled={isForwardDisabled}
           onClick={(navigationType) => handleNavigation(navigationType)}
         />
-        <NavigationPath path={currentPath} onClick={onClick} />
+        <NavigationPath path={currentPath} onClick={navigate} />
       </div>
     </TopbarContainer>
   );
