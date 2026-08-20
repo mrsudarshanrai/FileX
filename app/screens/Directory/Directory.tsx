@@ -37,7 +37,7 @@ const Directory = () => {
       {isLoading && <LoadingOverlay>Fetching files…</LoadingOverlay>}
       {hasDirs && (
         <DirContainer key={currentPath}>
-          {dirs.map(({ folder_name, path, is_dir: isFolder, is_visible, extension }: IDir.IDir) => {
+          {dirs.map(({ folder_name, path, is_dir: isFolder, is_visible, thumbnail }: IDir.IDir) => {
             if (!is_visible) return null;
             return (
               <FileGrid key={path} draggable={true}>
@@ -49,7 +49,7 @@ const Directory = () => {
                   onDoubleClick={() => onFileDoubleClick(path, isFolder)}
                 >
                   <div className='file_icon_container'>
-                    <FileIcon isDir={isFolder} extension={extension} />
+                    <FileIcon thumbnail={thumbnail} />
                   </div>
                   <FileNameWrapper title={folder_name}>
                     {checkIfRenameEnabled(fileRenamePath, path) ? (
