@@ -8,5 +8,6 @@ export namespace FilePropertiesType {
     mime_type: string;
     name: string;
     size: number;
+    thumbnail: string;
   }
 }
