@@ -128,8 +128,13 @@ impl File {
     }
 
     pub async fn rename(path: String, new_name: String) -> String {
+        let trimmed_name = new_name.trim();
+        if trimmed_name.is_empty() || trimmed_name.contains('/') {
+            return String::from("invalid_name");
+        }
+
         if let Some(relative_path) = path.rsplitn(2, "/").nth(1) {
-            let new_path = format!("{}/{}", relative_path, new_name);
+            let new_path = format!("{}/{}", relative_path, trimmed_name);
             if let Ok(_) = fs::rename(path, new_path) {
                 String::from("rename_success")
             } else {
