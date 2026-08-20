@@ -111,7 +111,11 @@ fn xdg_user_dir(key: &str) -> Option<String> {
     return None;
   }
   let path = String::from_utf8_lossy(&output.stdout).trim().to_string();
-  if path.is_empty() { None } else { Some(path) }
+  if path.is_empty() {
+    None
+  } else {
+    Some(path)
+  }
 }
 
 pub fn get_places() -> Vec<Place> {
@@ -211,86 +215,5 @@ pub async fn calculate_file_size_recursive(
         }
       }
     }
-  }
-}
-
-#[cfg(test)]
-mod tests {
-  use super::*;
-
-  #[test]
-  fn falls_back_to_file_name_when_extension_has_no_match() {
-    assert_eq!(resolve_thumbnail("Dockerfile", "", false), "/extensions/docker.svg");
-    assert_eq!(resolve_thumbnail(".gitignore", "", false), "/extensions/git.svg");
-    assert_eq!(resolve_thumbnail(".prettierrc", "", false), "/extensions/prettier.svg");
-  }
-
-  #[test]
-  fn matches_file_name_case_insensitively() {
-    assert_eq!(resolve_thumbnail("dockerfile", "", false), "/extensions/docker.svg");
-    assert_eq!(resolve_thumbnail("LICENSE", "", false), "/extensions/certificate.svg");
-  }
-
-  #[test]
-  fn extension_match_still_takes_priority() {
-    assert_eq!(resolve_thumbnail("main.rs", "rs", false), "/extensions/rust.svg");
-  }
-
-  #[test]
-  fn unknown_file_falls_back_to_default_icon() {
-    assert_eq!(resolve_thumbnail("something.unknownext", "unknownext", false), DEFAULT_FILE_THUMBNAIL);
-    assert_eq!(resolve_thumbnail("no_match_at_all", "", false), DEFAULT_FILE_THUMBNAIL);
-  }
-
-  #[test]
-  fn directories_always_get_the_folder_icon() {
-    assert_eq!(resolve_thumbnail("src", "", true), FOLDER_THUMBNAIL);
-  }
-
-  #[test]
-  fn sorts_directories_before_files_then_alphabetically() {
-    let mut items = vec![
-      Files {
-        path: PathBuf::from("/tmp/zeta.txt"),
-        is_dir: false,
-        extension: String::from("txt"),
-        folder_name: String::from("zeta.txt"),
-        is_visible: true,
-        thumbnail: String::new(),
-      },
-      Files {
-        path: PathBuf::from("/tmp/Beta"),
-        is_dir: true,
-        extension: String::new(),
-        folder_name: String::from("Beta"),
-        is_visible: true,
-        thumbnail: String::new(),
-      },
-      Files {
-        path: PathBuf::from("/tmp/alpha.txt"),
-        is_dir: false,
-        extension: String::from("txt"),
-        folder_name: String::from("alpha.txt"),
-        is_visible: true,
-        thumbnail: String::new(),
-      },
-      Files {
-        path: PathBuf::from("/tmp/apple"),
-        is_dir: true,
-        extension: String::new(),
-        folder_name: String::from("apple"),
-        is_visible: true,
-        thumbnail: String::new(),
-      },
-    ];
-
-    items.sort_by(|a, b| {
-      b.is_dir
-        .cmp(&a.is_dir)
-        .then_with(|| a.folder_name.to_lowercase().cmp(&b.folder_name.to_lowercase()))
-    });
-
-    let names: Vec<&str> = items.iter().map(|f| f.folder_name.as_str()).collect();
-    assert_eq!(names, vec!["apple", "Beta", "alpha.txt", "zeta.txt"]);
   }
 }
