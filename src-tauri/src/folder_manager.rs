@@ -10,17 +10,25 @@ pub struct CreateFolderResponse {
 }
 pub struct Folder;
 
+fn join_path(base: &str, name: &str) -> String {
+    if base.ends_with('/') {
+        format!("{}{}", base, name)
+    } else {
+        format!("{}/{}", base, name)
+    }
+}
+
 impl Folder {
     /** create folder  */
     pub fn create(folder_path: String) -> Result<CreateFolderResponse, String> {
         let mut attempt = 1;
         let folder_name_suffix = "Untitled Folder";
-        let mut full_folder_path = format!("{}{}", &folder_path, folder_name_suffix);
+        let mut full_folder_path = join_path(&folder_path, folder_name_suffix);
 
         // check if folder exist
         while fs::metadata(&full_folder_path).is_ok() {
             attempt += 1;
-            full_folder_path = format!("{}{} {}", folder_path, folder_name_suffix, attempt);
+            full_folder_path = join_path(&folder_path, &format!("{} {}", folder_name_suffix, attempt));
         }
         // Create the folder
         if let Err(err) = fs::create_dir_all(&full_folder_path) {
