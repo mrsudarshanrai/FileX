@@ -9,9 +9,8 @@ mod utils;
 fn main() {
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![
-            helper::get_home,
             entry::create_folder,
-            entry::get_all_dir,
+            entry::get_initial_data,
             entry::get_files_in_path,
             entry::delete_path,
             entry::copy_to_path,

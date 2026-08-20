@@ -7,4 +7,9 @@ export namespace IDir {
     is_visible: boolean;
     thumbnail: string;
   };
+
+  export type Place = {
+    name: string;
+    path: string;
+  };
 }

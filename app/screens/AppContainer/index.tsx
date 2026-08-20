@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { MouseEvent, useEffect } from 'react';
+import { MouseEvent, useEffect, useRef } from 'react';
 import ModalContext from '@/app/context/ModalContext';
 import { useContext } from 'react';
 import Modal from '@/app/components/Modal/Modal';
@@ -15,11 +15,16 @@ const AppContainer = ({ children }: { children: React.ReactNode }) => {
   const { setDirectorySizeFunc, setIsFetchingFunc } = useContext(DirectorySizeContext);
   const { finishOperation } = useOperations();
   const { currentPath } = useContext(NavigationContext);
-  const { fetch } = useContext(DirContext);
+  const { fetch, setActiveDir } = useContext(DirContext);
 
   const onMousedown = (event: MouseEvent<HTMLDivElement>) => {
     // event.preventDefault();
   };
+
+  const latestRef = useRef({ currentPath, fetch, finishOperation, setActiveDir });
+  useEffect(() => {
+    latestRef.current = { currentPath, fetch, finishOperation, setActiveDir };
+  }, [currentPath, fetch, finishOperation, setActiveDir]);
 
   useEffect(() => {
     let unListen: () => void;
@@ -43,7 +48,8 @@ const AppContainer = ({ children }: { children: React.ReactNode }) => {
 
     const initializeCopyListener = async () => {
       unListen = await listen('copy_done', ({ payload }: any) => {
-        const { operation_id, success, to } = payload || {};
+        const { operation_id, success, to, destination_path } = payload || {};
+        const { currentPath, fetch, finishOperation, setActiveDir } = latestRef.current;
 
         if (operation_id) {
           finishOperation(operation_id, success ? 'completed' : 'failed');
@@ -51,6 +57,9 @@ const AppContainer = ({ children }: { children: React.ReactNode }) => {
 
         if (success && typeof to === 'string' && to === currentPath) {
           fetch(currentPath, 'get_files_in_path');
+          if (typeof destination_path === 'string') {
+            setActiveDir({ path: destination_path });
+          }
         }
       });
     };
@@ -60,7 +69,7 @@ const AppContainer = ({ children }: { children: React.ReactNode }) => {
     return () => {
       if (unListen) unListen();
     };
-  }, [currentPath, fetch, finishOperation]);
+  }, []);
   return (
     <AppWrapper onClick={onMousedown}>
       {open && <Modal />}

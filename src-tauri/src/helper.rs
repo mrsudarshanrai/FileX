@@ -3,7 +3,6 @@ use async_recursion::async_recursion;
 use serde::{ Deserialize, Serialize };
 use std::{ env, fs::{ self }, path::{ Path, PathBuf }, process::Command, sync::OnceLock };
 
-#[tauri::command]
 pub fn get_home() -> String {
   let home_dir = match env::var("HOME") {
     Ok(val) => val,
@@ -92,8 +91,54 @@ pub fn get_files(path: String) -> Result<Vec<Files>, String> {
     dirs.push(file);
   }
   dirs.retain(|a| !a.folder_name.starts_with("."));
-  dirs.sort_by(|a, b| { a.folder_name.to_lowercase().cmp(&b.folder_name.to_lowercase()) });
+  dirs.sort_by(|a, b| {
+    b.is_dir
+      .cmp(&a.is_dir)
+      .then_with(|| a.folder_name.to_lowercase().cmp(&b.folder_name.to_lowercase()))
+  });
   Ok(dirs)
+}
+
+#[derive(Serialize, Debug)]
+pub struct Place {
+  pub name: String,
+  pub path: String,
+}
+
+fn xdg_user_dir(key: &str) -> Option<String> {
+  let output = Command::new("xdg-user-dir").arg(key).output().ok()?;
+  if !output.status.success() {
+    return None;
+  }
+  let path = String::from_utf8_lossy(&output.stdout).trim().to_string();
+  if path.is_empty() {
+    None
+  } else {
+    Some(path)
+  }
+}
+
+pub fn get_places() -> Vec<Place> {
+  let home = get_home();
+  let categories = [
+    ("DESKTOP", "Desktop"),
+    ("DOCUMENTS", "Documents"),
+    ("DOWNLOAD", "Downloads"),
+    ("MUSIC", "Music"),
+    ("PICTURES", "Pictures"),
+    ("VIDEOS", "Videos"),
+  ];
+
+  categories
+    .iter()
+    .filter_map(|(key, label)| {
+      let path = xdg_user_dir(key).unwrap_or_else(|| format!("{}/{}", home, label));
+      if path == home || !Path::new(&path).is_dir() {
+        return None;
+      }
+      Some(Place { name: label.to_string(), path })
+    })
+    .collect()
 }
 
 #[derive(Debug)]

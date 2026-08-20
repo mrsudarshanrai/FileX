@@ -1,8 +1,8 @@
 import { Display, DisplayEnum } from '@/app/components/ContextMenuModal/contextmenuModalType';
 import ContextMenu from '@/app/context/ContextMenu';
+import DirContext from '@/app/context/DirectoryContext';
 import { NavigationContext } from '@/app/context/NavigationContext';
 import { useContextMenu } from '@/app/hooks/useContextMenu';
-import { useDir } from '@/app/hooks/useDir';
 import { useRenameFile } from '@/app/hooks/useRenameFile';
 import { useContext, useMemo } from 'react';
 
@@ -11,7 +11,7 @@ const useDirectoryLogics = () => {
   const { show, setShow, setTargetPath, setIsTargetPathFile } = useContext(ContextMenu);
 
   const { openFile } = useContextMenu();
-  const { activeDir, setActiveDir } = useDir();
+  const { activeDir, setActiveDir } = useContext(DirContext);
   const { fileName, setFileName, renameFile, fileRenamePath, setFileRenamePath } = useRenameFile();
   const isContextMenuOpen = (value: Display) => value === DisplayEnum.none;
 

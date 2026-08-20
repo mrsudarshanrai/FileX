@@ -10,17 +10,25 @@ pub struct CreateFolderResponse {
 }
 pub struct Folder;
 
+fn join_path(base: &str, name: &str) -> String {
+    if base.ends_with('/') {
+        format!("{}{}", base, name)
+    } else {
+        format!("{}/{}", base, name)
+    }
+}
+
 impl Folder {
     /** create folder  */
     pub fn create(folder_path: String) -> Result<CreateFolderResponse, String> {
         let mut attempt = 1;
         let folder_name_suffix = "Untitled Folder";
-        let mut full_folder_path = format!("{}{}", &folder_path, folder_name_suffix);
+        let mut full_folder_path = join_path(&folder_path, folder_name_suffix);
 
         // check if folder exist
         while fs::metadata(&full_folder_path).is_ok() {
             attempt += 1;
-            full_folder_path = format!("{}{} {}", folder_path, folder_name_suffix, attempt);
+            full_folder_path = join_path(&folder_path, &format!("{} {}", folder_name_suffix, attempt));
         }
         // Create the folder
         if let Err(err) = fs::create_dir_all(&full_folder_path) {
@@ -52,14 +60,14 @@ impl Folder {
             let entry_path = entry.path();
             let entry_dest_path = format!("{}/{}", to, entry.file_name().to_string_lossy());
             if entry_path.is_dir() {
-                Self::copy(&entry_path.to_string_lossy().to_string(), &entry_dest_path).await?
+                Self::copy(&entry_path.to_string_lossy().to_string(), &entry_dest_path).await?;
             } else {
                 let file_dest_path = entry_dest_path.rsplitn(2, "/").nth(1).unwrap();
                 File::copy(
                     &entry_path.to_string_lossy().to_string(),
                     &file_dest_path.to_string(),
                 )
-                .await?
+                .await?;
             }
         }
         Ok(())

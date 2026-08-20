@@ -59,7 +59,7 @@ const ContextMenuModal = (props: ContextMenuModalProps) => {
     /** on new folder click */
     if (name === IContextMenuItemEnum.newFolder) {
       await invoke('create_folder', {
-        folderPath: currentPath + '/',
+        folderPath: currentPath,
       })
         .then((response) => {
           if (typeof response === 'object' && (response as CreateFolderResponse)?.success) {
@@ -94,7 +94,6 @@ const ContextMenuModal = (props: ContextMenuModalProps) => {
     if (name === IContextMenuItemEnum.properties) {
       if (targetPath || currentPath) {
         setIsFetchingFunc(true);
-        setSorucePathToCopy(targetPath);
         setShow(DisplayEnum.none);
         showFileProperties(targetPath || currentPath);
         await invoke('calculate_directory_size', {

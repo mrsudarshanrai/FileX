@@ -33,7 +33,7 @@ impl File {
 
     /** copy file */
     #[async_recursion]
-    pub async fn copy(from: &String, to: &String) -> std::io::Result<()> {
+    pub async fn copy(from: &String, to: &String) -> std::io::Result<String> {
         let full_filename = utils::get_full_filename_from_path(from);
         let mut attempt = 1;
 
@@ -49,7 +49,7 @@ impl File {
         }
 
         fs::copy(from, &new_destination_path)?;
-        Ok(())
+        Ok(new_destination_path)
     }
 
     /** get metadata */
@@ -128,8 +128,13 @@ impl File {
     }
 
     pub async fn rename(path: String, new_name: String) -> String {
+        let trimmed_name = new_name.trim();
+        if trimmed_name.is_empty() || trimmed_name.contains('/') {
+            return String::from("invalid_name");
+        }
+
         if let Some(relative_path) = path.rsplitn(2, "/").nth(1) {
-            let new_path = format!("{}/{}", relative_path, new_name);
+            let new_path = format!("{}/{}", relative_path, trimmed_name);
             if let Ok(_) = fs::rename(path, new_path) {
                 String::from("rename_success")
             } else {

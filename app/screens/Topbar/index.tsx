@@ -1,6 +1,5 @@
 import { useContext } from 'react';
 import NavigationPath from '@/app/components/NavigationPath';
-import { useDirRoute } from '@/app/hooks/useDirRoute';
 import { NavigationButtonType } from '@/app/components/NavigationButton/NavigationButtonType';
 import NavigationButton from '@/app/components/NavigationButton';
 import { TopbarContainer } from './TopbarStyled';
@@ -10,15 +9,9 @@ import { Icon } from '@/app/components/Icon/Icon';
 import { useAppTheme } from '@/app/context/ThemeContext';
 
 const Topbar = () => {
-  const { changeDir } = useDirRoute();
   const { navigate, currentPath, isForwardDisabled, isBackDisabled } =
     useContext(NavigationContext);
   const { mode, setTheme, availableThemes } = useAppTheme();
-
-  const onClick = (path: string, dir: string) => {
-    const pathToRoute = changeDir(path, dir);
-    navigate(pathToRoute);
-  };
 
   const handleNavigation = (type: NavigationButtonType.NavigationType) => {
     switch (type) {
@@ -45,7 +38,7 @@ const Topbar = () => {
           isForwardBtnDisabled={isForwardDisabled}
           onClick={(navigationType) => handleNavigation(navigationType)}
         />
-        <NavigationPath path={currentPath} onClick={onClick} />
+        <NavigationPath path={currentPath} onClick={navigate} />
       </div>
       <ArrowIcon onClick={onToggleTheme} title='Toggle theme'>
         <Icon name={mode === 'dark' ? 'sun' : 'moon'} width='18px' height='18px' />
