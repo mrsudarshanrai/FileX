@@ -16,6 +16,7 @@ export namespace IconType {
     | 'documents'
     | 'downloads'
     | 'home'
+    | 'moon'
     | 'music'
     | 'new-folder'
     | 'open'
@@ -24,5 +25,6 @@ export namespace IconType {
     | 'properties'
     | 'rename'
     | 'select-all'
+    | 'sun'
     | 'videos';
 }

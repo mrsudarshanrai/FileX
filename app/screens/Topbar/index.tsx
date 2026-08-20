@@ -5,11 +5,15 @@ import { NavigationButtonType } from '@/app/components/NavigationButton/Navigati
 import NavigationButton from '@/app/components/NavigationButton';
 import { TopbarContainer } from './TopbarStyled';
 import { NavigationContext } from '@/app/context/NavigationContext';
+import { ArrowIcon } from '@/app/components/NavigationPath/PathStyled';
+import { Icon } from '@/app/components/Icon/Icon';
+import { useAppTheme } from '@/app/context/ThemeContext';
 
 const Topbar = () => {
   const { changeDir } = useDirRoute();
   const { navigate, currentPath, isForwardDisabled, isBackDisabled } =
     useContext(NavigationContext);
+  const { mode, setTheme, availableThemes } = useAppTheme();
 
   const onClick = (path: string, dir: string) => {
     const pathToRoute = changeDir(path, dir);
@@ -27,6 +31,12 @@ const Topbar = () => {
     }
   };
 
+  const onToggleTheme = () => {
+    const currentIndex = availableThemes.indexOf(mode);
+    const nextMode = availableThemes[(currentIndex + 1) % availableThemes.length];
+    setTheme(nextMode);
+  };
+
   return (
     <TopbarContainer>
       <div className='left_container'>
@@ -37,6 +47,9 @@ const Topbar = () => {
         />
         <NavigationPath path={currentPath} onClick={onClick} />
       </div>
+      <ArrowIcon onClick={onToggleTheme} title='Toggle theme'>
+        <Icon name={mode === 'dark' ? 'sun' : 'moon'} width='18px' height='18px' />
+      </ArrowIcon>
     </TopbarContainer>
   );
 };

@@ -85,4 +85,10 @@ type Color = {
     pill: string;
   };
 };
-export type { Color };
+
+/**
+ * key here must have a matching entry in `themes` (app/theme/colors.ts).
+ */
+type ThemeMode = 'dark' | 'light';
+
+export type { Color, ThemeMode };

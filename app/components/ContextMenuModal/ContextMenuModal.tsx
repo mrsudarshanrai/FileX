@@ -22,6 +22,9 @@ import DirectorySizeContext from '@/app/context/DirectorySizeContext/DirectorySi
 import { Icon } from '../Icon/Icon';
 import { IconType } from '../Icon/IconType';
 import { useOperations } from '@/app/context/OperationContext';
+import { useAppTheme } from '@/app/context/ThemeContext';
+import { useTheme } from 'styled-components';
+import { Color } from '@/app/theme/colorsType';
 
 const CONDITIONAL_ITEM = ['delete', 'copy', 'open', 'rename'];
 
@@ -30,6 +33,9 @@ const ContextMenuModal = (props: ContextMenuModalProps) => {
   const { fetch } = useContext(DirContext);
   const { setIsFetchingFunc } = useContext(DirectorySizeContext);
   const { deleteFile, showFileProperties, openFile } = useContextMenu();
+  const { mode } = useAppTheme();
+  const theme = useTheme() as Color;
+
   const {
     top,
     left,
@@ -145,6 +151,8 @@ const ContextMenuModal = (props: ContextMenuModalProps) => {
     });
   }, [targetPath]);
 
+  const iconFill = mode === 'dark' ? theme.text.onAccent : theme.text.secondary;
+
   return (
     <ContextMenuWrapper
       onContextMenu={(e) => e.preventDefault()}
@@ -162,7 +170,7 @@ const ContextMenuModal = (props: ContextMenuModalProps) => {
           >
             <Item>
               <IconContainer>
-                <Icon name={name as IconType.IconName} />
+                <Icon name={name as IconType.IconName} fill={iconFill} />
               </IconContainer>
               {label}
             </Item>
