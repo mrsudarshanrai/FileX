@@ -53,7 +53,7 @@ const ContextMenuModal = (props: ContextMenuModalProps) => {
     /** on new folder click */
     if (name === IContextMenuItemEnum.newFolder) {
       await invoke('create_folder', {
-        folderPath: currentPath + '/',
+        folderPath: currentPath,
       })
         .then((response) => {
           if (typeof response === 'object' && (response as CreateFolderResponse)?.success) {
