@@ -60,14 +60,14 @@ impl Folder {
             let entry_path = entry.path();
             let entry_dest_path = format!("{}/{}", to, entry.file_name().to_string_lossy());
             if entry_path.is_dir() {
-                Self::copy(&entry_path.to_string_lossy().to_string(), &entry_dest_path).await?
+                Self::copy(&entry_path.to_string_lossy().to_string(), &entry_dest_path).await?;
             } else {
                 let file_dest_path = entry_dest_path.rsplitn(2, "/").nth(1).unwrap();
                 File::copy(
                     &entry_path.to_string_lossy().to_string(),
                     &file_dest_path.to_string(),
                 )
-                .await?
+                .await?;
             }
         }
         Ok(())

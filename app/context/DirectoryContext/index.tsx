@@ -8,10 +8,12 @@ const DirContext = createContext<DirContextType>({
   isLoading: false,
   fetch: () => Promise.resolve(undefined),
   homePath: '/',
+  activeDir: {},
+  setActiveDir: () => {},
 });
 
 export function DirContextProvider({ children }: { children: ReactNode }) {
-  const { dirs, places, isLoading, fetch, homePath } = useDir();
+  const { dirs, places, isLoading, fetch, homePath, activeDir, setActiveDir } = useDir();
 
   const contextValue = {
     dirs,
@@ -19,6 +21,8 @@ export function DirContextProvider({ children }: { children: ReactNode }) {
     isLoading,
     fetch,
     homePath,
+    activeDir,
+    setActiveDir,
   };
 
   return <DirContext.Provider value={contextValue}>{children}</DirContext.Provider>;

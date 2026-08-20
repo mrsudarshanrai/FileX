@@ -65,6 +65,7 @@ pub struct CopyDonePayload {
   pub message: String,
   pub from: String,
   pub to: String,
+  pub destination_path: Option<String>,
 }
 
 /** Copy File/Folder (runs in background and emits 'copy_done') */
@@ -82,16 +83,16 @@ pub async fn copy_to_path(
   let app_handle = app.clone();
 
   tokio::spawn(async move {
-    let (success, message) = if File::is_file(&from) && !File::is_file(&to) {
+    let (success, message, destination_path) = if File::is_file(&from) && !File::is_file(&to) {
       match File::copy(&from, &to).await {
-        Ok(_) => (true, String::from("File copied")),
-        Err(_) => (false, String::from("Failed to copy file")),
+        Ok(path) => (true, String::from("File copied"), Some(path)),
+        Err(_) => (false, String::from("Failed to copy file"), None),
       }
     } else {
       let dest_path = format!("{}/{}", to, utils::get_full_filename_from_path(&from));
       match Folder::copy(&from, &dest_path).await {
-        Ok(_) => (true, String::from("Folder copied")),
-        Err(_) => (false, String::from("Failed to copy folder")),
+        Ok(_) => (true, String::from("Folder copied"), Some(dest_path)),
+        Err(_) => (false, String::from("Failed to copy folder"), None),
       }
     };
 
@@ -101,6 +102,7 @@ pub async fn copy_to_path(
       message,
       from,
       to,
+      destination_path,
     };
 
     let _ = app_handle.emit("copy_done", payload);

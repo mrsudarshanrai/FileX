@@ -33,7 +33,7 @@ impl File {
 
     /** copy file */
     #[async_recursion]
-    pub async fn copy(from: &String, to: &String) -> std::io::Result<()> {
+    pub async fn copy(from: &String, to: &String) -> std::io::Result<String> {
         let full_filename = utils::get_full_filename_from_path(from);
         let mut attempt = 1;
 
@@ -49,7 +49,7 @@ impl File {
         }
 
         fs::copy(from, &new_destination_path)?;
-        Ok(())
+        Ok(new_destination_path)
     }
 
     /** get metadata */

@@ -6,4 +6,6 @@ export type DirContextType = {
   isLoading: boolean;
   fetch: (path: string, funcName: string) => Promise<unknown>;
   homePath: string;
+  activeDir: Partial<IDir.IDir>;
+  setActiveDir: (dir: Partial<IDir.IDir>) => void;
 };
