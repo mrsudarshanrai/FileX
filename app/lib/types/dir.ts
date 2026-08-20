@@ -12,4 +12,10 @@ export namespace IDir {
     name: string;
     path: string;
   };
+
+  export type DiskUsage = {
+    total: number;
+    used: number;
+    available: number;
+  };
 }
