@@ -6,9 +6,8 @@ import {
   IconChip,
   SidebarTitle,
 } from './SidebarStyled';
-import { useContext, useMemo } from 'react';
+import { useContext } from 'react';
 import DirContext from '@/app/context/DirectoryContext';
-import { getSidebarDirs } from './helper';
 import { IDir } from '@/app/lib/types/dir';
 import { NavigationContext } from '@/app/context/NavigationContext';
 import { Icon } from '@/app/components/Icon/Icon';
@@ -17,9 +16,8 @@ import { colors } from '@/app/theme/colors';
 import Image from 'next/image';
 
 const Sidebar = () => {
-  const { placesDirs, homePath } = useContext(DirContext);
+  const { places, homePath } = useContext(DirContext);
   const { navigate, currentPath } = useContext(NavigationContext);
-  const sideBarDirs = useMemo(() => getSidebarDirs(placesDirs), [placesDirs]);
 
   const onDirClick = (path: string) => {
     navigate(path);
@@ -41,17 +39,14 @@ const Sidebar = () => {
           </IconChip>
           <p>Home</p>
         </SidebarItem>
-        {sideBarDirs.map(({ folder_name, path }: IDir.IDir) => {
+        {places.map(({ name, path }: IDir.Place) => {
           const isActive = path === currentPath;
           return (
             <SidebarItem key={path} onClick={() => onDirClick(path)} isActive={isActive}>
               <IconChip isActive={isActive}>
-                <Icon
-                  name={folder_name.toLowerCase() as IconType.IconName}
-                  fill={iconFill(isActive)}
-                />
+                <Icon name={name.toLowerCase() as IconType.IconName} fill={iconFill(isActive)} />
               </IconChip>
-              <p>{folder_name}</p>
+              <p>{name}</p>
             </SidebarItem>
           );
         })}

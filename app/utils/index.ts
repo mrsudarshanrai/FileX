@@ -1,9 +1,4 @@
-import { IDir } from '../lib/types/dir';
-
 const getLastItemFromArray = <T>(array: Array<T>) => array[array.length - 1];
-
-// true...false
-const sortArrayByBoolean = (x: IDir.IDir, y: IDir.IDir) => +y.is_dir - +x.is_dir;
 
 const splitPathOnSlash = (path: string) => {
   if (typeof path === 'string') return path.split('/');
@@ -48,7 +43,6 @@ function truncateMiddle(inputString: string, maxLength: number): string {
 
 export {
   getLastItemFromArray,
-  sortArrayByBoolean,
   splitPathOnSlash,
   isString,
   getFileNameFromPath,
