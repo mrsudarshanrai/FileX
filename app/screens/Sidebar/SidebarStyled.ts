@@ -99,4 +99,75 @@ const SidebarTitle = styled.h4`
   `}
 `;
 
-export { SidebarContainer, SidebarHeader, SidebarItems, SidebarItem, IconChip, SidebarTitle };
+const SidebarFooter = styled.div`
+  ${({ theme }) => css`
+    margin-top: auto;
+    padding: ${theme.spacing.sm} ${theme.spacing.md} ${theme.spacing.md};
+    border-top: 1px solid ${theme.border.subtle};
+  `}
+`;
+
+const StorageHeading = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: ${theme.spacing.xs};
+
+    span:first-child {
+      display: flex;
+      align-items: center;
+      gap: ${theme.spacing.xs};
+      font-size: 12px;
+      font-weight: 600;
+      color: ${theme.text.secondary};
+    }
+
+    span:last-child {
+      font-size: 12px;
+      font-weight: 600;
+      color: ${theme.text.muted};
+    }
+  `}
+`;
+
+const ProgressTrack = styled.div`
+  ${({ theme }) => css`
+    height: 6px;
+    border-radius: ${theme.radius.sm};
+    background-color: ${theme.bg.surfaceHover};
+    overflow: hidden;
+  `}
+`;
+
+const ProgressFill = styled.div<{ percent: number }>`
+  ${({ theme, percent }) => css`
+    height: 100%;
+    width: ${percent}%;
+    border-radius: ${theme.radius.sm};
+    background-color: ${theme.accent.default};
+    transition: width 0.3s ease;
+  `}
+`;
+
+const StorageDetail = styled.p`
+  ${({ theme }) => css`
+    margin-top: ${theme.spacing.xs};
+    font-size: 11px;
+    color: ${theme.text.muted};
+  `}
+`;
+
+export {
+  SidebarContainer,
+  SidebarHeader,
+  SidebarItems,
+  SidebarItem,
+  IconChip,
+  SidebarTitle,
+  SidebarFooter,
+  StorageHeading,
+  ProgressTrack,
+  ProgressFill,
+  StorageDetail,
+};

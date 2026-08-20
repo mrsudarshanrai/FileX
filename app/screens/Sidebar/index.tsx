@@ -5,6 +5,11 @@ import {
   SidebarItems,
   IconChip,
   SidebarTitle,
+  SidebarFooter,
+  StorageHeading,
+  ProgressTrack,
+  ProgressFill,
+  StorageDetail,
 } from './SidebarStyled';
 import { useContext } from 'react';
 import DirContext from '@/app/context/DirectoryContext';
@@ -13,6 +18,8 @@ import { NavigationContext } from '@/app/context/NavigationContext';
 import { Icon } from '@/app/components/Icon/Icon';
 import { IconType } from '@/app/components/Icon/IconType';
 import { Color } from '@/app/theme/colorsType';
+import { convertBytes } from '@/app/utils';
+import { useDiskUsage } from '@/app/hooks/useDiskUsage';
 import Image from 'next/image';
 import { useTheme } from 'styled-components';
 
@@ -20,12 +27,14 @@ const Sidebar = () => {
   const { places, homePath } = useContext(DirContext);
   const { navigate, currentPath } = useContext(NavigationContext);
   const theme = useTheme() as Color;
+  const diskUsage = useDiskUsage();
 
   const onDirClick = (path: string) => {
     navigate(path);
   };
 
   const iconFill = (isActive: boolean) => (isActive ? theme.text.onAccent : theme.text.secondary);
+  const totalStoragePercent = diskUsage && Math.round((diskUsage.used / diskUsage.total) * 100);
 
   return (
     <SidebarContainer>
@@ -53,6 +62,23 @@ const Sidebar = () => {
           );
         })}
       </SidebarItems>
+      {diskUsage && (
+        <SidebarFooter>
+          <StorageHeading>
+            <span>
+              <Icon name='storage' fill={theme.text.muted} />
+              Storage
+            </span>
+            <span>{totalStoragePercent}%</span>
+          </StorageHeading>
+          <ProgressTrack>
+            <ProgressFill percent={(diskUsage.used / diskUsage.total) * 100} />
+          </ProgressTrack>
+          <StorageDetail>
+            {convertBytes(diskUsage.available)} free of {convertBytes(diskUsage.total)}
+          </StorageDetail>
+        </SidebarFooter>
+      )}
     </SidebarContainer>
   );
 };
