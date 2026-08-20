@@ -150,3 +150,8 @@ pub async fn calculate_directory_size(app: tauri::AppHandle, dir_path: String) {
 pub async fn rename(path: String, new_name: String) -> String {
   File::rename(path, new_name).await
 }
+
+#[tauri::command]
+pub fn get_disk_usage() -> Option<helper::DiskUsage> {
+  helper::get_disk_usage(&helper::get_home())
+}

@@ -141,6 +141,33 @@ pub fn get_places() -> Vec<Place> {
     .collect()
 }
 
+#[derive(Serialize, Debug)]
+pub struct DiskUsage {
+  pub total: u64,
+  pub used: u64,
+  pub available: u64,
+}
+
+pub fn get_disk_usage(path: &str) -> Option<DiskUsage> {
+  let output = Command::new("df").env("LC_ALL", "C").arg("-Pk").arg(path).output().ok()?;
+  if !output.status.success() {
+    return None;
+  }
+
+  let stdout = String::from_utf8_lossy(&output.stdout);
+  let line = stdout.lines().nth(1)?;
+  let columns: Vec<&str> = line.split_whitespace().collect();
+  if columns.len() < 4 {
+    return None;
+  }
+
+  let total = columns[1].parse::<u64>().ok()? * 1024;
+  let used = columns[2].parse::<u64>().ok()? * 1024;
+  let available = columns[3].parse::<u64>().ok()? * 1024;
+
+  Some(DiskUsage { total, used, available })
+}
+
 #[derive(Debug)]
 pub enum XDGSearchResult {
   Found(String),

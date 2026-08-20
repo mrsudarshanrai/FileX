@@ -17,7 +17,8 @@ fn main() {
             entry::open_file,
             entry::get_properties,
             entry::calculate_directory_size,
-            entry::rename
+            entry::rename,
+            entry::get_disk_usage
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
