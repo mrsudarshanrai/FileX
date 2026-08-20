@@ -1,12 +1,7 @@
 use crate::utils;
 use async_recursion::async_recursion;
-use serde::Serialize;
-use std::{
-    env,
-    fs::{self},
-    path::{Path, PathBuf},
-    process::Command,
-};
+use serde::{ Deserialize, Serialize };
+use std::{ env, fs::{ self }, path::{ Path, PathBuf }, process::Command, sync::OnceLock };
 
 #[tauri::command]
 pub fn get_home() -> String {
@@ -25,6 +20,53 @@ pub struct Files {
     pub extension: String,
     pub folder_name: String,
     pub is_visible: bool,
+  pub thumbnail: String,
+}
+
+const DEFAULT_FILE_THUMBNAIL: &str = "/assets/file.svg";
+const FOLDER_THUMBNAIL: &str = "/assets/folder.svg";
+const FILE_TYPES_JSON: &str = include_str!("../../app/lib/files.json");
+
+#[derive(Deserialize)]
+struct FileTypeEntry {
+  #[serde(default)]
+  extensions: Vec<String>,
+  #[serde(default, rename = "fileNames")]
+  file_names: Vec<String>,
+  thumbnail: String,
+}
+
+fn file_types() -> &'static Vec<FileTypeEntry> {
+  static FILE_TYPES: OnceLock<Vec<FileTypeEntry>> = OnceLock::new();
+  FILE_TYPES.get_or_init(|| serde_json::from_str(FILE_TYPES_JSON).unwrap_or_default())
+}
+
+pub fn resolve_thumbnail(folder_name: &str, extension: &str, is_dir: bool) -> String {
+  if is_dir {
+    return FOLDER_THUMBNAIL.to_string();
+  }
+
+  let entries = file_types();
+
+  if !extension.is_empty() {
+    if
+      let Some(entry) = entries
+        .iter()
+        .find(|entry| entry.extensions.iter().any(|ext| ext.eq_ignore_ascii_case(extension)))
+    {
+      return entry.thumbnail.clone();
+    }
+  }
+
+  if
+    let Some(entry) = entries
+      .iter()
+      .find(|entry| { entry.file_names.iter().any(|name| name.eq_ignore_ascii_case(folder_name)) })
+  {
+    return entry.thumbnail.clone();
+  }
+
+  DEFAULT_FILE_THUMBNAIL.to_string()
 }
 
 pub fn get_files(path: String) -> Result<Vec<Files>, String> {
