@@ -15,9 +15,20 @@ pub fn get_files_in_path(path: &str) -> Result<Vec<helper::Files>, String> {
   helper::get_files(path.to_string())
 }
 
+#[derive(Serialize)]
+pub struct InitialData {
+  pub home_path: String,
+  pub dirs: Vec<helper::Files>,
+  pub places: Vec<helper::Place>,
+}
+
 #[tauri::command]
-pub fn get_all_dir() -> Result<Vec<helper::Files>, String> {
-  helper::get_files(helper::get_home())
+pub fn get_initial_data() -> Result<InitialData, String> {
+  let home_path = helper::get_home();
+  let dirs = helper::get_files(home_path.clone())?;
+  let places = helper::get_places();
+
+  Ok(InitialData { home_path, dirs, places })
 }
 
 /** Create new folder */
