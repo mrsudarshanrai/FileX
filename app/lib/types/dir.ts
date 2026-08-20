@@ -5,5 +5,6 @@ export namespace IDir {
     is_dir: boolean;
     extension: string;
     is_visible: boolean;
+    thumbnail: string;
   };
 }

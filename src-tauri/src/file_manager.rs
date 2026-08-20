@@ -21,6 +21,7 @@ pub struct FileProperties {
     last_modified: String,
     created: String,
     extension: String,
+    thumbnail: String,
 }
 
 impl File {
@@ -89,27 +90,35 @@ impl File {
                     mime_type = result;
                 }
 
+                let name = utils::option_to_string(directory_path.file_name());
+
                 let properties = if metadata.is_dir() {
+                    let extension = String::from("");
+                    let thumbnail = helper::resolve_thumbnail(&name, &extension, true);
                     FileProperties {
                         size: 0,
                         is_file: false,
-                        name: utils::option_to_string(directory_path.file_name()),
+                        name,
                         mime_type,
                         location: path.clone(),
                         last_modified: utils::sys_time_to_date_time(metadata.modified().unwrap()),
                         created: utils::sys_time_to_date_time(metadata.created().unwrap()),
-                        extension: String::from(""),
+                        extension,
+                        thumbnail,
                     }
                 } else {
+                    let extension = utils::option_to_string(directory_path.extension());
+                    let thumbnail = helper::resolve_thumbnail(&name, &extension, false);
                     FileProperties {
                         size: metadata.len(),
                         is_file: true,
-                        name: utils::option_to_string(directory_path.file_name()),
+                        name,
                         mime_type,
                         location: path.clone(),
                         last_modified: utils::sys_time_to_date_time(metadata.modified().unwrap()),
                         created: utils::sys_time_to_date_time(metadata.created().unwrap()),
-                        extension: utils::option_to_string(directory_path.extension()),
+                        extension,
+                        thumbnail,
                     }
                 };
                 Ok(properties)
