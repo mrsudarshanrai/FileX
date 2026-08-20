@@ -88,7 +88,6 @@ const ContextMenuModal = (props: ContextMenuModalProps) => {
     if (name === IContextMenuItemEnum.properties) {
       if (targetPath || currentPath) {
         setIsFetchingFunc(true);
-        setSorucePathToCopy(targetPath);
         setShow(DisplayEnum.none);
         showFileProperties(targetPath || currentPath);
         await invoke('calculate_directory_size', {
