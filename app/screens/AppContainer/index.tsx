@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { MouseEvent, useEffect } from 'react';
+import { MouseEvent, useEffect, useRef } from 'react';
 import ModalContext from '@/app/context/ModalContext';
 import { useContext } from 'react';
 import Modal from '@/app/components/Modal/Modal';
@@ -20,6 +20,11 @@ const AppContainer = ({ children }: { children: React.ReactNode }) => {
   const onMousedown = (event: MouseEvent<HTMLDivElement>) => {
     // event.preventDefault();
   };
+
+  const latestRef = useRef({ currentPath, fetch, finishOperation });
+  useEffect(() => {
+    latestRef.current = { currentPath, fetch, finishOperation };
+  }, [currentPath, fetch, finishOperation]);
 
   useEffect(() => {
     let unListen: () => void;
@@ -44,6 +49,7 @@ const AppContainer = ({ children }: { children: React.ReactNode }) => {
     const initializeCopyListener = async () => {
       unListen = await listen('copy_done', ({ payload }: any) => {
         const { operation_id, success, to } = payload || {};
+        const { currentPath, fetch, finishOperation } = latestRef.current;
 
         if (operation_id) {
           finishOperation(operation_id, success ? 'completed' : 'failed');
@@ -60,7 +66,7 @@ const AppContainer = ({ children }: { children: React.ReactNode }) => {
     return () => {
       if (unListen) unListen();
     };
-  }, [currentPath, fetch, finishOperation]);
+  }, []);
   return (
     <AppWrapper onClick={onMousedown}>
       {open && <Modal />}
