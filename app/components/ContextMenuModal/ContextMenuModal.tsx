@@ -26,7 +26,7 @@ import { useAppTheme } from '@/app/context/ThemeContext';
 import { useTheme } from 'styled-components';
 import { Color } from '@/app/theme/colorsType';
 
-const CONDITIONAL_ITEM = ['delete', 'copy', 'open', 'rename'];
+const CONDITIONAL_ITEM = ['delete', 'copy', 'cut', 'open', 'rename'];
 
 const ContextMenuModal = (props: ContextMenuModalProps) => {
   const { currentPath, navigate } = useContext(NavigationContext);
@@ -44,6 +44,8 @@ const ContextMenuModal = (props: ContextMenuModalProps) => {
     targetPath,
     setSorucePathToCopy,
     sorucePathToCopy,
+    setIsCut,
+    isCut,
     isTargetPathFile,
     setFileRenamePath,
   } = props;
@@ -79,6 +81,14 @@ const ContextMenuModal = (props: ContextMenuModalProps) => {
     /**  on file/folder copy */
     if (name === IContextMenuItemEnum.copy) {
       setSorucePathToCopy(targetPath);
+      setIsCut(false);
+      setShow(DisplayEnum.none);
+    }
+
+    /**  on file/folder cut */
+    if (name === IContextMenuItemEnum.cut) {
+      setSorucePathToCopy(targetPath);
+      setIsCut(true);
       setShow(DisplayEnum.none);
     }
 
@@ -115,15 +125,19 @@ const ContextMenuModal = (props: ContextMenuModalProps) => {
       setShow(DisplayEnum.none);
 
       const opId = startOperation({
-        label: 'Copying item…',
+        label: isCut ? 'Moving item…' : 'Copying item…',
       });
 
       try {
-        await invoke('copy_to_path', {
+        await invoke(isCut ? 'move_to_path' : 'copy_to_path', {
           from: sorucePathToCopy,
           to: currentPath,
           operationId: opId,
         });
+        if (isCut) {
+          setSorucePathToCopy(undefined);
+          setIsCut(false);
+        }
       } catch (error: any) {
         // eslint-disable-next-line no-console
         console.error(error);

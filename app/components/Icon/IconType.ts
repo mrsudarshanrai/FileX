@@ -11,6 +11,7 @@ export namespace IconType {
     | 'chevron-right'
     | 'close'
     | 'copy'
+    | 'cut'
     | 'delete'
     | 'desktop'
     | 'documents'

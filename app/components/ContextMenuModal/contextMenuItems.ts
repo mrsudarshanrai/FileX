@@ -18,6 +18,12 @@ const contextMenuItems: IContextMenuItem[] = [
     disabled: true,
   },
   {
+    label: 'Cut',
+    name: IContextMenuItemEnum.cut,
+    shortcut: '',
+    disabled: true,
+  },
+  {
     label: 'Paste',
     name: IContextMenuItemEnum.paste,
     shortcut: '',

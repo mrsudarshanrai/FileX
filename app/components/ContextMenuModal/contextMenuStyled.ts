@@ -11,6 +11,8 @@ const ContextMenuWrapper = styled.div<
     | 'targetPath'
     | 'setSorucePathToCopy'
     | 'sorucePathToCopy'
+    | 'setIsCut'
+    | 'isCut'
     | 'isTargetPathFile'
     | 'setFileRenamePath'
   >
