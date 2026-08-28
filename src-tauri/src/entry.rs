@@ -6,9 +6,16 @@ use crate::helper;
 use crate::utils;
 use serde::Serialize;
 use std::path::Path;
+use std::sync::OnceLock;
 use std::time::Duration;
 use tauri::Emitter;
+use tokio::sync::Semaphore;
 use tokio::time;
+
+fn copy_semaphore() -> &'static Semaphore {
+  static SEM: OnceLock<Semaphore> = OnceLock::new();
+  SEM.get_or_init(|| Semaphore::new(2))
+}
 
 #[tauri::command]
 pub fn get_files_in_path(path: &str) -> Result<Vec<helper::Files>, String> {
@@ -83,16 +90,20 @@ pub async fn copy_to_path(
   let app_handle = app.clone();
 
   tokio::spawn(async move {
+    let _permit = copy_semaphore().acquire().await.unwrap();
+
     let (success, message, destination_path) = if File::is_file(&from) && !File::is_file(&to) {
-      match File::copy(&from, &to).await {
-        Ok(path) => (true, String::from("File copied"), Some(path)),
-        Err(_) => (false, String::from("Failed to copy file"), None),
+      let (from, to) = (from.clone(), to.clone());
+      match tokio::task::spawn_blocking(move || File::copy(&from, &to)).await {
+        Ok(Ok(path)) => (true, String::from("File copied"), Some(path)),
+        _ => (false, String::from("Failed to copy file"), None),
       }
     } else {
       let dest_path = format!("{}/{}", to, utils::get_full_filename_from_path(&from));
-      match Folder::copy(&from, &dest_path).await {
-        Ok(_) => (true, String::from("Folder copied"), Some(dest_path)),
-        Err(_) => (false, String::from("Failed to copy folder"), None),
+      let (from, dest_path_clone) = (from.clone(), dest_path.clone());
+      match tokio::task::spawn_blocking(move || Folder::copy(&from, &dest_path_clone)).await {
+        Ok(Ok(_)) => (true, String::from("Folder copied"), Some(dest_path)),
+        _ => (false, String::from("Failed to copy folder"), None),
       }
     };
 
@@ -126,16 +137,20 @@ pub async fn move_to_path(
   let app_handle = app.clone();
 
   tokio::spawn(async move {
+    let _permit = copy_semaphore().acquire().await.unwrap();
+
     let (success, message, destination_path) = if File::is_file(&from) && !File::is_file(&to) {
-      match File::move_to(&from, &to).await {
-        Ok(path) => (true, String::from("File moved"), Some(path)),
-        Err(_) => (false, String::from("Failed to move file"), None),
+      let (from, to) = (from.clone(), to.clone());
+      match tokio::task::spawn_blocking(move || File::move_to(&from, &to)).await {
+        Ok(Ok(path)) => (true, String::from("File moved"), Some(path)),
+        _ => (false, String::from("Failed to move file"), None),
       }
     } else {
       let dest_path = format!("{}/{}", to, utils::get_full_filename_from_path(&from));
-      match Folder::move_to(&from, &dest_path).await {
-        Ok(path) => (true, String::from("Folder moved"), Some(path)),
-        Err(_) => (false, String::from("Failed to move folder"), None),
+      let (from, dest_path_clone) = (from.clone(), dest_path.clone());
+      match tokio::task::spawn_blocking(move || Folder::move_to(&from, &dest_path_clone)).await {
+        Ok(Ok(path)) => (true, String::from("Folder moved"), Some(path)),
+        _ => (false, String::from("Failed to move folder"), None),
       }
     };
 

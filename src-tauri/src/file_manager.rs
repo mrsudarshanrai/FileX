@@ -2,7 +2,6 @@ use crate::{
     helper::{self, open_file_with_default_file_opener, XDGSearchResult},
     utils,
 };
-use async_recursion::async_recursion;
 use serde::Serialize;
 use std::{
     fs::{self, Metadata},
@@ -45,8 +44,7 @@ impl File {
     }
 
     /** copy file */
-    #[async_recursion]
-    pub async fn copy(from: &String, to: &String) -> std::io::Result<String> {
+    pub fn copy(from: &String, to: &String) -> std::io::Result<String> {
         let full_filename = utils::get_full_filename_from_path(from);
         let new_destination_path = unique_destination_path(to, &full_filename);
 
@@ -55,8 +53,7 @@ impl File {
     }
 
     /** move file */
-    #[async_recursion]
-    pub async fn move_to(from: &String, to: &String) -> std::io::Result<String> {
+    pub fn move_to(from: &String, to: &String) -> std::io::Result<String> {
         let full_filename = utils::get_full_filename_from_path(from);
         let new_destination_path = unique_destination_path(to, &full_filename);
 
