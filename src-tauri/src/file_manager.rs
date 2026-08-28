@@ -24,6 +24,19 @@ pub struct FileProperties {
     thumbnail: String,
 }
 
+fn unique_destination_path(to: &str, full_filename: &str) -> String {
+    let (filename, file_extension) = utils::get_filename_and_extension_from_path(full_filename);
+    let mut attempt = 1;
+    let mut destination_path = format!("{}/{}", to, full_filename);
+
+    while fs::metadata(&destination_path).is_ok() {
+        attempt += 1;
+        destination_path = format!("{}/{}-{}(Copy).{}", to, filename, attempt, file_extension);
+    }
+
+    destination_path
+}
+
 impl File {
     /** delete files */
     pub fn delete(path: &String) -> std::io::Result<()> {
@@ -35,20 +48,23 @@ impl File {
     #[async_recursion]
     pub async fn copy(from: &String, to: &String) -> std::io::Result<String> {
         let full_filename = utils::get_full_filename_from_path(from);
-        let mut attempt = 1;
-
-        let (filename, file_extension) =
-            utils::get_filename_and_extension_from_path(&full_filename);
-
-        let mut new_destination_path = format!("{}/{}", to, full_filename);
-
-        while fs::metadata(&new_destination_path).is_ok() {
-            attempt += 1;
-            new_destination_path =
-                format!("{}/{}-{}(Copy).{}", to, filename, attempt, file_extension);
-        }
+        let new_destination_path = unique_destination_path(to, &full_filename);
 
         fs::copy(from, &new_destination_path)?;
+        Ok(new_destination_path)
+    }
+
+    /** move file */
+    #[async_recursion]
+    pub async fn move_to(from: &String, to: &String) -> std::io::Result<String> {
+        let full_filename = utils::get_full_filename_from_path(from);
+        let new_destination_path = unique_destination_path(to, &full_filename);
+
+        if fs::rename(from, &new_destination_path).is_err() {
+            fs::copy(from, &new_destination_path)?;
+            fs::remove_file(from)?;
+        }
+
         Ok(new_destination_path)
     }
 

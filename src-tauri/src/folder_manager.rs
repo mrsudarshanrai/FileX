@@ -72,4 +72,14 @@ impl Folder {
         }
         Ok(())
     }
+
+    /** move folder */
+    #[async_recursion]
+    pub async fn move_to(from: &String, to: &String) -> std::io::Result<String> {
+        if fs::rename(from, to).is_err() {
+            Self::copy(from, to).await?;
+            fs::remove_dir_all(from)?;
+        }
+        Ok(to.clone())
+    }
 }

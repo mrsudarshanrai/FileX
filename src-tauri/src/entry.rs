@@ -111,6 +111,49 @@ pub async fn copy_to_path(
   Ok(())
 }
 
+/** Move File/Folder (runs in background and emits 'copy_done') */
+#[tauri::command]
+pub async fn move_to_path(
+  app: tauri::AppHandle,
+  from: String,
+  to: String,
+  operation_id: Option<String>
+) -> Result<(), String> {
+  if !(File::has_valid_metadata(&from) && File::has_valid_metadata(&to)) {
+    return Err(String::from("Not a valid path"));
+  }
+
+  let app_handle = app.clone();
+
+  tokio::spawn(async move {
+    let (success, message, destination_path) = if File::is_file(&from) && !File::is_file(&to) {
+      match File::move_to(&from, &to).await {
+        Ok(path) => (true, String::from("File moved"), Some(path)),
+        Err(_) => (false, String::from("Failed to move file"), None),
+      }
+    } else {
+      let dest_path = format!("{}/{}", to, utils::get_full_filename_from_path(&from));
+      match Folder::move_to(&from, &dest_path).await {
+        Ok(path) => (true, String::from("Folder moved"), Some(path)),
+        Err(_) => (false, String::from("Failed to move folder"), None),
+      }
+    };
+
+    let payload = CopyDonePayload {
+      operation_id,
+      success,
+      message,
+      from,
+      to,
+      destination_path,
+    };
+
+    let _ = app_handle.emit("copy_done", payload);
+  });
+
+  Ok(())
+}
+
 #[tauri::command]
 pub fn open_file(path: String) -> String {
   File::open(&path)
