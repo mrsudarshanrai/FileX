@@ -39,7 +39,7 @@ const Sidebar = () => {
   return (
     <SidebarContainer>
       <SidebarHeader>
-        <Image src={'fileX-icon.svg'} alt='icon' width={35} height={35} />
+        <Image src={'fileX-icon.svg'} alt='icon' width={28} height={28} />
         <p>FileX</p>
       </SidebarHeader>
       <SidebarItems>

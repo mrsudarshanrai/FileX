@@ -22,15 +22,16 @@ const SidebarHeader = styled.div`
     min-height: 52px;
     display: flex;
     align-items: center;
-    column-gap: 10px;
+    column-gap: ${theme.spacing.sm};
     font-size: 13px;
     color: ${theme.text.primary};
-    padding: ${theme.spacing.lg} ${theme.spacing.sm} ${theme.spacing.sm};
+    padding: ${theme.spacing.sm} ${theme.spacing.lg};
+    border-bottom: 1px solid ${theme.border.subtle};
 
     p {
-      font-size: 15px;
-      font-weight: 600;
-      letter-spacing: 0.02em;
+      font-size: 14.5px;
+      font-weight: 650;
+      letter-spacing: 0.01em;
       color: ${theme.text.primary};
     }
   `}
@@ -53,7 +54,7 @@ const SidebarItem = styled.div<ISidebarItem>`
     padding: 5px ${theme.spacing.sm} 5px 5px;
     height: 36px;
     cursor: pointer;
-    border-radius: ${theme.radius.md};
+    border-radius: ${theme.radius.lg};
     background-color: ${isActive ? theme.accent.muted : 'transparent'};
     transition: background-color 0.15s ease;
 
@@ -63,7 +64,7 @@ const SidebarItem = styled.div<ISidebarItem>`
 
     p {
       font-size: 13px;
-      font-weight: 600;
+      font-weight: ${isActive ? 650 : 500};
       color: ${isActive ? theme.text.primary : theme.text.secondary};
     }
   `}
@@ -77,23 +78,18 @@ const IconChip = styled.div<ISidebarItem>`
     width: 26px;
     height: 26px;
     flex-shrink: 0;
-    border-radius: ${theme.radius.sm};
+    border-radius: ${theme.radius.md};
     background-color: ${isActive ? theme.accent.default : 'transparent'};
     transition: background-color 0.5s ease;
-
-    svg {
-      /* width: 15px;1 */
-      /* height: 15px; */
-    }
   `}
 `;
 
 const SidebarTitle = styled.h4`
   ${({ theme }) => css`
-    padding: 6px 10px;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.06em;
+    padding: ${theme.spacing.lg} ${theme.spacing.sm} ${theme.spacing.xs};
+    font-size: 10.5px;
+    font-weight: 650;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
     color: ${theme.text.muted};
   `}
@@ -101,9 +97,12 @@ const SidebarTitle = styled.h4`
 
 const SidebarFooter = styled.div`
   ${({ theme }) => css`
+    margin: ${theme.spacing.sm};
     margin-top: auto;
-    padding: ${theme.spacing.sm} ${theme.spacing.md} ${theme.spacing.md};
-    border-top: 1px solid ${theme.border.subtle};
+    padding: ${theme.spacing.md};
+    background-color: ${theme.bg.elevated};
+    border: 1px solid ${theme.border.subtle};
+    border-radius: ${theme.radius.lg};
   `}
 `;
 
