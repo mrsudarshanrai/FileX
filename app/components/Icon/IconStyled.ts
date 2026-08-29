@@ -18,7 +18,11 @@ const IconContainer = styled.div<IconContainerProps>`
       height: ${height} !important;
     }
     svg,
-    path {
+    path,
+    circle,
+    rect,
+    polygon,
+    ellipse {
       fill: ${fill};
     }
   `}
