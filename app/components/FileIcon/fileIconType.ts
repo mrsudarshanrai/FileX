@@ -5,5 +5,7 @@ export namespace FileIconType {
 
   export interface Props extends FileIconWrapper {
     thumbnail: string;
+    path?: string;
+    isImage?: boolean;
   }
 }

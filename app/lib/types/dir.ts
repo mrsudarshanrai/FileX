@@ -6,6 +6,7 @@ export namespace IDir {
     extension: string;
     is_visible: boolean;
     thumbnail: string;
+    is_image: boolean;
   };
 
   export type Place = {
