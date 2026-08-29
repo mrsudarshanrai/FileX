@@ -17,6 +17,11 @@ fn copy_semaphore() -> &'static Semaphore {
   SEM.get_or_init(|| Semaphore::new(2))
 }
 
+fn thumbnail_semaphore() -> &'static Semaphore {
+  static SEM: OnceLock<Semaphore> = OnceLock::new();
+  SEM.get_or_init(|| Semaphore::new(4))
+}
+
 #[tauri::command]
 pub fn get_files_in_path(path: &str) -> Result<Vec<helper::Files>, String> {
   helper::get_files(path.to_string())
@@ -212,4 +217,10 @@ pub async fn rename(path: String, new_name: String) -> String {
 #[tauri::command]
 pub fn get_disk_usage() -> Option<helper::DiskUsage> {
   helper::get_disk_usage(&helper::get_home())
+}
+
+#[tauri::command]
+pub async fn get_thumbnail(path: String) -> Option<String> {
+  let _permit = thumbnail_semaphore().acquire().await.ok()?;
+  tokio::task::spawn_blocking(move || crate::thumbnail::generate_thumbnail(&path)).await.ok()?
 }

@@ -4,6 +4,7 @@ mod entry;
 mod file_manager;
 mod folder_manager;
 mod helper;
+mod thumbnail;
 mod utils;
 
 fn main() {
@@ -19,7 +20,8 @@ fn main() {
             entry::get_properties,
             entry::calculate_directory_size,
             entry::rename,
-            entry::get_disk_usage
+            entry::get_disk_usage,
+            entry::get_thumbnail
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
