@@ -20,6 +20,7 @@ pub struct Files {
   pub folder_name: String,
   pub is_visible: bool,
   pub thumbnail: String,
+  pub is_image: bool,
 }
 
 const DEFAULT_FILE_THUMBNAIL: &str = "/assets/file.svg";
@@ -32,12 +33,26 @@ struct FileTypeEntry {
   extensions: Vec<String>,
   #[serde(default, rename = "fileNames")]
   file_names: Vec<String>,
+  #[serde(default, rename = "type")]
+  type_name: String,
   thumbnail: String,
 }
 
 fn file_types() -> &'static Vec<FileTypeEntry> {
   static FILE_TYPES: OnceLock<Vec<FileTypeEntry>> = OnceLock::new();
   FILE_TYPES.get_or_init(|| serde_json::from_str(FILE_TYPES_JSON).unwrap_or_default())
+}
+
+fn is_image_extension(extension: &str) -> bool {
+  if extension.is_empty() {
+    return false;
+  }
+
+  file_types()
+    .iter()
+    .find(|entry| entry.type_name == "Image")
+    .map(|entry| entry.extensions.iter().any(|ext| ext.eq_ignore_ascii_case(extension)))
+    .unwrap_or(false)
 }
 
 pub fn resolve_thumbnail(folder_name: &str, extension: &str, is_dir: bool) -> String {
@@ -79,6 +94,7 @@ pub fn get_files(path: String) -> Result<Vec<Files>, String> {
     let folder_name = utils::option_to_string(path.file_name()).trim().to_string();
     let is_visible = !folder_name.starts_with(".");
     let thumbnail = resolve_thumbnail(&folder_name, &extension, is_dir);
+    let is_image = !is_dir && is_image_extension(&extension);
 
     let file = Files {
       path,
@@ -87,6 +103,7 @@ pub fn get_files(path: String) -> Result<Vec<Files>, String> {
       folder_name,
       is_visible,
       thumbnail,
+      is_image,
     };
     dirs.push(file);
   }
