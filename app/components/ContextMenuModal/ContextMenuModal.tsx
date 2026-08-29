@@ -5,7 +5,7 @@ import {
   Item,
   IconContainer,
 } from './contextMenuStyled';
-import { useContext, useEffect, useState } from 'react';
+import { useContext } from 'react';
 import { NavigationContext } from '@/app/context/NavigationContext';
 import { invoke } from '@tauri-apps/api/core';
 import DirContext from '@/app/context/DirectoryContext';
@@ -54,7 +54,16 @@ const ContextMenuModal = (props: ContextMenuModalProps) => {
     folder_path: string;
     success: string;
   };
-  const [items, setItems] = useState<IContextMenuItem[]>([]);
+  const items = contextMenuItems.filter((item) => {
+    if (CONDITIONAL_ITEM.includes(item.name) && typeof targetPath === 'undefined') {
+      return false;
+    }
+    if (item.name === 'newFolder' && targetPath) {
+      return false;
+    }
+
+    return true;
+  });
   const { startOperation, finishOperation } = useOperations();
 
   const onContextItemClick = async (name: string) => {
@@ -147,22 +156,6 @@ const ContextMenuModal = (props: ContextMenuModalProps) => {
       }
     }
   };
-
-  useEffect(() => {
-    setItems(() => {
-      const filteredItems = contextMenuItems.filter((item) => {
-        if (CONDITIONAL_ITEM.includes(item.name) && typeof targetPath === 'undefined') {
-          return false;
-        }
-        if (item.name === 'newFolder' && targetPath) {
-          return false;
-        }
-
-        return true;
-      });
-      return filteredItems;
-    });
-  }, [targetPath]);
 
   const iconFill = mode === 'dark' ? theme.text.onAccent : theme.text.secondary;
 
