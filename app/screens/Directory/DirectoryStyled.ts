@@ -56,6 +56,10 @@ const FileName = styled.span<FileName>`
     padding: 2px 8px;
     border-radius: ${theme.radius.sm};
     border: 1px solid transparent;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
 
     ${isSelected &&
     css`

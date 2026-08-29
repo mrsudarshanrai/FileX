@@ -15,6 +15,9 @@ import {
 import FileIcon from '@/app/components/FileIcon';
 import { checkIfRenameEnabled } from './directoryUtils';
 import { useDirectoryLogics } from './hooks/useDirectoryLogics';
+import { truncateMiddle } from '@/app/utils';
+
+const FILE_NAME_MAX_LENGTH = 26;
 
 const Directory = () => {
   const { dirs, isLoading } = useContext(DirContext);
@@ -60,7 +63,9 @@ const Directory = () => {
                         onChange={(event) => setFileName(event?.target.value)}
                       />
                     ) : (
-                      <FileName isSelected={activePath === path}>{folder_name}</FileName>
+                      <FileName isSelected={activePath === path}>
+                        {truncateMiddle(folder_name, FILE_NAME_MAX_LENGTH)}
+                      </FileName>
                     )}
                   </FileNameWrapper>
                 </File>
