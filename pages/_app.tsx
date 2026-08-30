@@ -31,8 +31,8 @@ const App = ({ Component, pageProps }: AppProps) => {
             <NavigationContextProvider>
               <Sidebar />
               <MainSection>
-                <Topbar />
                 <ModalContextProvider>
+                  <Topbar />
                   <DirectorySizeContextProvider>
                     <OperationContextProvider>
                       <AppContainer>
