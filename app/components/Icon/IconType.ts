@@ -26,6 +26,7 @@ export namespace IconType {
     | 'properties'
     | 'rename'
     | 'select-all'
+    | 'settings'
     | 'storage'
     | 'sun'
     | 'videos';
