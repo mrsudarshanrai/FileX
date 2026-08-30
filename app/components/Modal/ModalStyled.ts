@@ -41,6 +41,7 @@ const ModalHeader = styled.div`
   font-size: 13px;
   font-weight: 600;
   color: ${({ theme }) => theme.text.primary};
+  pointer-events: auto;
 `;
 
 const ModalHeaderRightContainer = styled.div`
@@ -61,7 +62,9 @@ const ModalHeaderRightContainer = styled.div`
     }
   }
 `;
-const ModalHeaderLeftContainer = styled.div``;
+const ModalHeaderLeftContainer = styled.div`
+  cursor: move;
+`;
 
 const ModalBodySection = styled.section`
   display: grid;
