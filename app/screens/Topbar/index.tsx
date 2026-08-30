@@ -6,12 +6,13 @@ import { TopbarContainer } from './TopbarStyled';
 import { NavigationContext } from '@/app/context/NavigationContext';
 import { ArrowIcon } from '@/app/components/NavigationPath/PathStyled';
 import { Icon } from '@/app/components/Icon/Icon';
-import { useAppTheme } from '@/app/context/ThemeContext';
+import ModalContext from '@/app/context/ModalContext';
+import { SettingsModal } from '@/app/components/SettingsModal';
 
 const Topbar = () => {
   const { navigate, currentPath, isForwardDisabled, isBackDisabled } =
     useContext(NavigationContext);
-  const { mode, setTheme, availableThemes } = useAppTheme();
+  const { show } = useContext(ModalContext);
 
   const handleNavigation = (type: NavigationButtonType.NavigationType) => {
     switch (type) {
@@ -24,10 +25,13 @@ const Topbar = () => {
     }
   };
 
-  const onToggleTheme = () => {
-    const currentIndex = availableThemes.indexOf(mode);
-    const nextMode = availableThemes[(currentIndex + 1) % availableThemes.length];
-    setTheme(nextMode);
+  const onOpenSettings = () => {
+    show({
+      open: true,
+      modalWidth: '700px',
+      modalHeader: <h4>Settings</h4>,
+      modalBody: <SettingsModal />,
+    });
   };
 
   return (
@@ -40,8 +44,8 @@ const Topbar = () => {
         />
         <NavigationPath path={currentPath} onClick={navigate} />
       </div>
-      <ArrowIcon onClick={onToggleTheme} title='Toggle theme'>
-        <Icon name={mode === 'dark' ? 'sun' : 'moon'} width='18px' height='18px' />
+      <ArrowIcon onClick={onOpenSettings} title='Settings'>
+        <Icon name='settings' width='18px' height='18px' />
       </ArrowIcon>
     </TopbarContainer>
   );
