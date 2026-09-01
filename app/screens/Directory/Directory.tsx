@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import DirContext from '@/app/context/DirectoryContext';
 import { NavigationContext } from '@/app/context/NavigationContext';
 import { IDir } from '@/app/lib/types/dir';
@@ -23,7 +23,7 @@ import { truncateMiddle } from '@/app/utils';
 const FILE_NAME_MAX_LENGTH = 26;
 
 const Directory = () => {
-  const { dirs, isLoading, viewMode } = useContext(DirContext);
+  const { dirs, isLoading, viewMode, selectedPaths, setSelectedPaths } = useContext(DirContext);
   const { currentPath } = useContext(NavigationContext);
   const {
     onContextMenu,
@@ -34,10 +34,13 @@ const Directory = () => {
     fileRenamePath,
     setFileName,
     fileName,
-    activePath,
   } = useDirectoryLogics();
 
   const hasDirs = dirs && dirs.length > 0;
+
+  useEffect(() => {
+    setSelectedPaths(new Set());
+  }, [currentPath, setSelectedPaths]);
 
   if (hasDirs && viewMode === 'list') {
     return (
@@ -74,7 +77,7 @@ const Directory = () => {
                       onChange={(event) => setFileName(event?.target.value)}
                     />
                   ) : (
-                    <FileListName isSelected={activePath === path} title={folder_name}>
+                    <FileListName isSelected={selectedPaths.has(path)} title={folder_name}>
                       {folder_name}
                     </FileListName>
                   )}
@@ -123,7 +126,7 @@ const Directory = () => {
                           onChange={(event) => setFileName(event?.target.value)}
                         />
                       ) : (
-                        <FileName isSelected={activePath === path}>
+                        <FileName isSelected={selectedPaths.has(path)}>
                           {truncateMiddle(folder_name, FILE_NAME_MAX_LENGTH)}
                         </FileName>
                       )}
