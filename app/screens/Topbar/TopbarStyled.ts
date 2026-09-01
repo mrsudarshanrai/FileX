@@ -18,6 +18,12 @@ const TopbarContainer = styled.div`
       column-gap: ${theme.spacing.sm};
       height: 100%;
     }
+
+    .right_container {
+      display: flex;
+      align-items: center;
+      column-gap: ${theme.spacing.xl};
+    }
   `}
 `;
 export { TopbarContainer };
