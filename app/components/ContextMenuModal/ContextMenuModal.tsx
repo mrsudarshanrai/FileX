@@ -30,7 +30,7 @@ const CONDITIONAL_ITEM = ['delete', 'copy', 'cut', 'open', 'rename'];
 
 const ContextMenuModal = (props: ContextMenuModalProps) => {
   const { currentPath, navigate } = useContext(NavigationContext);
-  const { fetch } = useContext(DirContext);
+  const { fetch, dirs, setSelectedPaths } = useContext(DirContext);
   const { setIsFetchingFunc } = useContext(DirectorySizeContext);
   const { deleteFile, showFileProperties, openFile } = useContextMenu();
   const { mode } = useAppTheme();
@@ -119,6 +119,12 @@ const ContextMenuModal = (props: ContextMenuModalProps) => {
           dirPath: targetPath || currentPath,
         });
       }
+    }
+
+    /**  on select all */
+    if (name === IContextMenuItemEnum.selectAll) {
+      setSelectedPaths(new Set(dirs.filter((d) => d.is_visible).map((d) => d.path)));
+      setShow(DisplayEnum.none);
     }
 
     if (name === IContextMenuItemEnum.open) {
