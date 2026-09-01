@@ -64,7 +64,7 @@ const Directory = () => {
                   onDoubleClick={() => onFileDoubleClick(path, isFolder)}
                 >
                   <div className='file_icon_container'>
-                    <FileIcon thumbnail={thumbnail} path={path} isImage={is_image} size={20} />
+                    <FileIcon thumbnail={thumbnail} path={path} isImage={is_image} size={30} />
                   </div>
                   {checkIfRenameEnabled(fileRenamePath, path) ? (
                     <FileRenameInput

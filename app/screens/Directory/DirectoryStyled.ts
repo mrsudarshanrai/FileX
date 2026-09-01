@@ -100,7 +100,7 @@ const FileListRow = styled.div`
     display: flex;
     align-items: center;
     column-gap: 10px;
-    height: 34px;
+    height: 44px;
     padding: 0 ${theme.spacing.sm};
     border-radius: ${theme.radius.sm};
     cursor: pointer;
