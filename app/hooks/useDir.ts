@@ -19,7 +19,6 @@ const useDir = () => {
   const [places, setPlaces] = useState<IDir.Place[]>([]);
   const [homePath, setHomePath] = useState('/');
   const [isLoading, setIsLoading] = useState(false);
-  const [activeDir, setActiveDir] = useState<Partial<IDir.IDir>>({});
   const [viewMode, setViewModeState] = useState<IDir.ViewMode>(DEFAULT_VIEW_MODE);
   const [selectedPaths, setSelectedPaths] = useState<Set<string>>(new Set());
 
@@ -63,8 +62,6 @@ const useDir = () => {
     isLoading,
     fetch,
     homePath,
-    setActiveDir,
-    activeDir,
     viewMode,
     setViewMode,
     selectedPaths,
