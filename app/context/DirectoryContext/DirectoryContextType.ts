@@ -1,4 +1,5 @@
 import { IDir } from '@/app/lib/types/dir';
+import type { Dispatch, SetStateAction } from 'react';
 
 export type DirContextType = {
   dirs: IDir.IDir[];
@@ -10,4 +11,6 @@ export type DirContextType = {
   setActiveDir: (dir: Partial<IDir.IDir>) => void;
   viewMode: IDir.ViewMode;
   setViewMode: (mode: IDir.ViewMode) => void;
+  selectedPaths: Set<string>;
+  setSelectedPaths: Dispatch<SetStateAction<Set<string>>>;
 };

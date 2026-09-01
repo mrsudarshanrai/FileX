@@ -21,6 +21,7 @@ const useDir = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [activeDir, setActiveDir] = useState<Partial<IDir.IDir>>({});
   const [viewMode, setViewModeState] = useState<IDir.ViewMode>(DEFAULT_VIEW_MODE);
+  const [selectedPaths, setSelectedPaths] = useState<Set<string>>(new Set());
 
   const getFile = async (path: string, funcName = 'get_files_in_path'): Promise<unknown> =>
     await invoke(funcName, { path })
@@ -66,6 +67,8 @@ const useDir = () => {
     activeDir,
     viewMode,
     setViewMode,
+    selectedPaths,
+    setSelectedPaths,
   };
 };
 

@@ -12,6 +12,8 @@ const DirContext = createContext<DirContextType>({
   setActiveDir: () => {},
   viewMode: 'icon',
   setViewMode: () => {},
+  selectedPaths: new Set(),
+  setSelectedPaths: () => {},
 });
 
 export function DirContextProvider({ children }: { children: ReactNode }) {
@@ -25,6 +27,8 @@ export function DirContextProvider({ children }: { children: ReactNode }) {
     setActiveDir,
     viewMode,
     setViewMode,
+    selectedPaths,
+    setSelectedPaths,
   } = useDir();
 
   const contextValue = {
@@ -37,6 +41,8 @@ export function DirContextProvider({ children }: { children: ReactNode }) {
     setActiveDir,
     viewMode,
     setViewMode,
+    selectedPaths,
+    setSelectedPaths,
   };
 
   return <DirContext.Provider value={contextValue}>{children}</DirContext.Provider>;
