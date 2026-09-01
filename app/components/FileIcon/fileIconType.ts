@@ -7,5 +7,6 @@ export namespace FileIconType {
     thumbnail: string;
     path?: string;
     isImage?: boolean;
+    size?: number;
   }
 }

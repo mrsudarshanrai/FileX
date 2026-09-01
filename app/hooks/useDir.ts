@@ -8,12 +8,19 @@ type InitialData = {
   places: IDir.Place[];
 };
 
+const VIEW_MODE_STORAGE_KEY = 'FileX:view-mode';
+const DEFAULT_VIEW_MODE: IDir.ViewMode = 'icon';
+
+const isViewMode = (value: string | null): value is IDir.ViewMode =>
+  value === 'icon' || value === 'list';
+
 const useDir = () => {
   const [dirs, setDirs] = useState<IDir.IDir[]>([]);
   const [places, setPlaces] = useState<IDir.Place[]>([]);
   const [homePath, setHomePath] = useState('/');
   const [isLoading, setIsLoading] = useState(false);
   const [activeDir, setActiveDir] = useState<Partial<IDir.IDir>>({});
+  const [viewMode, setViewModeState] = useState<IDir.ViewMode>(DEFAULT_VIEW_MODE);
 
   const getFile = async (path: string, funcName = 'get_files_in_path'): Promise<unknown> =>
     await invoke(funcName, { path })
@@ -36,6 +43,16 @@ const useDir = () => {
       .finally(() => setIsLoading(false));
   }, []);
 
+  useEffect(() => {
+    const stored = window.localStorage.getItem(VIEW_MODE_STORAGE_KEY);
+    if (isViewMode(stored)) setViewModeState(stored);
+  }, []);
+
+  const setViewMode = (mode: IDir.ViewMode) => {
+    setViewModeState(mode);
+    window.localStorage.setItem(VIEW_MODE_STORAGE_KEY, mode);
+  };
+
   const fetch = (path: string, funcName: string) => {
     return getFile(path, funcName);
   };
@@ -47,6 +64,8 @@ const useDir = () => {
     homePath,
     setActiveDir,
     activeDir,
+    viewMode,
+    setViewMode,
   };
 };
 

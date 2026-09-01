@@ -15,7 +15,7 @@ const getDynamicIcon = (name: IconType.IconName) => {
 };
 
 const Icon = (props: IconType.Props) => {
-  const { name, width, height, fill } = props;
+  const { name, width, height, fill = '#fff' } = props;
   const DynamicSvg = getDynamicIcon(name);
   return (
     <IconContainer width={width} height={height} fill={fill}>

@@ -5,7 +5,7 @@ import { FileIconType } from './fileIconType';
 import { FileIconWrapper } from './fileIconStyled';
 
 const FileIcon = (props: FileIconType.Props) => {
-  const { thumbnail, path, isImage, disableHover = false } = props;
+  const { thumbnail, path, isImage, disableHover = false, size = 80 } = props;
   const [previewSrc, setPreviewSrc] = useState<string | null>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
 
@@ -51,13 +51,13 @@ const FileIcon = (props: FileIconType.Props) => {
   const src = showPreview ? (previewSrc as string) : thumbnail;
 
   return (
-    <FileIconWrapper ref={wrapperRef} disableHover={disableHover} isImage={showPreview}>
+    <FileIconWrapper ref={wrapperRef} disableHover={disableHover} isImage={showPreview} size={size}>
       <Image
         key={src}
         alt='file icon'
         src={src}
-        width={80}
-        height={80}
+        width={size}
+        height={size}
         onError={(error) => {
           console.error('thumbnail image failed to load', src, error);
           setPreviewSrc(null);

@@ -89,6 +89,58 @@ const FileNameWrapper = styled.div`
   justify-content: center;
 `;
 
+const ListContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 8px 20px;
+`;
+
+const FileListRow = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    align-items: center;
+    column-gap: 10px;
+    height: 44px;
+    padding: 0 ${theme.spacing.sm};
+    border-radius: ${theme.radius.sm};
+    cursor: pointer;
+    user-select: none;
+    transition: background-color 0.15s ease;
+
+    &:hover {
+      background-color: ${theme.bg.surfaceHover};
+    }
+
+    .file_icon_container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      width: 20px;
+      height: 20px;
+    }
+  `}
+`;
+
+const FileListName = styled.span<FileName>`
+  ${({ theme, isSelected }) => css`
+    font-size: 13px;
+    color: ${theme.text.primary};
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding: 2px 6px;
+    border-radius: ${theme.radius.sm};
+    border: 1px solid transparent;
+
+    ${isSelected &&
+    css`
+      background-color: ${theme.accent.muted};
+      border: 1px solid ${theme.accent.border};
+    `}
+  `}
+`;
+
 const DirContainerWrapper = styled.div`
   height: 100%;
   position: relative;
@@ -117,4 +169,7 @@ export {
   FileRenameInput,
   DirContainerWrapper,
   LoadingOverlay,
+  ListContainer,
+  FileListRow,
+  FileListName,
 };

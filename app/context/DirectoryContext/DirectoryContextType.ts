@@ -8,4 +8,6 @@ export type DirContextType = {
   homePath: string;
   activeDir: Partial<IDir.IDir>;
   setActiveDir: (dir: Partial<IDir.IDir>) => void;
+  viewMode: IDir.ViewMode;
+  setViewMode: (mode: IDir.ViewMode) => void;
 };

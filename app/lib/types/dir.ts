@@ -19,4 +19,6 @@ export namespace IDir {
     used: number;
     available: number;
   };
+
+  export type ViewMode = 'icon' | 'list';
 }

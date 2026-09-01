@@ -4,10 +4,11 @@ import { NavigationButtonType } from '@/app/components/NavigationButton/Navigati
 import NavigationButton from '@/app/components/NavigationButton';
 import { TopbarContainer } from './TopbarStyled';
 import { NavigationContext } from '@/app/context/NavigationContext';
-import { ArrowIcon } from '@/app/components/NavigationPath/PathStyled';
+import { ClickableIcon, NavSegment } from '@/app/components/NavigationPath/PathStyled';
 import { Icon } from '@/app/components/Icon/Icon';
 import ModalContext from '@/app/context/ModalContext';
 import { SettingsModal } from '@/app/components/SettingsModal';
+import { ViewToggle } from '@/app/components/ViewToggle';
 
 const Topbar = () => {
   const { navigate, currentPath, isForwardDisabled, isBackDisabled } =
@@ -44,9 +45,14 @@ const Topbar = () => {
         />
         <NavigationPath path={currentPath} onClick={navigate} />
       </div>
-      <ArrowIcon onClick={onOpenSettings} title='Settings'>
-        <Icon name='settings' width='18px' height='18px' />
-      </ArrowIcon>
+      <div className='right_container'>
+        <ViewToggle />
+        <NavSegment>
+          <ClickableIcon onClick={onOpenSettings} title='Settings'>
+            <Icon name='settings' width='18px' height='18px' />
+          </ClickableIcon>
+        </NavSegment>
+      </div>
     </TopbarContainer>
   );
 };

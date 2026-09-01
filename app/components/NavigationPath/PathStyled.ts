@@ -68,11 +68,11 @@ const Paths = styled.div`
   `}
 `;
 
-interface IArrowIcon {
+interface IClickableIcon {
   disabled?: boolean;
 }
 
-const ArrowIcon = styled.button<IArrowIcon>`
+const ClickableIcon = styled.button<IClickableIcon>`
   ${({ theme, disabled }) => css`
     width: 32px;
     height: 32px;
@@ -99,4 +99,4 @@ const ArrowIcon = styled.button<IArrowIcon>`
   `}
 `;
 
-export { PathContainer, Paths, ArrowIcon, NavSegment, NavDivider, BreadcrumbBar };
+export { PathContainer, Paths, ClickableIcon, NavSegment, NavDivider, BreadcrumbBar };
