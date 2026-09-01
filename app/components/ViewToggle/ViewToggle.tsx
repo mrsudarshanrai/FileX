@@ -25,7 +25,7 @@ const ViewToggle = () => {
       {VIEW_MODES.map(({ mode, icon, title }) => {
         const isActive = mode === viewMode;
         const iconFill =
-          isActive || themeMode !== 'light' ? theme.text.onAccent : theme.accent.default;
+          isActive || themeMode !== 'light' ? theme.text.onAccent : theme.text.secondary;
 
         return (
           <ViewToggleButton
@@ -34,7 +34,7 @@ const ViewToggle = () => {
             onClick={() => setViewMode(mode)}
             title={title}
           >
-            <Icon name={icon} width='18px' height='18px' fill={iconFill} />
+            <Icon name={icon} width='20px' height='20px' fill={iconFill} />
           </ViewToggleButton>
         );
       })}
