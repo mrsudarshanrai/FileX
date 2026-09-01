@@ -20,60 +20,64 @@ import { useOperations } from '@/app/context/OperationContext';
 
 const useContextMenu = () => {
   const { currentPath } = useContext(NavigationContext);
-  const { fetch } = useContext(DirContext);
+  const { fetch, selectedPaths, setSelectedPaths } = useContext(DirContext);
   const { show } = useContext(ModalContext);
   const { setDirectorySizeFunc } = useContext(DirectorySizeContext);
   const { setShow: setContextMenuShow, targetPath } = useContext(ContextMenu);
   const { startOperation, finishOperation } = useOperations();
 
   const deleteFile = () => {
-    if (targetPath) {
-      setContextMenuShow(DisplayEnum.none);
-      show({
-        open: true,
-        modalHeader: (
-          <h4>
-            Delete &quot;
-            <Mark>{truncateMiddle(getFileNameFromPath(targetPath) as string, 30)}</Mark>&quot;
-          </h4>
-        ),
-        modalBody: (
-          <ModalBodyMessage>
-            Are you sure you want to permanently delete &quot;
-            <Mark>{getFileNameFromPath(targetPath)}</Mark>
-            &quot;?
-          </ModalBodyMessage>
-        ),
-        modalFooter: (
-          <ModalFooterButtonContainer>
-            <Button onClick={() => show({ open: false })}>Cancel</Button>
-            <Button
-              onClick={async () => {
-                const opId = startOperation({
-                  label: `Deleting "${getFileNameFromPath(targetPath) ?? ''}"`,
-                });
-                try {
-                  await invoke('delete_path', {
-                    path: targetPath,
-                  });
-                  fetch(currentPath, 'get_files_in_path');
-                  finishOperation(opId, 'completed');
-                } catch (error: any) {
-                  // eslint-disable-next-line no-console
-                  console.error(error);
-                  finishOperation(opId, 'failed', String(error));
-                } finally {
-                  show({ open: false });
-                }
-              }}
-              theme='error'
-            >
-              Delete
-            </Button>
-          </ModalFooterButtonContainer>
-        ),
-      });
-    }
+    const pathsToDelete: string[] =
+      selectedPaths.size > 0 ? Array.from(selectedPaths) : targetPath ? [targetPath] : [];
+    if (pathsToDelete.length === 0) return;
+
+    const deleteLabel =
+      pathsToDelete.length > 1 ? (
+        `${pathsToDelete.length} items`
+      ) : (
+        <Mark>{truncateMiddle(getFileNameFromPath(pathsToDelete[0]) as string, 30)}</Mark>
+      );
+
+    setContextMenuShow(DisplayEnum.none);
+    show({
+      open: true,
+      modalHeader: <h4>Delete &quot;{deleteLabel}&quot;</h4>,
+      modalBody: (
+        <ModalBodyMessage>
+          Are you sure you want to permanently delete &quot;{deleteLabel}&quot;?
+        </ModalBodyMessage>
+      ),
+      modalFooter: (
+        <ModalFooterButtonContainer>
+          <Button onClick={() => show({ open: false })}>Cancel</Button>
+          <Button
+            onClick={async () => {
+              const opId = startOperation({
+                label:
+                  pathsToDelete.length > 1
+                    ? `Deleting ${pathsToDelete.length} items`
+                    : `Deleting "${getFileNameFromPath(pathsToDelete[0]) ?? ''}"`,
+              });
+              try {
+                await Promise.all(pathsToDelete.map((path) => invoke('delete_path', { path })));
+                setSelectedPaths(new Set());
+                fetch(currentPath, 'get_files_in_path');
+                finishOperation(opId, 'completed');
+              } catch (error: any) {
+                // eslint-disable-next-line no-console
+                console.error(error);
+                finishOperation(opId, 'failed', String(error));
+              } finally {
+                show({ open: false });
+              }
+            }}
+            theme='error'
+          >
+            Delete
+          </Button>
+        </ModalFooterButtonContainer>
+      ),
+    });
   };
 
   const openFile = async (path: string) => {
