@@ -1,14 +1,16 @@
 import styled, { css } from 'styled-components';
 import { FileIconType } from './fileIconType';
 
-const FileIconWrapper = styled.div<FileIconType.FileIconWrapper & { isImage?: boolean }>`
-  ${({ theme, isImage }) => css`
+const FileIconWrapper = styled.div<
+  FileIconType.FileIconWrapper & { isImage?: boolean; size: number }
+>`
+  ${({ theme, isImage, size }) => css`
     filter: brightness(100%);
 
     ${isImage &&
     css`
-      width: 80px;
-      height: 80px;
+      width: ${size}px;
+      height: ${size}px;
       overflow: hidden;
       border-radius: ${theme.radius.sm};
 
