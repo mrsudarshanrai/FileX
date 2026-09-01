@@ -1,35 +1,37 @@
-import { useState } from 'react';
+import { useContext } from 'react';
 import { useTheme } from 'styled-components';
 import { Icon } from '@/app/components/Icon/Icon';
 import { IconType } from '@/app/components/Icon/IconType';
 import { Color } from '@/app/theme/colorsType';
 import { ViewToggleGroup, ViewToggleHighlight, ViewToggleButton } from './ViewToggleStyled';
 import { useAppTheme } from '@/app/context/ThemeContext';
+import DirContext from '@/app/context/DirectoryContext';
+import { IDir } from '@/app/lib/types/dir';
 
-const VIEW_MODES: { mode: string; icon: IconType.IconName; title: string }[] = [
+const VIEW_MODES: { mode: IDir.ViewMode; icon: IconType.IconName; title: string }[] = [
   { mode: 'icon', icon: 'grid', title: 'Icon view' },
   { mode: 'list', icon: 'list', title: 'List view' },
 ];
 
 const ViewToggle = () => {
-  const [activeMode, setActiveMode] = useState('icon');
+  const { viewMode, setViewMode } = useContext(DirContext);
   const theme = useTheme() as Color;
   const { mode: themeMode } = useAppTheme();
-  const activeIndex = VIEW_MODES.findIndex((item) => item.mode === activeMode);
+  const activeIndex = VIEW_MODES.findIndex((item) => item.mode === viewMode);
 
   return (
     <ViewToggleGroup>
       <ViewToggleHighlight index={activeIndex} />
       {VIEW_MODES.map(({ mode, icon, title }) => {
-        const isActive = mode === activeMode;
+        const isActive = mode === viewMode;
         const iconFill =
-          isActive || themeMode !== 'light' ? theme.text.onAccent : theme.text.secondary;
+          isActive || themeMode !== 'light' ? theme.text.onAccent : theme.accent.default;
 
         return (
           <ViewToggleButton
             key={mode}
             iconFill={iconFill}
-            onClick={() => setActiveMode(mode)}
+            onClick={() => setViewMode(mode)}
             title={title}
           >
             <Icon name={icon} width='18px' height='18px' fill={iconFill} />
