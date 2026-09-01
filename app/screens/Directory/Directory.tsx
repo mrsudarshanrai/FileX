@@ -14,6 +14,7 @@ import {
   ListContainer,
   FileListRow,
   FileListName,
+  SelectionBox,
 } from './DirectoryStyled';
 import FileIcon from '@/app/components/FileIcon';
 import { checkIfRenameEnabled } from './directoryUtils';
@@ -30,6 +31,9 @@ const Directory = () => {
     onFileClick,
     onFileDoubleClick,
     onDirectoryContainerClicked,
+    onContainerMouseDown,
+    containerRef,
+    selectionBox,
     onKeyDown,
     fileRenamePath,
     setFileName,
@@ -44,8 +48,13 @@ const Directory = () => {
 
   if (hasDirs && viewMode === 'list') {
     return (
-      <DirContainerWrapper onClick={onDirectoryContainerClicked}>
+      <DirContainerWrapper
+        ref={containerRef}
+        onClick={onDirectoryContainerClicked}
+        onMouseDown={onContainerMouseDown}
+      >
         {isLoading && <LoadingOverlay>Fetching files…</LoadingOverlay>}
+        {selectionBox && <SelectionBox style={selectionBox} />}
         <ListContainer key={currentPath}>
           {dirs.map(
             ({
@@ -60,10 +69,11 @@ const Directory = () => {
               return (
                 <FileListRow
                   key={path}
+                  data-path={path}
                   onContextMenu={(event) => {
                     onContextMenu(event, path, isFolder);
                   }}
-                  onClick={() => onFileClick(path, folder_name, isFolder)}
+                  onClick={(event) => onFileClick(path, folder_name, isFolder, event)}
                   onDoubleClick={() => onFileDoubleClick(path, isFolder)}
                 >
                   <div className='file_icon_container'>
@@ -91,8 +101,13 @@ const Directory = () => {
   }
 
   return (
-    <DirContainerWrapper onClick={onDirectoryContainerClicked}>
+    <DirContainerWrapper
+      ref={containerRef}
+      onClick={onDirectoryContainerClicked}
+      onMouseDown={onContainerMouseDown}
+    >
       {isLoading && <LoadingOverlay>Fetching files…</LoadingOverlay>}
+      {selectionBox && <SelectionBox style={selectionBox} />}
       {hasDirs && (
         <DirContainer key={currentPath}>
           {dirs.map(
@@ -106,12 +121,12 @@ const Directory = () => {
             }: IDir.IDir) => {
               if (!is_visible) return null;
               return (
-                <FileGrid key={path} draggable={true}>
+                <FileGrid key={path} data-path={path} draggable={true}>
                   <File
                     onContextMenu={(event) => {
                       onContextMenu(event, path, isFolder);
                     }}
-                    onClick={() => onFileClick(path, folder_name, isFolder)}
+                    onClick={(event) => onFileClick(path, folder_name, isFolder, event)}
                     onDoubleClick={() => onFileDoubleClick(path, isFolder)}
                   >
                     <div className='file_icon_container'>

@@ -146,6 +146,17 @@ const DirContainerWrapper = styled.div`
   position: relative;
 `;
 
+const SelectionBox = styled.div`
+  ${({ theme }) => css`
+    position: fixed;
+    border: 1px solid ${theme.accent.default};
+    background-color: ${theme.accent.muted};
+    opacity: 0.5;
+    pointer-events: none;
+    z-index: 50;
+  `}
+`;
+
 const LoadingOverlay = styled.div`
   ${({ theme }) => css`
     position: absolute;
@@ -172,4 +183,5 @@ export {
   ListContainer,
   FileListRow,
   FileListName,
+  SelectionBox,
 };
