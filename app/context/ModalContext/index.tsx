@@ -1,4 +1,4 @@
-import { createContext, useState } from 'react';
+import { createContext, useCallback, useMemo, useState } from 'react';
 import { ModalContextProviderPropsType, ModalContextType, ModalOptions } from './ModalContextType';
 
 const ModalContext = createContext<ModalContextType>({
@@ -21,13 +21,17 @@ const ModalContextProvider = ({ children }: ModalContextProviderPropsType) => {
     ),
   });
 
-  const show = (options: ModalOptions) => {
+  const show = useCallback((options: ModalOptions) => {
     setModalOptions(options);
-  };
-  const contextValue = {
-    ...modalOptions,
-    show,
-  };
+  }, []);
+
+  const contextValue = useMemo(
+    () => ({
+      ...modalOptions,
+      show,
+    }),
+    [modalOptions, show],
+  );
   return <ModalContext.Provider value={contextValue}>{children}</ModalContext.Provider>;
 };
 

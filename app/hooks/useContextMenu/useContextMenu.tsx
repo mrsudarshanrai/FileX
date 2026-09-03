@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useCallback, useContext } from 'react';
 import { NavigationContext } from '@/app/context/NavigationContext';
 import DirContext from '@/app/context/DirectoryContext';
 import ModalContext from '@/app/context/ModalContext';
@@ -26,7 +26,7 @@ const useContextMenu = () => {
   const { setShow: setContextMenuShow, targetPath } = useContext(ContextMenu);
   const { startOperation, finishOperation } = useOperations();
 
-  const deleteFile = () => {
+  const deleteFile = useCallback(() => {
     const pathsToDelete: string[] =
       selectedPaths.size > 0 ? Array.from(selectedPaths) : targetPath ? [targetPath] : [];
     if (pathsToDelete.length === 0) return;
@@ -78,66 +78,83 @@ const useContextMenu = () => {
         </ModalFooterButtonContainer>
       ),
     });
-  };
+  }, [
+    selectedPaths,
+    targetPath,
+    setContextMenuShow,
+    show,
+    startOperation,
+    finishOperation,
+    setSelectedPaths,
+    fetch,
+    currentPath,
+  ]);
 
-  const openFile = async (path: string) => {
-    if (path) {
-      await invoke('open_file', {
-        path,
-      })
-        .then((response: keyof typeof UseContextMenuType.OpenFileResponseTypeEnum | unknown) => {
-          if (
-            typeof response === 'string' &&
-            Object.keys(openFileErrorModalMessage).includes(response)
-          ) {
-            show({
-              open: true,
-              modalHeader: (
-                <h4>
-                  Can&apos;t open &quot;
-                  <Mark>{truncateMiddle(getFileNameFromPath(path) as string, 30)}</Mark>
-                  &quot;
-                </h4>
-              ),
-              modalBody: (
-                <ModalBodyMessage>
-                  {openFileErrorModalMessage?.[response as string](
-                    getFileNameFromPath(path) as string,
-                  )}
-                </ModalBodyMessage>
-              ),
-              modalFooter: (
-                <ModalFooterButtonContainer>
-                  <Button onClick={() => show({ open: false })}>Cancel</Button>
-                </ModalFooterButtonContainer>
-              ),
-            });
-          }
+  const openFile = useCallback(
+    async (path: string) => {
+      if (path) {
+        await invoke('open_file', {
+          path,
         })
-        .catch(console.error);
-    }
-  };
+          .then((response: keyof typeof UseContextMenuType.OpenFileResponseTypeEnum | unknown) => {
+            if (
+              typeof response === 'string' &&
+              Object.keys(openFileErrorModalMessage).includes(response)
+            ) {
+              show({
+                open: true,
+                modalHeader: (
+                  <h4>
+                    Can&apos;t open &quot;
+                    <Mark>{truncateMiddle(getFileNameFromPath(path) as string, 30)}</Mark>
+                    &quot;
+                  </h4>
+                ),
+                modalBody: (
+                  <ModalBodyMessage>
+                    {openFileErrorModalMessage?.[response as string](
+                      getFileNameFromPath(path) as string,
+                    )}
+                  </ModalBodyMessage>
+                ),
+                modalFooter: (
+                  <ModalFooterButtonContainer>
+                    <Button onClick={() => show({ open: false })}>Cancel</Button>
+                  </ModalFooterButtonContainer>
+                ),
+              });
+            }
+          })
+          .catch(console.error);
+      }
+    },
+    [show],
+  );
 
-  const showFileProperties = async (path: string) => {
-    show({
-      open: true,
-      modalWidth: '600px',
-      modalHeader: <h4>{truncateMiddle(getFileNameFromPath(path) as string, 40)} Properties</h4>,
-      modalBody: <PropertiesModal path={path} />,
-      modalFooter: (
-        <ModalFooterButtonContainer>
-          <Button
-            onClick={() => {
-              show({ open: false });
-              setDirectorySizeFunc(0, 0);
-            }}
-          >
-            Close
-          </Button>
-        </ModalFooterButtonContainer>
-      ),
-    });
-  };
+  const showFileProperties = useCallback(
+    async (path: string) => {
+      show({
+        open: true,
+        modalWidth: '600px',
+        modalHeader: <h4>{truncateMiddle(getFileNameFromPath(path) as string, 40)} Properties</h4>,
+        modalBody: <PropertiesModal path={path} />,
+        modalFooter: (
+          <ModalFooterButtonContainer>
+            <Button
+              onClick={() => {
+                show({ open: false });
+                setDirectorySizeFunc(0, 0);
+              }}
+            >
+              Close
+            </Button>
+          </ModalFooterButtonContainer>
+        ),
+      });
+    },
+    [show, setDirectorySizeFunc],
+  );
+
   return { deleteFile, openFile, showFileProperties };
 };
 
