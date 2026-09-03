@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react';
-import Image from 'next/image';
 import { invoke, convertFileSrc } from '@tauri-apps/api/core';
 import { FileIconType } from './fileIconType';
 import { FileIconWrapper } from './fileIconStyled';
@@ -51,17 +50,22 @@ const FileIcon = (props: FileIconType.Props) => {
   const src = showPreview ? (previewSrc as string) : thumbnail;
 
   return (
-    <FileIconWrapper ref={wrapperRef} disableHover={disableHover} isImage={showPreview} size={size}>
-      <Image
+    <FileIconWrapper
+      ref={wrapperRef}
+      data-preview={showPreview}
+      data-hover-disabled={disableHover}
+      style={showPreview ? { width: size, height: size } : undefined}
+    >
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
         key={src}
         alt='file icon'
         src={src}
         width={size}
         height={size}
-        onError={(error) => {
-          console.error('thumbnail image failed to load', src, error);
-          setPreviewSrc(null);
-        }}
+        decoding='async'
+        draggable={false}
+        onError={() => setPreviewSrc(null)}
       />
     </FileIconWrapper>
   );

@@ -15,16 +15,16 @@ const AppContainer = ({ children }: { children: React.ReactNode }) => {
   const { setDirectorySizeFunc, setIsFetchingFunc } = useContext(DirectorySizeContext);
   const { finishOperation } = useOperations();
   const { currentPath } = useContext(NavigationContext);
-  const { fetch, setActiveDir } = useContext(DirContext);
+  const { fetch, setSelectedPaths } = useContext(DirContext);
 
   const onMousedown = (event: MouseEvent<HTMLDivElement>) => {
     // event.preventDefault();
   };
 
-  const latestRef = useRef({ currentPath, fetch, finishOperation, setActiveDir });
+  const latestRef = useRef({ currentPath, fetch, finishOperation, setSelectedPaths });
   useEffect(() => {
-    latestRef.current = { currentPath, fetch, finishOperation, setActiveDir };
-  }, [currentPath, fetch, finishOperation, setActiveDir]);
+    latestRef.current = { currentPath, fetch, finishOperation, setSelectedPaths };
+  }, [currentPath, fetch, finishOperation, setSelectedPaths]);
 
   useEffect(() => {
     let unListen: () => void;
@@ -49,7 +49,7 @@ const AppContainer = ({ children }: { children: React.ReactNode }) => {
     const initializeCopyListener = async () => {
       unListen = await listen('copy_done', ({ payload }: any) => {
         const { operation_id, success, to, destination_path } = payload || {};
-        const { currentPath, fetch, finishOperation, setActiveDir } = latestRef.current;
+        const { currentPath, fetch, finishOperation, setSelectedPaths } = latestRef.current;
 
         if (operation_id) {
           finishOperation(operation_id, success ? 'completed' : 'failed');
@@ -58,7 +58,7 @@ const AppContainer = ({ children }: { children: React.ReactNode }) => {
         if (success && typeof to === 'string' && to === currentPath) {
           fetch(currentPath, 'get_files_in_path');
           if (typeof destination_path === 'string') {
-            setActiveDir({ path: destination_path });
+            setSelectedPaths((prev) => new Set([...prev, destination_path]));
           }
         }
       });

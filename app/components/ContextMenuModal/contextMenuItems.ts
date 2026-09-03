@@ -38,14 +38,14 @@ const contextMenuItems: IContextMenuItem[] = [
     name: IContextMenuItemEnum.delete,
     shortcut: '',
   },
-  // {
-  //   label: 'Select All',
-  //   name: IContextMenuItemEnum.selectAll,
-  //   shortcut: '',
-  // },
   {
     label: 'Properties',
     name: IContextMenuItemEnum.properties,
+    shortcut: '',
+  },
+  {
+    label: 'Select All',
+    name: IContextMenuItemEnum.selectAll,
     shortcut: '',
   },
 ];

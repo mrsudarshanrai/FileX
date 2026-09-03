@@ -1,5 +1,5 @@
 import { invoke } from '@tauri-apps/api/core';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { IDir } from '../lib/types/dir';
 
 type InitialData = {
@@ -19,17 +19,22 @@ const useDir = () => {
   const [places, setPlaces] = useState<IDir.Place[]>([]);
   const [homePath, setHomePath] = useState('/');
   const [isLoading, setIsLoading] = useState(false);
-  const [activeDir, setActiveDir] = useState<Partial<IDir.IDir>>({});
   const [viewMode, setViewModeState] = useState<IDir.ViewMode>(DEFAULT_VIEW_MODE);
+  const [selectedPaths, setSelectedPaths] = useState<Set<string>>(new Set());
 
-  const getFile = async (path: string, funcName = 'get_files_in_path'): Promise<unknown> =>
-    await invoke(funcName, { path })
-      .then((res: IDir.IDir[] | unknown) => {
-        if (Array.isArray(res)) {
-          setDirs(res);
-        }
-      })
-      .finally(() => setIsLoading(false));
+  const getFile = useCallback(
+    async (path: string, funcName = 'get_files_in_path'): Promise<unknown> => {
+      setIsLoading(true);
+      return await invoke(funcName, { path })
+        .then((res: IDir.IDir[] | unknown) => {
+          if (Array.isArray(res)) {
+            setDirs(res);
+          }
+        })
+        .finally(() => setIsLoading(false));
+    },
+    [],
+  );
 
   useEffect(() => {
     setIsLoading(true);
@@ -48,24 +53,27 @@ const useDir = () => {
     if (isViewMode(stored)) setViewModeState(stored);
   }, []);
 
-  const setViewMode = (mode: IDir.ViewMode) => {
+  const setViewMode = useCallback((mode: IDir.ViewMode) => {
     setViewModeState(mode);
     window.localStorage.setItem(VIEW_MODE_STORAGE_KEY, mode);
-  };
+  }, []);
 
-  const fetch = (path: string, funcName: string) => {
-    return getFile(path, funcName);
-  };
+  const fetch = useCallback(
+    (path: string, funcName: string) => {
+      return getFile(path, funcName);
+    },
+    [getFile],
+  );
   return {
     dirs,
     places,
     isLoading,
     fetch,
     homePath,
-    setActiveDir,
-    activeDir,
     viewMode,
     setViewMode,
+    selectedPaths,
+    setSelectedPaths,
   };
 };
 

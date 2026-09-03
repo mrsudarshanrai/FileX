@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import ContextMenu from '../context/ContextMenu';
 import { getFileNameFromPath } from '../utils';
 import { invoke } from '@tauri-apps/api/core';
@@ -12,16 +12,19 @@ const useRenameFile = () => {
 
   const [fileName, setFileName] = useState('');
 
-  const renameFile = async (newName: string) => {
-    if (!fileRenamePath || newName.length === 0) return;
-    await invoke('rename', {
-      path: fileRenamePath,
-      newName,
-    }).then(() => {
-      setFileRenamePath(null);
-      fetch(currentPath, 'get_files_in_path');
-    });
-  };
+  const renameFile = useCallback(
+    async (newName: string) => {
+      if (!fileRenamePath || newName.length === 0) return;
+      await invoke('rename', {
+        path: fileRenamePath,
+        newName,
+      }).then(() => {
+        setFileRenamePath(null);
+        fetch(currentPath, 'get_files_in_path');
+      });
+    },
+    [fileRenamePath, fetch, currentPath, setFileRenamePath],
+  );
 
   useEffect(() => {
     if (fileRenamePath) {

@@ -1,6 +1,6 @@
 {
   "name": "FileX",
-  "version": "0.1.0",
+  "version": "1.0.0-beta.1",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -11,6 +11,7 @@
     "format": "prettier --write './/**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc.json"
   },
   "dependencies": {
+    "@tanstack/react-virtual": "^3.14.10",
     "next": "^15.5.23",
     "react": "18.2.0",
     "react-dom": "18.2.0",

@@ -30,7 +30,7 @@ const CONDITIONAL_ITEM = ['delete', 'copy', 'cut', 'open', 'rename'];
 
 const ContextMenuModal = (props: ContextMenuModalProps) => {
   const { currentPath, navigate } = useContext(NavigationContext);
-  const { fetch } = useContext(DirContext);
+  const { fetch, dirs, selectedPaths, setSelectedPaths } = useContext(DirContext);
   const { setIsFetchingFunc } = useContext(DirectorySizeContext);
   const { deleteFile, showFileProperties, openFile } = useContextMenu();
   const { mode } = useAppTheme();
@@ -89,14 +89,14 @@ const ContextMenuModal = (props: ContextMenuModalProps) => {
 
     /**  on file/folder copy */
     if (name === IContextMenuItemEnum.copy) {
-      setSorucePathToCopy(targetPath);
+      setSorucePathToCopy(Array.from(selectedPaths));
       setIsCut(false);
       setShow(DisplayEnum.none);
     }
 
     /**  on file/folder cut */
     if (name === IContextMenuItemEnum.cut) {
-      setSorucePathToCopy(targetPath);
+      setSorucePathToCopy(Array.from(selectedPaths));
       setIsCut(true);
       setShow(DisplayEnum.none);
     }
@@ -121,6 +121,12 @@ const ContextMenuModal = (props: ContextMenuModalProps) => {
       }
     }
 
+    /**  on select all */
+    if (name === IContextMenuItemEnum.selectAll) {
+      setSelectedPaths(new Set(dirs.filter((d) => d.is_visible).map((d) => d.path)));
+      setShow(DisplayEnum.none);
+    }
+
     if (name === IContextMenuItemEnum.open) {
       setShow(DisplayEnum.none);
       if (targetPath) {
@@ -133,18 +139,29 @@ const ContextMenuModal = (props: ContextMenuModalProps) => {
     if (name === IContextMenuItemEnum.paste) {
       setShow(DisplayEnum.none);
 
-      const opId = startOperation({
-        label: isCut ? 'Moving item…' : 'Copying item…',
-      });
+      const itemCount = sorucePathToCopy.length;
+      const label = isCut
+        ? itemCount > 1
+          ? `Moving ${itemCount} items…`
+          : 'Moving item…'
+        : itemCount > 1
+        ? `Copying ${itemCount} items…`
+        : 'Copying item…';
+      const opId = startOperation({ label });
 
       try {
-        await invoke(isCut ? 'move_to_path' : 'copy_to_path', {
-          from: sorucePathToCopy,
-          to: currentPath,
-          operationId: opId,
-        });
+        setSelectedPaths(new Set());
+        await Promise.all(
+          sorucePathToCopy.map((from) =>
+            invoke(isCut ? 'move_to_path' : 'copy_to_path', {
+              from,
+              to: currentPath,
+              operationId: opId,
+            }),
+          ),
+        );
         if (isCut) {
-          setSorucePathToCopy(undefined);
+          setSorucePathToCopy([]);
           setIsCut(false);
         }
       } catch (error: any) {
