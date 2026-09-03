@@ -7,8 +7,10 @@ export type ContextMenuModalProps = Pick<
   top: number;
   left: number;
   display: Display;
-  setSorucePathToCopy: React.Dispatch<React.SetStateAction<string | undefined>>;
-  sorucePathToCopy: string | undefined;
+  setSorucePathToCopy: React.Dispatch<React.SetStateAction<string[]>>;
+  sorucePathToCopy: string[];
+  setIsCut: React.Dispatch<React.SetStateAction<boolean>>;
+  isCut: boolean;
 };
 export enum DisplayEnum {
   none = 'none',
@@ -36,6 +38,7 @@ export enum IContextMenuItemEnum {
   newFolder = 'newFolder',
   rename = 'rename',
   copy = 'copy',
+  cut = 'cut',
   name = 'name',
   paste = 'paste',
   selectAll = 'selectAll',

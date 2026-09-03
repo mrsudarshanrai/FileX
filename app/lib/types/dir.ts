@@ -5,5 +5,20 @@ export namespace IDir {
     is_dir: boolean;
     extension: string;
     is_visible: boolean;
+    thumbnail: string;
+    is_image: boolean;
   };
+
+  export type Place = {
+    name: string;
+    path: string;
+  };
+
+  export type DiskUsage = {
+    total: number;
+    used: number;
+    available: number;
+  };
+
+  export type ViewMode = 'icon' | 'list';
 }

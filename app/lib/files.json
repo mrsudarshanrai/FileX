@@ -274,7 +274,13 @@
     "thumbnail": "/extensions/yaml.svg"
   },
   {
-    "fileNames": [".prettierignore", ".prettierrc.json"],
+    "fileNames": [
+      ".prettierignore",
+      ".prettierrc",
+      ".prettierrc.json",
+      ".prettierrc.yml",
+      ".prettierrc.yaml"
+    ],
     "type": "Prettier configuration file",
     "thumbnail": "/extensions/prettier.svg"
   },

@@ -7,25 +7,28 @@ import { useMemo } from 'react';
 const NavigationPath = (props: NavigationPathType.Props) => {
   const { path, onClick } = props;
 
-  const paths = useMemo(() => {
-    const pathArr = splitPathOnSlash(path);
-    if (pathArr.length > 10) return pathArr.slice(pathArr.length - 6);
-    return pathArr;
-  }, [path]);
+  const segments = useMemo(() => splitPathOnSlash(path).filter((item) => item.length), [path]);
+
+  const visibleSegments = useMemo(() => {
+    if (segments.length > 10) return segments.slice(segments.length - 6);
+    return segments;
+  }, [segments]);
+
+  const startOffset = segments.length - visibleSegments.length;
 
   return (
     <BreadcrumbBar>
       <PathContainer>
-        {paths
-          .filter((item) => item.length)
-          .map((dir, index) => {
-            return (
-              <Paths key={index} onClick={() => onClick(path, dir)}>
-                <Icon name='chevron-right' width='13px' height='13px' />
-                <span>{dir}</span>
-              </Paths>
-            );
-          })}
+        {visibleSegments.map((dir, localIndex) => {
+          const absoluteIndex = startOffset + localIndex;
+          const targetPath = '/' + segments.slice(0, absoluteIndex + 1).join('/');
+          return (
+            <Paths key={absoluteIndex} onClick={() => onClick(targetPath)}>
+              <Icon name='chevron-right' width='13px' height='13px' />
+              <span>{dir}</span>
+            </Paths>
+          );
+        })}
       </PathContainer>
     </BreadcrumbBar>
   );

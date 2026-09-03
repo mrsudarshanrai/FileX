@@ -18,6 +18,12 @@ const contextMenuItems: IContextMenuItem[] = [
     disabled: true,
   },
   {
+    label: 'Cut',
+    name: IContextMenuItemEnum.cut,
+    shortcut: '',
+    disabled: true,
+  },
+  {
     label: 'Paste',
     name: IContextMenuItemEnum.paste,
     shortcut: '',
@@ -32,14 +38,14 @@ const contextMenuItems: IContextMenuItem[] = [
     name: IContextMenuItemEnum.delete,
     shortcut: '',
   },
-  // {
-  //   label: 'Select All',
-  //   name: IContextMenuItemEnum.selectAll,
-  //   shortcut: '',
-  // },
   {
     label: 'Properties',
     name: IContextMenuItemEnum.properties,
+    shortcut: '',
+  },
+  {
+    label: 'Select All',
+    name: IContextMenuItemEnum.selectAll,
     shortcut: '',
   },
 ];

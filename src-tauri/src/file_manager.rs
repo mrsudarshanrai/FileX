@@ -2,7 +2,6 @@ use crate::{
     helper::{self, open_file_with_default_file_opener, XDGSearchResult},
     utils,
 };
-use async_recursion::async_recursion;
 use serde::Serialize;
 use std::{
     fs::{self, Metadata},
@@ -21,6 +20,20 @@ pub struct FileProperties {
     last_modified: String,
     created: String,
     extension: String,
+    thumbnail: String,
+}
+
+fn unique_destination_path(to: &str, full_filename: &str) -> String {
+    let (filename, file_extension) = utils::get_filename_and_extension_from_path(full_filename);
+    let mut attempt = 1;
+    let mut destination_path = format!("{}/{}", to, full_filename);
+
+    while fs::metadata(&destination_path).is_ok() {
+        attempt += 1;
+        destination_path = format!("{}/{}-{}(Copy).{}", to, filename, attempt, file_extension);
+    }
+
+    destination_path
 }
 
 impl File {
@@ -31,24 +44,25 @@ impl File {
     }
 
     /** copy file */
-    #[async_recursion]
-    pub async fn copy(from: &String, to: &String) -> std::io::Result<()> {
+    pub fn copy(from: &String, to: &String) -> std::io::Result<String> {
         let full_filename = utils::get_full_filename_from_path(from);
-        let mut attempt = 1;
-
-        let (filename, file_extension) =
-            utils::get_filename_and_extension_from_path(&full_filename);
-
-        let mut new_destination_path = format!("{}/{}", to, full_filename);
-
-        while fs::metadata(&new_destination_path).is_ok() {
-            attempt += 1;
-            new_destination_path =
-                format!("{}/{}-{}(Copy).{}", to, filename, attempt, file_extension);
-        }
+        let new_destination_path = unique_destination_path(to, &full_filename);
 
         fs::copy(from, &new_destination_path)?;
-        Ok(())
+        Ok(new_destination_path)
+    }
+
+    /** move file */
+    pub fn move_to(from: &String, to: &String) -> std::io::Result<String> {
+        let full_filename = utils::get_full_filename_from_path(from);
+        let new_destination_path = unique_destination_path(to, &full_filename);
+
+        if fs::rename(from, &new_destination_path).is_err() {
+            fs::copy(from, &new_destination_path)?;
+            fs::remove_file(from)?;
+        }
+
+        Ok(new_destination_path)
     }
 
     /** get metadata */
@@ -89,27 +103,35 @@ impl File {
                     mime_type = result;
                 }
 
+                let name = utils::option_to_string(directory_path.file_name());
+
                 let properties = if metadata.is_dir() {
+                    let extension = String::from("");
+                    let thumbnail = helper::resolve_thumbnail(&name, &extension, true);
                     FileProperties {
                         size: 0,
                         is_file: false,
-                        name: utils::option_to_string(directory_path.file_name()),
+                        name,
                         mime_type,
                         location: path.clone(),
                         last_modified: utils::sys_time_to_date_time(metadata.modified().unwrap()),
                         created: utils::sys_time_to_date_time(metadata.created().unwrap()),
-                        extension: String::from(""),
+                        extension,
+                        thumbnail,
                     }
                 } else {
+                    let extension = utils::option_to_string(directory_path.extension());
+                    let thumbnail = helper::resolve_thumbnail(&name, &extension, false);
                     FileProperties {
                         size: metadata.len(),
                         is_file: true,
-                        name: utils::option_to_string(directory_path.file_name()),
+                        name,
                         mime_type,
                         location: path.clone(),
                         last_modified: utils::sys_time_to_date_time(metadata.modified().unwrap()),
                         created: utils::sys_time_to_date_time(metadata.created().unwrap()),
-                        extension: utils::option_to_string(directory_path.extension()),
+                        extension,
+                        thumbnail,
                     }
                 };
                 Ok(properties)
@@ -119,8 +141,13 @@ impl File {
     }
 
     pub async fn rename(path: String, new_name: String) -> String {
+        let trimmed_name = new_name.trim();
+        if trimmed_name.is_empty() || trimmed_name.contains('/') {
+            return String::from("invalid_name");
+        }
+
         if let Some(relative_path) = path.rsplitn(2, "/").nth(1) {
-            let new_path = format!("{}/{}", relative_path, new_name);
+            let new_path = format!("{}/{}", relative_path, trimmed_name);
             if let Ok(_) = fs::rename(path, new_path) {
                 String::from("rename_success")
             } else {

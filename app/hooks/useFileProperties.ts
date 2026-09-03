@@ -12,6 +12,7 @@ const useFileProperties = (targetPath: string) => {
     mime_type: '',
     name: '',
     size: 0,
+    thumbnail: '/assets/file.svg',
   });
 
   const getFileProperties = async () => {

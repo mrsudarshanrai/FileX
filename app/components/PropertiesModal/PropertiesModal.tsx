@@ -7,14 +7,14 @@ import { getFileSize } from './PropertiesModalUtils';
 
 const PropertiesModal = (props: { path: string }) => {
   const { properties } = useFileProperties(props.path);
-  const { name, extension, is_file, created, last_modified, mime_type, location, size } =
+  const { name, is_file, created, last_modified, mime_type, location, size, thumbnail } =
     properties || {};
   const { fileCount, directorySize, isFetching } = useContext(DirectorySizeContext);
 
   return (
     <PropertiesModalWrapper>
       <div>
-        <FileIcon extension={extension} isDir={!is_file} />
+        <FileIcon thumbnail={thumbnail} />
       </div>
       <div className='file_info_container'>
         <Info>

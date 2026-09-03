@@ -5,6 +5,11 @@ FileX is a lightweight, native-feeling file manager for Linux, built with Tauri 
 ![fileX](https://github.com/mrsudarshanrai/FileX/blob/main/public/assets/fileX-01.jpg?raw=true)
 ![fileX](https://github.com/mrsudarshanrai/FileX/blob/main/public/assets/fileX-02.jpg?raw=true)
 
+## Design
+
+- [UI plan](https://www.figma.com/design/tTXlxtuM4GGnBTlQ8woxjP/FileX)
+- [Assets (file icons, icons)](https://www.figma.com/design/tTXlxtuM4GGnBTlQ8woxjP/FileX?node-id=413-3864&p=f)
+
 ## Features
 
 - Sidebar with quick access to Home and other common places

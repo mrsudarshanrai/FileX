@@ -1,20 +1,19 @@
 import { useContext } from 'react';
 import NavigationPath from '@/app/components/NavigationPath';
-import { useDirRoute } from '@/app/hooks/useDirRoute';
 import { NavigationButtonType } from '@/app/components/NavigationButton/NavigationButtonType';
 import NavigationButton from '@/app/components/NavigationButton';
 import { TopbarContainer } from './TopbarStyled';
 import { NavigationContext } from '@/app/context/NavigationContext';
+import { ClickableIcon, NavSegment } from '@/app/components/NavigationPath/PathStyled';
+import { Icon } from '@/app/components/Icon/Icon';
+import ModalContext from '@/app/context/ModalContext';
+import { SettingsModal } from '@/app/components/SettingsModal';
+import { ViewToggle } from '@/app/components/ViewToggle';
 
 const Topbar = () => {
-  const { changeDir } = useDirRoute();
   const { navigate, currentPath, isForwardDisabled, isBackDisabled } =
     useContext(NavigationContext);
-
-  const onClick = (path: string, dir: string) => {
-    const pathToRoute = changeDir(path, dir);
-    navigate(pathToRoute);
-  };
+  const { show } = useContext(ModalContext);
 
   const handleNavigation = (type: NavigationButtonType.NavigationType) => {
     switch (type) {
@@ -27,6 +26,15 @@ const Topbar = () => {
     }
   };
 
+  const onOpenSettings = () => {
+    show({
+      open: true,
+      modalWidth: '700px',
+      modalHeader: <h4>Settings</h4>,
+      modalBody: <SettingsModal />,
+    });
+  };
+
   return (
     <TopbarContainer>
       <div className='left_container'>
@@ -35,7 +43,15 @@ const Topbar = () => {
           isForwardBtnDisabled={isForwardDisabled}
           onClick={(navigationType) => handleNavigation(navigationType)}
         />
-        <NavigationPath path={currentPath} onClick={onClick} />
+        <NavigationPath path={currentPath} onClick={navigate} />
+      </div>
+      <div className='right_container'>
+        <ViewToggle />
+        <NavSegment>
+          <ClickableIcon onClick={onOpenSettings} title='Settings'>
+            <Icon name='settings' width='18px' height='18px' />
+          </ClickableIcon>
+        </NavSegment>
       </div>
     </TopbarContainer>
   );

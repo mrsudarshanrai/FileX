@@ -1,5 +1,4 @@
 use crate::file_manager::File;
-use async_recursion::async_recursion;
 use serde::Serialize;
 use std::fs::{self};
 
@@ -10,17 +9,25 @@ pub struct CreateFolderResponse {
 }
 pub struct Folder;
 
+fn join_path(base: &str, name: &str) -> String {
+    if base.ends_with('/') {
+        format!("{}{}", base, name)
+    } else {
+        format!("{}/{}", base, name)
+    }
+}
+
 impl Folder {
     /** create folder  */
     pub fn create(folder_path: String) -> Result<CreateFolderResponse, String> {
         let mut attempt = 1;
         let folder_name_suffix = "Untitled Folder";
-        let mut full_folder_path = format!("{}{}", &folder_path, folder_name_suffix);
+        let mut full_folder_path = join_path(&folder_path, folder_name_suffix);
 
         // check if folder exist
         while fs::metadata(&full_folder_path).is_ok() {
             attempt += 1;
-            full_folder_path = format!("{}{} {}", folder_path, folder_name_suffix, attempt);
+            full_folder_path = join_path(&folder_path, &format!("{} {}", folder_name_suffix, attempt));
         }
         // Create the folder
         if let Err(err) = fs::create_dir_all(&full_folder_path) {
@@ -43,8 +50,7 @@ impl Folder {
     }
 
     /** copy folder */
-    #[async_recursion]
-    pub async fn copy(from: &String, to: &String) -> std::io::Result<()> {
+    pub fn copy(from: &String, to: &String) -> std::io::Result<()> {
         fs::create_dir_all(to)?;
 
         for entry in fs::read_dir(from)? {
@@ -52,16 +58,24 @@ impl Folder {
             let entry_path = entry.path();
             let entry_dest_path = format!("{}/{}", to, entry.file_name().to_string_lossy());
             if entry_path.is_dir() {
-                Self::copy(&entry_path.to_string_lossy().to_string(), &entry_dest_path).await?
+                Self::copy(&entry_path.to_string_lossy().to_string(), &entry_dest_path)?;
             } else {
                 let file_dest_path = entry_dest_path.rsplitn(2, "/").nth(1).unwrap();
                 File::copy(
                     &entry_path.to_string_lossy().to_string(),
                     &file_dest_path.to_string(),
-                )
-                .await?
+                )?;
             }
         }
         Ok(())
+    }
+
+    /** move folder */
+    pub fn move_to(from: &String, to: &String) -> std::io::Result<String> {
+        if fs::rename(from, to).is_err() {
+            Self::copy(from, to)?;
+            fs::remove_dir_all(from)?;
+        }
+        Ok(to.clone())
     }
 }

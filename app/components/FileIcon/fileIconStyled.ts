@@ -1,17 +1,26 @@
-import styled, { css } from 'styled-components';
-import { FileIconType } from './fileIconType';
+import styled from 'styled-components';
 
-const FileIconWrapper = styled.div<FileIconType.FileIconWrapper>`
+const FileIconWrapper = styled.div`
   filter: brightness(100%);
 
-  ${(props) =>
-    props &&
-    !props.disableHover &&
-    css`
-      &:hover {
-        filter: brightness(90%);
-      }
-    `}
+  img {
+    display: block;
+  }
+
+  &[data-preview='true'] {
+    overflow: hidden;
+    border-radius: var(--radius-sm);
+
+    img {
+      object-fit: cover;
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  &:not([data-hover-disabled='true']):hover {
+    filter: brightness(90%);
+  }
 `;
 
 export { FileIconWrapper };

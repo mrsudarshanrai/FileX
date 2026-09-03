@@ -1,53 +1,79 @@
 import { invoke } from '@tauri-apps/api/core';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { IDir } from '../lib/types/dir';
-import { sortArrayByBoolean } from '../utils';
 
-const useDir = (funcName?: string) => {
+type InitialData = {
+  home_path: string;
+  dirs: IDir.IDir[];
+  places: IDir.Place[];
+};
+
+const VIEW_MODE_STORAGE_KEY = 'FileX:view-mode';
+const DEFAULT_VIEW_MODE: IDir.ViewMode = 'icon';
+
+const isViewMode = (value: string | null): value is IDir.ViewMode =>
+  value === 'icon' || value === 'list';
+
+const useDir = () => {
   const [dirs, setDirs] = useState<IDir.IDir[]>([]);
-  const [placesDirs, setPlacesDirs] = useState<IDir.IDir[]>([]);
+  const [places, setPlaces] = useState<IDir.Place[]>([]);
   const [homePath, setHomePath] = useState('/');
   const [isLoading, setIsLoading] = useState(false);
-  const [activeDir, setActiveDir] = useState<Partial<IDir.IDir>>({});
+  const [viewMode, setViewModeState] = useState<IDir.ViewMode>(DEFAULT_VIEW_MODE);
+  const [selectedPaths, setSelectedPaths] = useState<Set<string>>(new Set());
 
-  const getFile = async (
-    path: string,
-    funcName = 'get_all_dir',
-    isInitial = false,
-  ): Promise<unknown> =>
-    await invoke(funcName, { path })
-      .then((res: IDir.IDir[] | unknown) => {
-        if (Array.isArray(res)) {
-          res.sort(sortArrayByBoolean);
-          setDirs(res);
-          if (isInitial) setPlacesDirs(res);
-        }
-      })
-      .finally(() => setIsLoading(false));
-
-  const getHomePath = async () => {
-    await invoke('get_home', {}).then((path: string | unknown) => {
-      if (typeof path === 'string') setHomePath(path);
-    });
-  };
+  const getFile = useCallback(
+    async (path: string, funcName = 'get_files_in_path'): Promise<unknown> => {
+      setIsLoading(true);
+      return await invoke(funcName, { path })
+        .then((res: IDir.IDir[] | unknown) => {
+          if (Array.isArray(res)) {
+            setDirs(res);
+          }
+        })
+        .finally(() => setIsLoading(false));
+    },
+    [],
+  );
 
   useEffect(() => {
     setIsLoading(true);
-    getFile('null', funcName, true);
-    getHomePath();
-  }, [funcName]);
+    invoke('get_initial_data')
+      .then((res) => {
+        const { home_path, dirs, places } = res as InitialData;
+        setHomePath(home_path);
+        setDirs(dirs);
+        setPlaces(places);
+      })
+      .finally(() => setIsLoading(false));
+  }, []);
 
-  const fetch = (path: string, funcName: string) => {
-    return getFile(path, funcName);
-  };
+  useEffect(() => {
+    const stored = window.localStorage.getItem(VIEW_MODE_STORAGE_KEY);
+    if (isViewMode(stored)) setViewModeState(stored);
+  }, []);
+
+  const setViewMode = useCallback((mode: IDir.ViewMode) => {
+    setViewModeState(mode);
+    window.localStorage.setItem(VIEW_MODE_STORAGE_KEY, mode);
+  }, []);
+
+  const fetch = useCallback(
+    (path: string, funcName: string) => {
+      return getFile(path, funcName);
+    },
+    [getFile],
+  );
   return {
     dirs,
-    placesDirs,
+    places,
     isLoading,
     fetch,
     homePath,
-    setActiveDir,
-    activeDir,
+    viewMode,
+    setViewMode,
+    selectedPaths,
+    setSelectedPaths,
   };
 };
 
