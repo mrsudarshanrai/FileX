@@ -43,23 +43,7 @@ fn file_types() -> &'static Vec<FileTypeEntry> {
   FILE_TYPES.get_or_init(|| serde_json::from_str(FILE_TYPES_JSON).unwrap_or_default())
 }
 
-fn is_image_extension(extension: &str) -> bool {
-  if extension.is_empty() {
-    return false;
-  }
-
-  file_types()
-    .iter()
-    .find(|entry| entry.type_name == "Image")
-    .map(|entry| entry.extensions.iter().any(|ext| ext.eq_ignore_ascii_case(extension)))
-    .unwrap_or(false)
-}
-
-pub fn resolve_thumbnail(folder_name: &str, extension: &str, is_dir: bool) -> String {
-  if is_dir {
-    return FOLDER_THUMBNAIL.to_string();
-  }
-
+fn find_file_type_entry<'a>(folder_name: &str, extension: &str) -> Option<&'a FileTypeEntry> {
   let entries = file_types();
 
   if !extension.is_empty() {
@@ -68,19 +52,29 @@ pub fn resolve_thumbnail(folder_name: &str, extension: &str, is_dir: bool) -> St
         .iter()
         .find(|entry| entry.extensions.iter().any(|ext| ext.eq_ignore_ascii_case(extension)))
     {
-      return entry.thumbnail.clone();
+      return Some(entry);
     }
   }
 
-  if
-    let Some(entry) = entries
-      .iter()
-      .find(|entry| { entry.file_names.iter().any(|name| name.eq_ignore_ascii_case(folder_name)) })
-  {
-    return entry.thumbnail.clone();
+  entries
+    .iter()
+    .find(|entry| entry.file_names.iter().any(|name| name.eq_ignore_ascii_case(folder_name)))
+}
+
+/** Resolve both the thumbnail and whether the file is an image in a single lookup */
+pub fn resolve_file_type(folder_name: &str, extension: &str, is_dir: bool) -> (String, bool) {
+  if is_dir {
+    return (FOLDER_THUMBNAIL.to_string(), false);
   }
 
-  DEFAULT_FILE_THUMBNAIL.to_string()
+  match find_file_type_entry(folder_name, extension) {
+    Some(entry) => (entry.thumbnail.clone(), entry.type_name == "Image"),
+    None => (DEFAULT_FILE_THUMBNAIL.to_string(), false),
+  }
+}
+
+pub fn resolve_thumbnail(folder_name: &str, extension: &str, is_dir: bool) -> String {
+  resolve_file_type(folder_name, extension, is_dir).0
 }
 
 pub fn get_files(path: String) -> Result<Vec<Files>, String> {
@@ -88,13 +82,12 @@ pub fn get_files(path: String) -> Result<Vec<Files>, String> {
 
   for (_, entry) in fs::read_dir(path).unwrap().enumerate() {
     let entry = entry.unwrap();
+    let is_dir = entry.file_type().map(|t| t.is_dir()).unwrap_or(false);
     let path = entry.path();
     let extension = utils::option_to_string(path.extension());
-    let is_dir = path.is_dir();
     let folder_name = utils::option_to_string(path.file_name()).trim().to_string();
     let is_visible = !folder_name.starts_with(".");
-    let thumbnail = resolve_thumbnail(&folder_name, &extension, is_dir);
-    let is_image = !is_dir && is_image_extension(&extension);
+    let (thumbnail, is_image) = resolve_file_type(&folder_name, &extension, is_dir);
 
     let file = Files {
       path,
@@ -108,11 +101,7 @@ pub fn get_files(path: String) -> Result<Vec<Files>, String> {
     dirs.push(file);
   }
   dirs.retain(|a| !a.folder_name.starts_with("."));
-  dirs.sort_by(|a, b| {
-    b.is_dir
-      .cmp(&a.is_dir)
-      .then_with(|| a.folder_name.to_lowercase().cmp(&b.folder_name.to_lowercase()))
-  });
+  dirs.sort_by_cached_key(|a| (!a.is_dir, a.folder_name.to_lowercase()));
   Ok(dirs)
 }
 
