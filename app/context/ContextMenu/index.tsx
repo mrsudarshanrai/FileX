@@ -23,7 +23,7 @@ const ContextMenuProvider = ({ children }: { children: React.ReactNode }) => {
   const [targetPath, setTargetPath] = useState<undefined | string>(undefined);
   const [isTargetPathFile, setIsTargetPathFile] = useState(false);
   const [fileRenamePath, setFileRenamePath] = useState<string | null>(null);
-  const [sorucePathToCopy, setSorucePathToCopy] = useState<undefined | string>(undefined);
+  const [sorucePathToCopy, setSorucePathToCopy] = useState<string[]>([]);
   const [isCut, setIsCut] = useState(false);
 
   const onContextMenu = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {

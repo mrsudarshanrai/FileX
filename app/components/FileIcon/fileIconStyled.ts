@@ -1,35 +1,26 @@
-import styled, { css } from 'styled-components';
-import { FileIconType } from './fileIconType';
+import styled from 'styled-components';
 
-const FileIconWrapper = styled.div<
-  FileIconType.FileIconWrapper & { isImage?: boolean; size: number }
->`
-  ${({ theme, isImage, size }) => css`
-    filter: brightness(100%);
+const FileIconWrapper = styled.div`
+  filter: brightness(100%);
 
-    ${isImage &&
-    css`
-      width: ${size}px;
-      height: ${size}px;
-      overflow: hidden;
-      border-radius: ${theme.radius.sm};
+  img {
+    display: block;
+  }
 
-      img {
-        object-fit: cover;
-        width: 100%;
-        height: 100%;
-      }
-    `}
-  `}
+  &[data-preview='true'] {
+    overflow: hidden;
+    border-radius: var(--radius-sm);
 
-  ${(props) =>
-    props &&
-    !props.disableHover &&
-    css`
-      &:hover {
-        filter: brightness(90%);
-      }
-    `}
+    img {
+      object-fit: cover;
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  &:not([data-hover-disabled='true']):hover {
+    filter: brightness(90%);
+  }
 `;
 
 export { FileIconWrapper };
