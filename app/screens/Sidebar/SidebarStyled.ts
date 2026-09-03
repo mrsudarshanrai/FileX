@@ -56,7 +56,6 @@ const SidebarItem = styled.div<ISidebarItem>`
     cursor: pointer;
     border-radius: ${theme.radius.lg};
     background-color: ${isActive ? theme.accent.muted : 'transparent'};
-    transition: background-color 0.15s ease;
 
     &:hover {
       background-color: ${isActive ? theme.accent.muted : theme.bg.surfaceHover};

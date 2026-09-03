@@ -20,7 +20,6 @@ const FileGrid = styled.div`
     justify-content: flex-start;
     padding: 8px;
     border-radius: ${theme.radius.md};
-    transition: background-color 0.15s ease;
     user-select: none;
 
     &:hover {
@@ -105,7 +104,6 @@ const FileListRow = styled.div`
     border-radius: ${theme.radius.sm};
     cursor: pointer;
     user-select: none;
-    transition: background-color 0.15s ease;
 
     &:hover {
       background-color: ${theme.bg.surfaceHover};
