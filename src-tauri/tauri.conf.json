@@ -32,7 +32,10 @@
   },
   "bundle": {
     "active": true,
-    "category": "DeveloperTool",
+    "category": "Utility",
+    "shortDescription": "Yet Another File Manager",
+    "longDescription": "FileX is a fast, lightweight file manager for Linux.",
+    "homepage": "https://github.com/mrsudarshanrai/FileX",
     "copyright": "",
     "targets": "all",
     "icon": [

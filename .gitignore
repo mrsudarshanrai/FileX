@@ -35,5 +35,7 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-pkg
-src
+# makepkg leftovers
+/pkg
+/src
+/*.pkg.tar.zst
