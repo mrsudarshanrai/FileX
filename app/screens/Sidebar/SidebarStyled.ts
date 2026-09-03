@@ -79,7 +79,6 @@ const IconChip = styled.div<ISidebarItem>`
     flex-shrink: 0;
     border-radius: ${theme.radius.md};
     background-color: ${isActive ? theme.accent.default : 'transparent'};
-    transition: background-color 0.5s ease;
   `}
 `;
 

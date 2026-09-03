@@ -130,7 +130,6 @@ const FileListRow = styled.div`
   border-radius: var(--radius-sm);
   cursor: pointer;
   user-select: none;
-  transition: background-color 0.15s ease;
   contain: layout paint style;
 
   &:hover {
