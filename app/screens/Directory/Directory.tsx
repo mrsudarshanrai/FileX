@@ -1,27 +1,26 @@
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useMemo } from 'react';
+import { useVirtualizer } from '@tanstack/react-virtual';
 import DirContext from '@/app/context/DirectoryContext';
 import { NavigationContext } from '@/app/context/NavigationContext';
-import { IDir } from '@/app/lib/types/dir';
 import {
-  DirContainer,
   DirContainerWrapper,
-  File,
-  FileGrid,
-  FileName,
-  FileNameWrapper,
-  FileRenameInput,
   LoadingOverlay,
-  ListContainer,
-  FileListRow,
-  FileListName,
   SelectionBox,
+  GridScrollArea,
+  ListScrollArea,
+  VirtualContent,
+  VirtualRow,
+  GridRow,
+  GRID_ROW_HEIGHT,
+  LIST_ROW_HEIGHT,
+  GRID_SCROLL_AREA_PADDING_X,
 } from './DirectoryStyled';
-import FileIcon from '@/app/components/FileIcon';
+import DirectoryGridItem from './DirectoryGridItem';
+import DirectoryListItem from './DirectoryListItem';
 import { checkIfRenameEnabled } from './directoryUtils';
 import { useDirectoryLogics } from './hooks/useDirectoryLogics';
-import { truncateMiddle } from '@/app/utils';
-
-const FILE_NAME_MAX_LENGTH = 26;
+import { useGridColumns } from './hooks/useGridColumns';
+import { useScrollMargin } from './hooks/useScrollMargin';
 
 const Directory = () => {
   const { dirs, isLoading, viewMode, selectedPaths, setSelectedPaths } = useContext(DirContext);
@@ -40,65 +39,35 @@ const Directory = () => {
     fileName,
   } = useDirectoryLogics();
 
-  const hasDirs = dirs && dirs.length > 0;
+  const visibleDirs = useMemo(() => dirs.filter((dir) => dir.is_visible), [dirs]);
+  const hasDirs = visibleDirs.length > 0;
 
   useEffect(() => {
     setSelectedPaths(new Set());
   }, [currentPath, setSelectedPaths]);
 
-  if (hasDirs && viewMode === 'list') {
-    return (
-      <DirContainerWrapper
-        ref={containerRef}
-        onClick={onDirectoryContainerClicked}
-        onMouseDown={onContainerMouseDown}
-      >
-        {isLoading && <LoadingOverlay>Fetching files…</LoadingOverlay>}
-        {selectionBox && <SelectionBox style={selectionBox} />}
-        <ListContainer key={currentPath}>
-          {dirs.map(
-            ({
-              folder_name,
-              path,
-              is_dir: isFolder,
-              is_visible,
-              thumbnail,
-              is_image,
-            }: IDir.IDir) => {
-              if (!is_visible) return null;
-              return (
-                <FileListRow
-                  key={path}
-                  data-path={path}
-                  onContextMenu={(event) => {
-                    onContextMenu(event, path, isFolder);
-                  }}
-                  onClick={(event) => onFileClick(path, folder_name, isFolder, event)}
-                  onDoubleClick={() => onFileDoubleClick(path, isFolder)}
-                >
-                  <div className='file_icon_container'>
-                    <FileIcon thumbnail={thumbnail} path={path} isImage={is_image} size={30} />
-                  </div>
-                  {checkIfRenameEnabled(fileRenamePath, path) ? (
-                    <FileRenameInput
-                      value={fileName}
-                      autoFocus={true}
-                      onKeyDown={onKeyDown}
-                      onChange={(event) => setFileName(event?.target.value)}
-                    />
-                  ) : (
-                    <FileListName isSelected={selectedPaths.has(path)} title={folder_name}>
-                      {folder_name}
-                    </FileListName>
-                  )}
-                </FileListRow>
-              );
-            },
-          )}
-        </ListContainer>
-      </DirContainerWrapper>
-    );
-  }
+  const { columns, gridAreaRef } = useGridColumns(GRID_SCROLL_AREA_PADDING_X);
+  const { scrollMargin: gridScrollMargin, contentRef: gridContentRef } = useScrollMargin();
+  const { scrollMargin: listScrollMargin, contentRef: listContentRef } = useScrollMargin();
+
+  const isGridView = hasDirs && viewMode !== 'list';
+  const isListView = hasDirs && viewMode === 'list';
+
+  const gridVirtualizer = useVirtualizer({
+    count: isGridView ? Math.ceil(visibleDirs.length / columns) : 0,
+    getScrollElement: () => document.getElementById('main-scroll'),
+    estimateSize: () => GRID_ROW_HEIGHT,
+    overscan: 8,
+    scrollMargin: gridScrollMargin,
+  });
+
+  const listVirtualizer = useVirtualizer({
+    count: isListView ? visibleDirs.length : 0,
+    getScrollElement: () => document.getElementById('main-scroll'),
+    estimateSize: () => LIST_ROW_HEIGHT,
+    overscan: 8,
+    scrollMargin: listScrollMargin,
+  });
 
   return (
     <DirContainerWrapper
@@ -108,50 +77,81 @@ const Directory = () => {
     >
       {isLoading && <LoadingOverlay>Fetching files…</LoadingOverlay>}
       {selectionBox && <SelectionBox style={selectionBox} />}
-      {hasDirs && (
-        <DirContainer key={currentPath}>
-          {dirs.map(
-            ({
-              folder_name,
-              path,
-              is_dir: isFolder,
-              is_visible,
-              thumbnail,
-              is_image,
-            }: IDir.IDir) => {
-              if (!is_visible) return null;
+
+      {isListView && (
+        <ListScrollArea>
+          <VirtualContent ref={listContentRef} style={{ height: listVirtualizer.getTotalSize() }}>
+            {listVirtualizer.getVirtualItems().map((virtualRow) => {
+              const dir = visibleDirs[virtualRow.index];
+              const isRenaming = checkIfRenameEnabled(fileRenamePath, dir.path);
               return (
-                <FileGrid key={path} data-path={path} draggable={true}>
-                  <File
-                    onContextMenu={(event) => {
-                      onContextMenu(event, path, isFolder);
-                    }}
-                    onClick={(event) => onFileClick(path, folder_name, isFolder, event)}
-                    onDoubleClick={() => onFileDoubleClick(path, isFolder)}
-                  >
-                    <div className='file_icon_container'>
-                      <FileIcon thumbnail={thumbnail} path={path} isImage={is_image} />
-                    </div>
-                    <FileNameWrapper title={folder_name}>
-                      {checkIfRenameEnabled(fileRenamePath, path) ? (
-                        <FileRenameInput
-                          value={fileName}
-                          autoFocus={true}
-                          onKeyDown={onKeyDown}
-                          onChange={(event) => setFileName(event?.target.value)}
-                        />
-                      ) : (
-                        <FileName isSelected={selectedPaths.has(path)}>
-                          {truncateMiddle(folder_name, FILE_NAME_MAX_LENGTH)}
-                        </FileName>
-                      )}
-                    </FileNameWrapper>
-                  </File>
-                </FileGrid>
+                <VirtualRow
+                  key={String(virtualRow.key)}
+                  style={{ transform: `translateY(${virtualRow.start - listScrollMargin}px)` }}
+                >
+                  <DirectoryListItem
+                    path={dir.path}
+                    folderName={dir.folder_name}
+                    isFolder={dir.is_dir}
+                    thumbnail={dir.thumbnail}
+                    isImage={dir.is_image}
+                    isSelected={selectedPaths.has(dir.path)}
+                    isRenaming={isRenaming}
+                    fileName={isRenaming ? fileName : ''}
+                    onFileNameChange={setFileName}
+                    onKeyDown={onKeyDown}
+                    onContextMenu={onContextMenu}
+                    onFileClick={onFileClick}
+                    onFileDoubleClick={onFileDoubleClick}
+                  />
+                </VirtualRow>
               );
-            },
-          )}
-        </DirContainer>
+            })}
+          </VirtualContent>
+        </ListScrollArea>
+      )}
+
+      {isGridView && (
+        <GridScrollArea ref={gridAreaRef}>
+          <VirtualContent ref={gridContentRef} style={{ height: gridVirtualizer.getTotalSize() }}>
+            {gridVirtualizer.getVirtualItems().map((virtualRow) => {
+              const rowItems = visibleDirs.slice(
+                virtualRow.index * columns,
+                virtualRow.index * columns + columns,
+              );
+              return (
+                <VirtualRow
+                  key={String(virtualRow.key)}
+                  style={{ transform: `translateY(${virtualRow.start - gridScrollMargin}px)` }}
+                >
+                  <GridRow style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}>
+                    {rowItems.map((dir) => {
+                      const isRenaming = checkIfRenameEnabled(fileRenamePath, dir.path);
+                      return (
+                        <DirectoryGridItem
+                          key={dir.path}
+                          path={dir.path}
+                          folderName={dir.folder_name}
+                          isFolder={dir.is_dir}
+                          thumbnail={dir.thumbnail}
+                          isImage={dir.is_image}
+                          isSelected={selectedPaths.has(dir.path)}
+                          isRenaming={isRenaming}
+                          fileName={isRenaming ? fileName : ''}
+                          onFileNameChange={setFileName}
+                          onKeyDown={onKeyDown}
+                          onContextMenu={onContextMenu}
+                          onFileClick={onFileClick}
+                          onFileDoubleClick={onFileDoubleClick}
+                        />
+                      );
+                    })}
+                  </GridRow>
+                </VirtualRow>
+              );
+            })}
+          </VirtualContent>
+        </GridScrollArea>
       )}
     </DirContainerWrapper>
   );
