@@ -4,7 +4,7 @@ import DirContext from '@/app/context/DirectoryContext';
 import { NavigationContext } from '@/app/context/NavigationContext';
 import { useContextMenu } from '@/app/hooks/useContextMenu';
 import { useRenameFile } from '@/app/hooks/useRenameFile';
-import { useContext, useMemo, useRef, useState } from 'react';
+import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 
 const DRAG_THRESHOLD = 4;
 
@@ -13,6 +13,22 @@ type SelectionBox = {
   top: number;
   width: number;
   height: number;
+};
+
+type RowHandlers = {
+  onFileDoubleClick: (path: string, isFolder: boolean) => void;
+  onFileClick: (
+    filePath: string,
+    folder_name: string,
+    isFolder: boolean,
+    event: React.MouseEvent,
+  ) => void;
+  onContextMenu: (
+    event: React.MouseEvent<HTMLSpanElement, MouseEvent>,
+    path: string,
+    isFolder: boolean,
+  ) => void;
+  onKeyDown: (event: React.KeyboardEvent<HTMLInputElement>) => void;
 };
 
 const boxesIntersect = (rect: DOMRect, box: SelectionBox) =>
@@ -40,70 +56,99 @@ const useDirectoryLogics = () => {
     [dirs],
   );
 
-  const onFileDoubleClick = async (path: string, isFolder: boolean) => {
-    setTargetPath(path);
-    setShow(DisplayEnum.none);
-    if (isFolder) {
-      if (isContextMenuOpen(show)) navigate(path);
-    } else {
-      openFile(path);
-    }
-  };
+  const handlers: RowHandlers = {
+    onFileDoubleClick: async (path: string, isFolder: boolean) => {
+      setTargetPath(path);
+      setShow(DisplayEnum.none);
+      if (isFolder) {
+        if (isContextMenuOpen(show)) navigate(path);
+      } else {
+        openFile(path);
+      }
+    },
 
-  const onFileClick = (
-    filePath: string,
-    folder_name: string,
-    isFolder: boolean,
-    event: React.MouseEvent,
-  ) => {
-    setShow(DisplayEnum.none);
-    if (!isContextMenuOpen(show)) return;
+    onFileClick: (
+      filePath: string,
+      folder_name: string,
+      isFolder: boolean,
+      event: React.MouseEvent,
+    ) => {
+      setShow(DisplayEnum.none);
+      if (!isContextMenuOpen(show)) return;
 
-    if (event.shiftKey && anchorPathRef.current) {
-      const anchorIndex = visiblePaths.indexOf(anchorPathRef.current);
-      const targetIndex = visiblePaths.indexOf(filePath);
-      if (anchorIndex !== -1 && targetIndex !== -1) {
-        const [start, end] =
-          anchorIndex < targetIndex ? [anchorIndex, targetIndex] : [targetIndex, anchorIndex];
-        setSelectedPaths(new Set(visiblePaths.slice(start, end + 1)));
+      if (event.shiftKey && anchorPathRef.current) {
+        const anchorIndex = visiblePaths.indexOf(anchorPathRef.current);
+        const targetIndex = visiblePaths.indexOf(filePath);
+        if (anchorIndex !== -1 && targetIndex !== -1) {
+          const [start, end] =
+            anchorIndex < targetIndex ? [anchorIndex, targetIndex] : [targetIndex, anchorIndex];
+          setSelectedPaths(new Set(visiblePaths.slice(start, end + 1)));
+          return;
+        }
+      }
+
+      if (event.ctrlKey || event.metaKey) {
+        setSelectedPaths((prev) => {
+          const next = new Set(prev);
+          if (next.has(filePath)) next.delete(filePath);
+          else next.add(filePath);
+          return next;
+        });
+        anchorPathRef.current = filePath;
         return;
       }
-    }
 
-    if (event.ctrlKey || event.metaKey) {
-      setSelectedPaths((prev) => {
-        const next = new Set(prev);
-        if (next.has(filePath)) next.delete(filePath);
-        else next.add(filePath);
-        return next;
-      });
       anchorPathRef.current = filePath;
-      return;
-    }
+      setSelectedPaths(new Set([filePath]));
+    },
 
-    anchorPathRef.current = filePath;
-    setSelectedPaths(new Set([filePath]));
+    onContextMenu: async (
+      event: React.MouseEvent<HTMLSpanElement, MouseEvent>,
+      path: string,
+      isFolder: boolean,
+    ) => {
+      event?.preventDefault();
+      if (isContextMenuOpen(show)) {
+        setSelectedPaths((prev) => (prev.has(path) ? prev : new Set([path])));
+        anchorPathRef.current = path;
+      }
+      setTargetPath(path);
+      setIsTargetPathFile(!isFolder);
+    },
+
+    onKeyDown: (event: React.KeyboardEvent<HTMLInputElement>) => {
+      if (event.key === 'Enter') {
+        renameFile(fileName);
+      }
+    },
   };
 
-  const onContextMenu = async (
-    event: React.MouseEvent<HTMLSpanElement, MouseEvent>,
-    path: string,
-    isFolder: boolean,
-  ) => {
-    event?.preventDefault();
-    if (isContextMenuOpen(show)) {
-      setSelectedPaths((prev) => (prev.has(path) ? prev : new Set([path])));
-      anchorPathRef.current = path;
-    }
-    setTargetPath(path);
-    setIsTargetPathFile(!isFolder);
-  };
+  const handlersRef = useRef(handlers);
+  useEffect(() => {
+    handlersRef.current = handlers;
+  });
 
-  const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') {
-      renameFile(fileName);
-    }
-  };
+  const onFileDoubleClick = useCallback(
+    (path: string, isFolder: boolean) => handlersRef.current.onFileDoubleClick(path, isFolder),
+    [],
+  );
+
+  const onFileClick = useCallback(
+    (filePath: string, folder_name: string, isFolder: boolean, event: React.MouseEvent) =>
+      handlersRef.current.onFileClick(filePath, folder_name, isFolder, event),
+    [],
+  );
+
+  const onContextMenu = useCallback(
+    (event: React.MouseEvent<HTMLSpanElement, MouseEvent>, path: string, isFolder: boolean) =>
+      handlersRef.current.onContextMenu(event, path, isFolder),
+    [],
+  );
+
+  const onKeyDown = useCallback(
+    (event: React.KeyboardEvent<HTMLInputElement>) => handlersRef.current.onKeyDown(event),
+    [],
+  );
 
   const onDirectoryContainerClicked = (event: React.MouseEvent<HTMLDivElement>) => {
     setShow(DisplayEnum.none);
@@ -129,12 +174,17 @@ const useDirectoryLogics = () => {
     const additive = event.ctrlKey || event.metaKey || event.shiftKey;
     const baseSelection = additive ? new Set(selectedPaths) : new Set<string>();
 
-    const onMouseMove = (moveEvent: MouseEvent) => {
+    let rafId: number | null = null;
+    let latestPoint = { x: startX, y: startY };
+
+    const recompute = () => {
+      rafId = null;
+      const { x, y } = latestPoint;
       const box: SelectionBox = {
-        left: Math.min(startX, moveEvent.clientX),
-        top: Math.min(startY, moveEvent.clientY),
-        width: Math.abs(moveEvent.clientX - startX),
-        height: Math.abs(moveEvent.clientY - startY),
+        left: Math.min(startX, x),
+        top: Math.min(startY, y),
+        width: Math.abs(x - startX),
+        height: Math.abs(y - startY),
       };
 
       if (!didDragRef.current && (box.width > DRAG_THRESHOLD || box.height > DRAG_THRESHOLD)) {
@@ -155,9 +205,20 @@ const useDirectoryLogics = () => {
       setSelectedPaths(next);
     };
 
+    const onMouseMove = (moveEvent: MouseEvent) => {
+      latestPoint = { x: moveEvent.clientX, y: moveEvent.clientY };
+      if (rafId === null) {
+        rafId = requestAnimationFrame(recompute);
+      }
+    };
+
     const onMouseUp = () => {
       window.removeEventListener('mousemove', onMouseMove);
       window.removeEventListener('mouseup', onMouseUp);
+      if (rafId !== null) {
+        cancelAnimationFrame(rafId);
+        rafId = null;
+      }
       setSelectionBox(null);
     };
 
