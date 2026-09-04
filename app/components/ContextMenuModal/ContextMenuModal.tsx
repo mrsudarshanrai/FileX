@@ -36,8 +36,8 @@ const HIDDEN_IN_TRASH = ['moveToTrash', 'deletePermanently', 'rename', 'cut', 'p
 const ITEM_ICON: Partial<Record<string, IconType.IconName>> = {
   deletePermanently: 'delete',
   deleteFromTrash: 'delete',
-  restore: 'paste',
   emptyTrash: 'delete',
+  moveToTrash: 'trash',
 };
 
 const ContextMenuModal = (props: ContextMenuModalProps) => {

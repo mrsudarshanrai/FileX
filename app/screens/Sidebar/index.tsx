@@ -24,7 +24,7 @@ import Image from 'next/image';
 import { useTheme } from 'styled-components';
 
 const Sidebar = () => {
-  const { places, homePath } = useContext(DirContext);
+  const { places, homePath, trashPath } = useContext(DirContext);
   const { navigate, currentPath } = useContext(NavigationContext);
   const theme = useTheme() as Color;
   const diskUsage = useDiskUsage();
@@ -61,6 +61,14 @@ const Sidebar = () => {
             </SidebarItem>
           );
         })}
+        {trashPath && (
+          <SidebarItem onClick={() => onDirClick(trashPath)} isActive={trashPath === currentPath}>
+            <IconChip isActive={trashPath === currentPath}>
+              <Icon name='trash' fill={iconFill(trashPath === currentPath)} />
+            </IconChip>
+            <p>Trash</p>
+          </SidebarItem>
+        )}
       </SidebarItems>
       {diskUsage && (
         <SidebarFooter>
