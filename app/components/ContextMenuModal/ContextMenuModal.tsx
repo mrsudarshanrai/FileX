@@ -26,13 +26,33 @@ import { useAppTheme } from '@/app/context/ThemeContext';
 import { useTheme } from 'styled-components';
 import { Color } from '@/app/theme/colorsType';
 
-const CONDITIONAL_ITEM = ['delete', 'copy', 'cut', 'open', 'rename'];
+const CONDITIONAL_ITEM = ['delete', 'deletePermanently', 'copy', 'cut', 'open', 'rename'];
+
+const TRASH_ONLY_ITEM = ['restore', 'deleteFromTrash', 'emptyTrash'];
+
+const HIDDEN_IN_TRASH = ['moveToTrash', 'deletePermanently', 'rename', 'cut', 'paste', 'newFolder'];
+
+/** items whose icon file is not named after the item itself */
+const ITEM_ICON: Partial<Record<string, IconType.IconName>> = {
+  deletePermanently: 'delete',
+  deleteFromTrash: 'delete',
+  restore: 'paste',
+  emptyTrash: 'delete',
+};
 
 const ContextMenuModal = (props: ContextMenuModalProps) => {
   const { currentPath, navigate } = useContext(NavigationContext);
-  const { fetch, dirs, selectedPaths, setSelectedPaths } = useContext(DirContext);
+  const { fetch, dirs, trashPath, selectedPaths, setSelectedPaths } = useContext(DirContext);
   const { setIsFetchingFunc } = useContext(DirectorySizeContext);
-  const { deleteFile, showFileProperties, openFile } = useContextMenu();
+  const {
+    deleteFile,
+    deletePermanently,
+    restoreFromTrash,
+    deleteFromTrash,
+    emptyTrash,
+    showFileProperties,
+    openFile,
+  } = useContextMenu();
   const { mode } = useAppTheme();
   const theme = useTheme() as Color;
 
@@ -54,8 +74,23 @@ const ContextMenuModal = (props: ContextMenuModalProps) => {
     folder_path: string;
     success: string;
   };
+
+  const isInTrash =
+    Boolean(trashPath) && (currentPath === trashPath || currentPath.startsWith(`${trashPath}/`));
+
   const items = contextMenuItems.filter((item) => {
-    if (CONDITIONAL_ITEM.includes(item.name) && typeof targetPath === 'undefined') {
+    if (isInTrash && HIDDEN_IN_TRASH.includes(item.name)) {
+      return false;
+    }
+    if (!isInTrash && TRASH_ONLY_ITEM.includes(item.name)) {
+      return false;
+    }
+
+    if (
+      (CONDITIONAL_ITEM.includes(item.name) ||
+        (TRASH_ONLY_ITEM.includes(item.name) && item.name !== 'emptyTrash')) &&
+      typeof targetPath === 'undefined'
+    ) {
       return false;
     }
     if (item.name === 'newFolder' && targetPath) {
@@ -83,8 +118,26 @@ const ContextMenuModal = (props: ContextMenuModalProps) => {
     }
 
     /** on file/folder delete */
-    if (name === IContextMenuItemEnum.delete) {
+    if (name === IContextMenuItemEnum.moveToTrash) {
       deleteFile();
+    }
+
+    /** delete -> permanent delete */
+    if (name === IContextMenuItemEnum.deletePermanently) {
+      deletePermanently();
+    }
+
+    /** trash actions */
+    if (name === IContextMenuItemEnum.restore) {
+      restoreFromTrash();
+    }
+
+    if (name === IContextMenuItemEnum.deleteFromTrash) {
+      deleteFromTrash();
+    }
+
+    if (name === IContextMenuItemEnum.emptyTrash) {
+      emptyTrash();
     }
 
     /**  on file/folder copy */
@@ -193,7 +246,7 @@ const ContextMenuModal = (props: ContextMenuModalProps) => {
           >
             <Item>
               <IconContainer>
-                <Icon name={name as IconType.IconName} fill={iconFill} />
+                <Icon name={ITEM_ICON[name] ?? (name as IconType.IconName)} fill={iconFill} />
               </IconContainer>
               {label}
             </Item>
