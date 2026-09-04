@@ -4,6 +4,7 @@ import { IDir } from '../lib/types/dir';
 
 type InitialData = {
   home_path: string;
+  trash_path: string;
   dirs: IDir.IDir[];
   places: IDir.Place[];
 };
@@ -18,6 +19,7 @@ const useDir = () => {
   const [dirs, setDirs] = useState<IDir.IDir[]>([]);
   const [places, setPlaces] = useState<IDir.Place[]>([]);
   const [homePath, setHomePath] = useState('/');
+  const [trashPath, setTrashPath] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [viewMode, setViewModeState] = useState<IDir.ViewMode>(DEFAULT_VIEW_MODE);
   const [selectedPaths, setSelectedPaths] = useState<Set<string>>(new Set());
@@ -40,8 +42,9 @@ const useDir = () => {
     setIsLoading(true);
     invoke('get_initial_data')
       .then((res) => {
-        const { home_path, dirs, places } = res as InitialData;
+        const { home_path, trash_path, dirs, places } = res as InitialData;
         setHomePath(home_path);
+        setTrashPath(trash_path);
         setDirs(dirs);
         setPlaces(places);
       })
@@ -70,6 +73,7 @@ const useDir = () => {
     isLoading,
     fetch,
     homePath,
+    trashPath,
     viewMode,
     setViewMode,
     selectedPaths,
