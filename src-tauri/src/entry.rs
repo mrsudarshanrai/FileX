@@ -4,6 +4,7 @@ use crate::folder_manager::CreateFolderResponse;
 use crate::folder_manager::Folder;
 use crate::helper;
 use crate::utils;
+use crate::trash;
 use serde::Serialize;
 use std::path::Path;
 use std::sync::OnceLock;
@@ -24,12 +25,16 @@ fn thumbnail_semaphore() -> &'static Semaphore {
 
 #[tauri::command]
 pub fn get_files_in_path(path: &str) -> Result<Vec<helper::Files>, String> {
+  if trash::is_trash_files_dir(path) {
+    return trash::list_trash();
+  }
   helper::get_files(path.to_string())
 }
 
 #[derive(Serialize)]
 pub struct InitialData {
   pub home_path: String,
+  pub trash_path: String,
   pub dirs: Vec<helper::Files>,
   pub places: Vec<helper::Place>,
 }
@@ -40,7 +45,9 @@ pub fn get_initial_data() -> Result<InitialData, String> {
   let dirs = helper::get_files(home_path.clone())?;
   let places = helper::get_places();
 
-  Ok(InitialData { home_path, dirs, places })
+  let trash_path = trash::trash_files_dir().to_string_lossy().to_string();
+
+  Ok(InitialData { home_path, trash_path, dirs, places })
 }
 
 /** Create new folder */
@@ -68,6 +75,29 @@ pub fn delete_path(path: String) -> String {
     }
     Err(_) => String::from("Invalid path"),
   }
+}
+
+/** Move File/Folder to the freedesktop trash */
+#[tauri::command]
+pub fn move_to_trash(paths: Vec<String>) -> Vec<trash::TrashOutcome> {
+  trash::move_to_trash(paths)
+}
+
+/** Put trashed items back where they came from */
+#[tauri::command]
+pub fn restore_from_trash(paths: Vec<String>) -> Vec<trash::RestoreOutcome> {
+  trash::restore_from_trash(paths)
+}
+
+/** Permanently remove specific items from the trash */
+#[tauri::command]
+pub fn purge_trash(paths: Vec<String>) -> Vec<trash::TrashOutcome> {
+  trash::purge_trash(paths)
+}
+
+#[tauri::command]
+pub fn empty_trash() -> Result<(), String> {
+  trash::empty_trash()
 }
 
 #[derive(Clone, Serialize, Debug)]
