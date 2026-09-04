@@ -34,8 +34,13 @@ const contextMenuItems: IContextMenuItem[] = [
     shortcut: '',
   },
   {
-    label: 'Delete',
-    name: IContextMenuItemEnum.delete,
+    label: 'Move to Trash',
+    name: IContextMenuItemEnum.moveToTrash,
+    shortcut: '',
+  },
+  {
+    label: 'Delete permanently',
+    name: IContextMenuItemEnum.deletePermanently,
     shortcut: '',
   },
   {
@@ -46,6 +51,21 @@ const contextMenuItems: IContextMenuItem[] = [
   {
     label: 'Select All',
     name: IContextMenuItemEnum.selectAll,
+    shortcut: '',
+  },
+  {
+    label: 'Restore',
+    name: IContextMenuItemEnum.restore,
+    shortcut: '',
+  },
+  {
+    label: 'Delete Permanently',
+    name: IContextMenuItemEnum.deleteFromTrash,
+    shortcut: '',
+  },
+  {
+    label: 'Empty Trash',
+    name: IContextMenuItemEnum.emptyTrash,
     shortcut: '',
   },
 ];

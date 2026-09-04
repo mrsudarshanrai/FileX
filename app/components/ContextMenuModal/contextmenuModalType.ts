@@ -43,7 +43,11 @@ export enum IContextMenuItemEnum {
   paste = 'paste',
   selectAll = 'selectAll',
   properties = 'properties',
-  delete = 'delete',
+  moveToTrash = 'moveToTrash',
+  deletePermanently = 'deletePermanently',
+  restore = 'restore',
+  deleteFromTrash = 'deleteFromTrash',
+  emptyTrash = 'emptyTrash',
 }
 
 export type ContextMenuItemUnion = keyof typeof IContextMenuItemEnum;
