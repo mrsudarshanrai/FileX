@@ -21,6 +21,11 @@ pub struct Files {
   pub is_visible: bool,
   pub thumbnail: String,
   pub is_image: bool,
+  /** Only set for trash entries, and skipped on the wire otherwise */
+  #[serde(skip_serializing_if = "Option::is_none")]
+  pub original_path: Option<String>,
+  #[serde(skip_serializing_if = "Option::is_none")]
+  pub deleted_at: Option<String>,
 }
 
 const DEFAULT_FILE_THUMBNAIL: &str = "/assets/file.svg";
@@ -80,8 +85,13 @@ pub fn resolve_thumbnail(folder_name: &str, extension: &str, is_dir: bool) -> St
 pub fn get_files(path: String) -> Result<Vec<Files>, String> {
   let mut dirs: Vec<Files> = Vec::new();
 
-  for (_, entry) in fs::read_dir(path).unwrap().enumerate() {
-    let entry = entry.unwrap();
+  let entries = fs::read_dir(&path).map_err(|error| format!("{}: {}", path, error))?;
+
+  for entry in entries {
+    let entry = match entry {
+      Ok(entry) => entry,
+      Err(_) => continue,
+    };
     let is_dir = entry.file_type().map(|t| t.is_dir()).unwrap_or(false);
     let path = entry.path();
     let extension = utils::option_to_string(path.extension());
@@ -97,6 +107,8 @@ pub fn get_files(path: String) -> Result<Vec<Files>, String> {
       is_visible,
       thumbnail,
       is_image,
+      original_path: None,
+      deleted_at: None,
     };
     dirs.push(file);
   }
