@@ -242,9 +242,7 @@ const useContextMenu = () => {
     confirmDialog({
       title: <>Delete &quot;{label}&quot; from Trash</>,
       message: (
-        <>
-          Are you sure you want to permanently delete &quot;{label}&quot;? This cannot be undone.
-        </>
+        <>Are you sure you want to permanently delete &quot;{label}&quot;? This cannot be undone.</>
       ),
       confirmLabel: 'Delete permanently',
       onConfirm: async () => {
