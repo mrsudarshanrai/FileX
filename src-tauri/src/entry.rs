@@ -91,6 +91,11 @@ pub fn add_bookmark(path: String) -> Result<(), String> {
   bookmarks::add_bookmark(path)
 }
 
+#[tauri::command]
+pub fn remove_bookmark(path: String) -> Result<(), String> {
+  bookmarks::remove_bookmark(path)
+}
+
 /** Move File/Folder to the freedesktop trash */
 #[tauri::command]
 pub fn move_to_trash(paths: Vec<String>) -> Vec<trash::TrashOutcome> {

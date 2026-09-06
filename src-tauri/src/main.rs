@@ -18,6 +18,7 @@ fn main() {
             entry::delete_path,
             entry::list_bookmarks,
             entry::add_bookmark,
+            entry::remove_bookmark,
             entry::move_to_trash,
             entry::restore_from_trash,
             entry::purge_trash,

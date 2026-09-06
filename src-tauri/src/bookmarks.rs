@@ -103,3 +103,35 @@ pub fn add_bookmark(path: String) -> Result<(), String> {
 
   fs::write(&file, contents).map_err(|error| error.to_string())
 }
+
+/**
+ * removes a bookmark from the bookmarks file, if it is identified by parse_line ,
+ */
+pub fn remove_bookmark(path: String) -> Result<(), String> {
+  let normalized = normalize(&path);
+  let file = bookmarks_file();
+
+  let contents = match fs::read_to_string(&file) {
+    Ok(contents) => contents,
+    Err(_) => {
+      return Ok(());
+    }
+  };
+
+  let kept: Vec<&str> = contents
+    .lines()
+    .filter(|line| {
+      match parse_line(line) {
+        Some(bookmark) => normalize(&bookmark.path) != normalized,
+        None => true,
+      }
+    })
+    .collect();
+
+  let mut remaining = kept.join("\n");
+  if !remaining.is_empty() {
+    remaining.push('\n');
+  }
+
+  fs::write(&file, remaining).map_err(|error| error.to_string())
+}
