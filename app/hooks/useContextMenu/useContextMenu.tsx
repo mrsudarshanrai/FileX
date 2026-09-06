@@ -1,4 +1,4 @@
-import { useCallback, useContext } from 'react';
+import { useCallback, useContext, useEffect, useRef } from 'react';
 import { NavigationContext } from '@/app/context/NavigationContext';
 import DirContext from '@/app/context/DirectoryContext';
 import ModalContext from '@/app/context/ModalContext';
@@ -60,6 +60,15 @@ const useContextMenu = () => {
   const { setShow: setContextMenuShow, targetPath } = useContext(ContextMenu);
   const { startOperation, finishOperation } = useOperations();
 
+  /**
+   * Modal content is stored as JSX in context, so a dialog left open while the
+   * user navigates would otherwise refresh the folder they came from.
+   */
+  const currentPathRef = useRef(currentPath);
+  useEffect(() => {
+    currentPathRef.current = currentPath;
+  }, [currentPath]);
+
   const closeModal = useCallback(() => show({ open: false }), [show]);
 
   const confirmDialog = useCallback(
@@ -114,7 +123,7 @@ const useContextMenu = () => {
       try {
         const result = await work();
         setSelectedPaths(new Set());
-        fetch(currentPath, 'get_files_in_path');
+        fetch(currentPathRef.current, 'get_files_in_path');
         finishOperation(opId, 'completed');
         return result;
       } catch (error) {
@@ -123,7 +132,7 @@ const useContextMenu = () => {
         return undefined;
       }
     },
-    [startOperation, finishOperation, setSelectedPaths, fetch, currentPath],
+    [startOperation, finishOperation, setSelectedPaths, fetch],
   );
 
   const confirmPermanentDelete = useCallback(

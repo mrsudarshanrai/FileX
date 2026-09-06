@@ -44,7 +44,6 @@ const Modal = () => {
         modalHeight={modalHeight}
         modalWidth={modalWidth}
         role='dialog'
-        aria-modal='true'
       >
         <ModalHeader ref={modalHeaderRef}>
           <div>{renderContent(modalHeader)}</div>
