@@ -1,5 +1,6 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
+mod bookmarks;
 mod entry;
 mod file_manager;
 mod folder_manager;

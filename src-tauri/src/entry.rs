@@ -5,6 +5,7 @@ use crate::folder_manager::Folder;
 use crate::helper;
 use crate::utils;
 use crate::trash;
+use crate::bookmarks;
 use serde::Serialize;
 use std::path::Path;
 use std::sync::OnceLock;
@@ -37,6 +38,7 @@ pub struct InitialData {
   pub trash_path: String,
   pub dirs: Vec<helper::Files>,
   pub places: Vec<helper::Place>,
+  pub bookmarks: Vec<helper::Place>,
 }
 
 #[tauri::command]
@@ -47,7 +49,9 @@ pub fn get_initial_data() -> Result<InitialData, String> {
 
   let trash_path = trash::trash_files_dir().to_string_lossy().to_string();
 
-  Ok(InitialData { home_path, trash_path, dirs, places })
+  let bookmarks = bookmarks::list_bookmarks();
+
+  Ok(InitialData { home_path, trash_path, dirs, places, bookmarks })
 }
 
 /** Create new folder */
