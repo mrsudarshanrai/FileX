@@ -1,20 +1,5 @@
 import { RefObject, useEffect, useRef } from 'react';
 
-type DragAxis = 'x' | 'y' | 'both';
-
-type UseDraggableOptions = {
-  /**
-   * Constrain dragging so the element stays fully within the viewport.
-   * Default: true
-   */
-  bounded?: boolean;
-  /**
-   * Which axes to allow dragging on.
-   * Default: 'both'
-   */
-  axis?: DragAxis;
-};
-
 type DragState = {
   isDragging: boolean;
   offsetX: number;
@@ -23,11 +8,7 @@ type DragState = {
   height: number;
 };
 
-const useDraggable = <T extends HTMLElement>(
-  ref: RefObject<T>,
-  modalHeaderRef: RefObject<T>,
-  options?: UseDraggableOptions,
-) => {
+const useDraggable = <T extends HTMLElement>(ref: RefObject<T>, handleRef: RefObject<T>) => {
   const dragStateRef = useRef<DragState>({
     isDragging: false,
     offsetX: 0,
@@ -36,17 +17,16 @@ const useDraggable = <T extends HTMLElement>(
     height: 0,
   });
 
-  const bounded = options?.bounded ?? true;
-  const axis: DragAxis = options?.axis ?? 'both';
-
   useEffect(() => {
     const element = ref.current;
-    const headerElement = modalHeaderRef.current;
+    const handle = handleRef.current;
 
-    if (!element || !headerElement) return;
+    if (!element || !handle) return;
 
     const handleMouseDown = (e: MouseEvent) => {
       if (e.button !== 0) return;
+      // prevent close button from dragging the modal
+      if ((e.target as HTMLElement).closest('[data-no-drag]')) return;
 
       const rect = element.getBoundingClientRect();
       const state = dragStateRef.current;
@@ -57,11 +37,13 @@ const useDraggable = <T extends HTMLElement>(
       state.width = rect.width;
       state.height = rect.height;
 
-      element.style.cursor = 'move';
       element.style.position = 'fixed';
       element.style.left = `${rect.left}px`;
       element.style.top = `${rect.top}px`;
-      element.style.transform = 'none';
+      element.style.margin = '0';
+
+      // on the body so the cursor holds even when the pointer outruns the handle
+      document.body.style.cursor = 'move';
 
       window.addEventListener('mousemove', handleMouseMove);
       window.addEventListener('mouseup', handleMouseUp);
@@ -71,23 +53,11 @@ const useDraggable = <T extends HTMLElement>(
       const state = dragStateRef.current;
       if (!state.isDragging) return;
 
-      let nextLeft = e.clientX - state.offsetX;
-      let nextTop = e.clientY - state.offsetY;
+      const maxLeft = Math.max(0, window.innerWidth - state.width);
+      const maxTop = Math.max(0, window.innerHeight - state.height);
 
-      if (bounded) {
-        const maxLeft = Math.max(0, window.innerWidth - state.width);
-        const maxTop = Math.max(0, window.innerHeight - state.height);
-
-        nextLeft = Math.min(Math.max(0, nextLeft), maxLeft);
-        nextTop = Math.min(Math.max(0, nextTop), maxTop);
-      }
-
-      if (axis === 'x' || axis === 'both') {
-        element.style.left = `${nextLeft}px`;
-      }
-      if (axis === 'y' || axis === 'both') {
-        element.style.top = `${nextTop}px`;
-      }
+      element.style.left = `${Math.min(Math.max(0, e.clientX - state.offsetX), maxLeft)}px`;
+      element.style.top = `${Math.min(Math.max(0, e.clientY - state.offsetY), maxTop)}px`;
     };
 
     const handleMouseUp = () => {
@@ -95,21 +65,22 @@ const useDraggable = <T extends HTMLElement>(
       if (!state.isDragging) return;
 
       state.isDragging = false;
-      element.style.cursor = 'auto';
+      // clear rather than set 'auto', so the stylesheet takes over again
+      document.body.style.cursor = '';
 
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseup', handleMouseUp);
     };
 
-    headerElement.addEventListener('mousedown', handleMouseDown);
+    handle.addEventListener('mousedown', handleMouseDown);
 
     return () => {
-      headerElement.removeEventListener('mousedown', handleMouseDown);
+      handle.removeEventListener('mousedown', handleMouseDown);
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseup', handleMouseUp);
+      document.body.style.cursor = '';
     };
-  }, [axis, bounded, modalHeaderRef, ref]);
+  }, [handleRef, ref]);
 };
 
-export type { UseDraggableOptions };
 export { useDraggable };
