@@ -81,6 +81,16 @@ pub fn delete_path(path: String) -> String {
   }
 }
 
+#[tauri::command]
+pub fn list_bookmarks() -> Vec<helper::Place> {
+  bookmarks::list_bookmarks()
+}
+
+#[tauri::command]
+pub fn add_bookmark(path: String) -> Result<(), String> {
+  bookmarks::add_bookmark(path)
+}
+
 /** Move File/Folder to the freedesktop trash */
 #[tauri::command]
 pub fn move_to_trash(paths: Vec<String>) -> Vec<trash::TrashOutcome> {

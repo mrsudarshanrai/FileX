@@ -16,6 +16,8 @@ fn main() {
             entry::get_initial_data,
             entry::get_files_in_path,
             entry::delete_path,
+            entry::list_bookmarks,
+            entry::add_bookmark,
             entry::move_to_trash,
             entry::restore_from_trash,
             entry::purge_trash,

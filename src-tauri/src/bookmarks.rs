@@ -46,6 +46,16 @@ fn parse_line(line: &str) -> Option<helper::Place> {
   Some(helper::Place { name, path })
 }
 
+/** Trailing slashes would otherwise make the same folder look like two bookmarks */
+fn normalize(path: &str) -> String {
+  let trimmed = path.trim_end_matches('/');
+  if trimmed.is_empty() {
+    String::from("/")
+  } else {
+    trimmed.to_string()
+  }
+}
+
 pub fn list_bookmarks() -> Vec<helper::Place> {
   let contents = match fs::read_to_string(bookmarks_file()) {
     Ok(contents) => contents,
@@ -55,4 +65,41 @@ pub fn list_bookmarks() -> Vec<helper::Place> {
   };
 
   contents.lines().filter_map(parse_line).collect()
+}
+
+/**
+ * adds a new bookmark to the bookmarks file without removing existing entries, ensuring
+ * compatibility with other file managers that may use different URI schemes.
+ */
+pub fn add_bookmark(path: String) -> Result<(), String> {
+  let normalized = normalize(&path);
+
+  if
+    list_bookmarks()
+      .iter()
+      .any(|bookmark| normalize(&bookmark.path) == normalized)
+  {
+    return Ok(());
+  }
+
+  let file = bookmarks_file();
+  if let Some(parent) = file.parent() {
+    fs::create_dir_all(parent).map_err(|error| error.to_string())?;
+  }
+
+  let mut contents = fs::read_to_string(&file).unwrap_or_default();
+  if !contents.is_empty() && !contents.ends_with('\n') {
+    contents.push('\n');
+  }
+
+  contents.push_str(
+    &format!(
+      "{}{} {}\n",
+      FILE_URI_PREFIX,
+      utils::percent_encode(&normalized),
+      utils::get_full_filename_from_path(&normalized)
+    )
+  );
+
+  fs::write(&file, contents).map_err(|error| error.to_string())
 }
