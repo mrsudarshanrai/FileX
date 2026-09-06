@@ -1,30 +1,20 @@
 import styled from 'styled-components';
 
-const ModalWrapper = styled.div`
+const ModalOverlay = styled.div`
   position: fixed;
+  inset: 0;
   z-index: 2;
-  width: 100%;
-  height: 100%;
-`;
-const ModalContainer = styled.div`
-  position: relative;
-  z-index: 2;
-  width: 100%;
-  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
+  pointer-events: none;
 `;
 
 const ModalContent = styled.div<{ modalHeight?: string; modalWidth?: string }>`
+  pointer-events: auto;
   width: ${({ modalWidth }) => modalWidth || '480px'};
-  position: absolute;
   height: ${({ modalHeight }) => modalHeight || 'fit-content'};
   overflow: hidden;
-
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   border-radius: ${({ theme }) => theme.radius.lg};
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
   border: 1px solid ${({ theme }) => theme.border.subtle};
@@ -41,7 +31,6 @@ const ModalHeader = styled.div`
   font-size: 13px;
   font-weight: 600;
   color: ${({ theme }) => theme.text.primary};
-  pointer-events: auto;
 `;
 
 const ModalHeaderRightContainer = styled.div`
@@ -62,10 +51,6 @@ const ModalHeaderRightContainer = styled.div`
     }
   }
 `;
-const ModalHeaderLeftContainer = styled.div`
-  cursor: move;
-`;
-
 const ModalBodySection = styled.section`
   display: grid;
   grid-template-rows: 1fr auto;
@@ -104,12 +89,10 @@ const Mark = styled.mark`
 `;
 
 export {
-  ModalWrapper,
+  ModalOverlay,
   ModalContent,
-  ModalContainer,
   ModalHeader,
   ModalHeaderRightContainer,
-  ModalHeaderLeftContainer,
   ModalBody,
   ModalFooter,
   ModalFooterButtonContainer,
