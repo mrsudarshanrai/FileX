@@ -1,5 +1,6 @@
 use crate::helper;
 use crate::utils;
+use crate::utils::{percent_decode, percent_encode};
 use chrono::Local;
 use serde::Serialize;
 use std::fs::{ self, OpenOptions };
@@ -69,44 +70,6 @@ fn ensure_trash_dirs() -> std::io::Result<()> {
   fs::create_dir_all(trash_files_dir())?;
   fs::create_dir_all(trash_info_dir())?;
   Ok(())
-}
-
-/**
- * The Path field of a .trashinfo is URL-encoded, so a name containing a space
- * or '@' round-trips through other file managers unchanged.
- */
-fn percent_encode(value: &str) -> String {
-  let mut encoded = String::with_capacity(value.len());
-  for byte in value.as_bytes() {
-    match byte {
-      b'A'..=b'Z' | b'a'..=b'z' | b'0'..=b'9' | b'-' | b'.' | b'_' | b'~' | b'/' => {
-        encoded.push(*byte as char);
-      }
-      _ => encoded.push_str(&format!("%{:02X}", byte)),
-    }
-  }
-  encoded
-}
-
-fn percent_decode(value: &str) -> String {
-  let bytes = value.as_bytes();
-  let mut decoded: Vec<u8> = Vec::with_capacity(bytes.len());
-  let mut index = 0;
-
-  while index < bytes.len() {
-    if bytes[index] == b'%' && index + 2 < bytes.len() {
-      let hex = std::str::from_utf8(&bytes[index + 1..index + 3]).ok();
-      if let Some(byte) = hex.and_then(|h| u8::from_str_radix(h, 16).ok()) {
-        decoded.push(byte);
-        index += 3;
-        continue;
-      }
-    }
-    decoded.push(bytes[index]);
-    index += 1;
-  }
-
-  String::from_utf8_lossy(&decoded).to_string()
 }
 
 /**
