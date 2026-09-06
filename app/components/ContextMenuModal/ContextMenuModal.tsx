@@ -43,7 +43,6 @@ const HIDDEN_IN_TRASH = [
 /** items whose icon file is not named after the item itself */
 const ITEM_ICON: Partial<Record<string, IconType.IconName>> = {
   deletePermanently: 'delete',
-  addBookmark: 'bookmark',
   deleteFromTrash: 'delete',
   emptyTrash: 'delete',
   moveToTrash: 'trash',
