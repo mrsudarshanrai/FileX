@@ -8,6 +8,7 @@ export type DirContextType = {
   fetch: (path: string, funcName: string) => Promise<unknown>;
   homePath: string;
   trashPath: string;
+  bookmarks: IDir.Place[];
   viewMode: IDir.ViewMode;
   setViewMode: (mode: IDir.ViewMode) => void;
   selectedPaths: Set<string>;

@@ -24,14 +24,8 @@ import { useDiskUsage } from '@/app/hooks/useDiskUsage';
 import Image from 'next/image';
 import { useTheme } from 'styled-components';
 
-const PLACEHOLDER_BOOKMARKS: IDir.Place[] = [
-  { name: 'projects', path: '/home/fox/projects' },
-  { name: 'Downloads', path: '/home/fox/Downloads' },
-  { name: 'Documents', path: '/home/fox/Documents' },
-];
-
 const Sidebar = () => {
-  const { places, homePath, trashPath } = useContext(DirContext);
+  const { places, homePath, trashPath, bookmarks } = useContext(DirContext);
   const { navigate, currentPath } = useContext(NavigationContext);
   const theme = useTheme() as Color;
   const diskUsage = useDiskUsage();
@@ -76,10 +70,10 @@ const Sidebar = () => {
             <p>Trash</p>
           </SidebarItem>
         )}
-        {PLACEHOLDER_BOOKMARKS.length > 0 && (
+        {bookmarks.length > 0 && (
           <>
             <SidebarTitle>Bookmarks</SidebarTitle>
-            {PLACEHOLDER_BOOKMARKS.map(({ name, path }: IDir.Place) => {
+            {bookmarks.map(({ name, path }: IDir.Place) => {
               const isActive = path === currentPath;
               return (
                 <SidebarItem key={path} onClick={() => onDirClick(path)} isActive={isActive}>
