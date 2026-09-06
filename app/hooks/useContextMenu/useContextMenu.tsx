@@ -54,7 +54,7 @@ const countedOperationLabel = (verb: string, paths: string[]) =>
 
 const useContextMenu = () => {
   const { currentPath } = useContext(NavigationContext);
-  const { fetch, selectedPaths, setSelectedPaths } = useContext(DirContext);
+  const { fetch, selectedPaths, setSelectedPaths, refreshBookmarks } = useContext(DirContext);
   const { show } = useContext(ModalContext);
   const { setDirectorySizeFunc } = useContext(DirectorySizeContext);
   const { setShow: setContextMenuShow, targetPath } = useContext(ContextMenu);
@@ -268,6 +268,20 @@ const useContextMenu = () => {
     });
   }, [setContextMenuShow, confirmDialog, runOperation, closeModal]);
 
+  const addBookmark = useCallback(
+    async (path: string) => {
+      setContextMenuShow(DisplayEnum.none);
+      try {
+        await invoke('add_bookmark', { path });
+        await refreshBookmarks();
+      } catch (error) {
+        console.error(error);
+        notifyDialog({ title: 'Could not add bookmark', message: String(error) });
+      }
+    },
+    [setContextMenuShow, refreshBookmarks, notifyDialog],
+  );
+
   const openFile = useCallback(
     async (path: string) => {
       if (!path) return;
@@ -322,6 +336,7 @@ const useContextMenu = () => {
   );
 
   return {
+    addBookmark,
     deleteFile,
     deletePermanently,
     restoreFromTrash,

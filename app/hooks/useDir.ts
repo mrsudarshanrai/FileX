@@ -64,6 +64,11 @@ const useDir = () => {
     window.localStorage.setItem(VIEW_MODE_STORAGE_KEY, mode);
   }, []);
 
+  const refreshBookmarks = useCallback(async () => {
+    const next = await invoke<IDir.Place[]>('list_bookmarks');
+    setBookmarks(next);
+  }, []);
+
   const fetch = useCallback(
     (path: string, funcName: string) => {
       return getFile(path, funcName);
@@ -78,6 +83,7 @@ const useDir = () => {
     homePath,
     trashPath,
     bookmarks,
+    refreshBookmarks,
     viewMode,
     setViewMode,
     selectedPaths,

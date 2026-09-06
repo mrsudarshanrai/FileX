@@ -30,11 +30,20 @@ const CONDITIONAL_ITEM = ['delete', 'deletePermanently', 'copy', 'cut', 'open', 
 
 const TRASH_ONLY_ITEM = ['restore', 'deleteFromTrash', 'emptyTrash'];
 
-const HIDDEN_IN_TRASH = ['moveToTrash', 'deletePermanently', 'rename', 'cut', 'paste', 'newFolder'];
+const HIDDEN_IN_TRASH = [
+  'moveToTrash',
+  'deletePermanently',
+  'rename',
+  'cut',
+  'paste',
+  'newFolder',
+  'addBookmark',
+];
 
 /** items whose icon file is not named after the item itself */
 const ITEM_ICON: Partial<Record<string, IconType.IconName>> = {
   deletePermanently: 'delete',
+  addBookmark: 'bookmark',
   deleteFromTrash: 'delete',
   emptyTrash: 'delete',
   moveToTrash: 'trash',
@@ -42,9 +51,11 @@ const ITEM_ICON: Partial<Record<string, IconType.IconName>> = {
 
 const ContextMenuModal = (props: ContextMenuModalProps) => {
   const { currentPath, navigate } = useContext(NavigationContext);
-  const { fetch, dirs, trashPath, selectedPaths, setSelectedPaths } = useContext(DirContext);
+  const { fetch, dirs, trashPath, bookmarks, selectedPaths, setSelectedPaths } =
+    useContext(DirContext);
   const { setIsFetchingFunc } = useContext(DirectorySizeContext);
   const {
+    addBookmark,
     deleteFile,
     deletePermanently,
     restoreFromTrash,
@@ -78,7 +89,17 @@ const ContextMenuModal = (props: ContextMenuModalProps) => {
   const isInTrash =
     Boolean(trashPath) && (currentPath === trashPath || currentPath.startsWith(`${trashPath}/`));
 
+  const bookmarkTarget = targetPath ?? currentPath;
+  const canBookmark = targetPath ? !isTargetPathFile : true;
+  const stripTrailingSlash = (path: string) => path.replace(/\/+$/, '') || '/';
+  const isAlreadyBookmarked = bookmarks.some(
+    (bookmark) => stripTrailingSlash(bookmark.path) === stripTrailingSlash(bookmarkTarget),
+  );
+
   const items = contextMenuItems.filter((item) => {
+    if (item.name === 'addBookmark' && (!canBookmark || isAlreadyBookmarked)) {
+      return false;
+    }
     if (isInTrash && HIDDEN_IN_TRASH.includes(item.name)) {
       return false;
     }
@@ -125,6 +146,10 @@ const ContextMenuModal = (props: ContextMenuModalProps) => {
     /** delete -> permanent delete */
     if (name === IContextMenuItemEnum.deletePermanently) {
       deletePermanently();
+    }
+
+    if (name === IContextMenuItemEnum.addBookmark) {
+      addBookmark(bookmarkTarget);
     }
 
     /** trash actions */

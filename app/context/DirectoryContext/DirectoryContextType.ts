@@ -9,6 +9,7 @@ export type DirContextType = {
   homePath: string;
   trashPath: string;
   bookmarks: IDir.Place[];
+  refreshBookmarks: () => Promise<void>;
   viewMode: IDir.ViewMode;
   setViewMode: (mode: IDir.ViewMode) => void;
   selectedPaths: Set<string>;
