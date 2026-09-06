@@ -42,6 +42,7 @@ export enum IContextMenuItemEnum {
   name = 'name',
   paste = 'paste',
   selectAll = 'selectAll',
+  addBookmark = 'addBookmark',
   properties = 'properties',
   moveToTrash = 'moveToTrash',
   deletePermanently = 'deletePermanently',

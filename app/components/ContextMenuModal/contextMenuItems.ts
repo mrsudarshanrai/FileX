@@ -44,6 +44,11 @@ const contextMenuItems: IContextMenuItem[] = [
     shortcut: '',
   },
   {
+    label: 'Add to Bookmarks',
+    name: IContextMenuItemEnum.addBookmark,
+    shortcut: '',
+  },
+  {
     label: 'Properties',
     name: IContextMenuItemEnum.properties,
     shortcut: '',
