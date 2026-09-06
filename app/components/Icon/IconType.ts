@@ -7,6 +7,7 @@ export namespace IconType {
   };
 
   export type IconName =
+    | 'bookmark'
     | 'chevron-left'
     | 'chevron-right'
     | 'close'

@@ -2,6 +2,7 @@ import {
   SidebarContainer,
   SidebarHeader,
   SidebarItem,
+  SidebarItemAction,
   SidebarItems,
   IconChip,
   SidebarTitle,
@@ -22,6 +23,12 @@ import { convertBytes } from '@/app/utils';
 import { useDiskUsage } from '@/app/hooks/useDiskUsage';
 import Image from 'next/image';
 import { useTheme } from 'styled-components';
+
+const PLACEHOLDER_BOOKMARKS: IDir.Place[] = [
+  { name: 'projects', path: '/home/fox/projects' },
+  { name: 'Downloads', path: '/home/fox/Downloads' },
+  { name: 'Documents', path: '/home/fox/Documents' },
+];
 
 const Sidebar = () => {
   const { places, homePath, trashPath } = useContext(DirContext);
@@ -68,6 +75,28 @@ const Sidebar = () => {
             </IconChip>
             <p>Trash</p>
           </SidebarItem>
+        )}
+        {PLACEHOLDER_BOOKMARKS.length > 0 && (
+          <>
+            <SidebarTitle>Bookmarks</SidebarTitle>
+            {PLACEHOLDER_BOOKMARKS.map(({ name, path }: IDir.Place) => {
+              const isActive = path === currentPath;
+              return (
+                <SidebarItem key={path} onClick={() => onDirClick(path)} isActive={isActive}>
+                  <IconChip isActive={isActive}>
+                    <Icon name='bookmark' fill={iconFill(isActive)} />
+                  </IconChip>
+                  <p title={path}>{name}</p>
+                  <SidebarItemAction
+                    title='Remove bookmark'
+                    onClick={(event) => event.stopPropagation()}
+                  >
+                    <Icon name='close' fill={theme.text.muted} width='10px' height='10px' />
+                  </SidebarItemAction>
+                </SidebarItem>
+              );
+            })}
+          </>
         )}
       </SidebarItems>
       {diskUsage && (
