@@ -1,15 +1,7 @@
-import { ContextMenuType } from '@/app/context/ContextMenu/ContextMenuType';
-
-export type ContextMenuModalProps = Pick<
-  ContextMenuType,
-  'targetPath' | 'setShow' | 'isTargetPathFile' | 'setFileRenamePath'
-> & {
+/** Everything else the menu needs it reads from ContextMenu itself */
+export type ContextMenuModalProps = {
   top: number;
   left: number;
-  setSourcePathsToCopy: React.Dispatch<React.SetStateAction<string[]>>;
-  sourcePathsToCopy: string[];
-  setIsCut: React.Dispatch<React.SetStateAction<boolean>>;
-  isCut: boolean;
 };
 export enum DisplayEnum {
   none = 'none',

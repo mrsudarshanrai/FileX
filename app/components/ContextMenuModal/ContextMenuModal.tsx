@@ -1,293 +1,37 @@
-import {
-  ContextMenuItem,
-  ContextMenuWrapper,
-  ContentMenuItemShortcut,
-  Item,
-  IconContainer,
-} from './contextMenuStyled';
-import { useContext, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
-import { NavigationContext } from '@/app/context/NavigationContext';
-import { invoke } from '@tauri-apps/api/core';
-import DirContext from '@/app/context/DirectoryContext';
-import {
-  ContextMenuModalProps,
-  DisplayEnum,
-  ContextMenuState,
-  IContextMenuItem,
-  IContextMenuItemEnum,
-} from './contextmenuModalType';
-import { contextMenuItems } from './contextMenuItems';
+import { useCallback, useContext } from 'react';
+import ContextMenu from '@/app/context/ContextMenu';
+import { ContextMenuWrapper } from './contextMenuStyled';
+import { ContextMenuItemRow } from './ContextMenuItemRow';
+import { ContextMenuModalProps, DisplayEnum } from './contextmenuModalType';
 import { isOptionDisabled } from './utils';
-import { useContextMenu } from '@/app/hooks/useContextMenu';
-import DirectorySizeContext from '@/app/context/DirectorySizeContext/DirectorySizeContext';
-import { Icon } from '../Icon/Icon';
-import { IconType } from '../Icon/IconType';
-import { useOperations } from '@/app/context/OperationContext';
-import { useAppTheme } from '@/app/context/ThemeContext';
-import { useTheme } from 'styled-components';
-import { Color } from '@/app/theme/colorsType';
+import { useVisibleItems } from './hooks/useVisibleItems';
+import { useMenuActions } from './hooks/useMenuActions';
+import { useMenuPosition } from './hooks/useMenuPosition';
+import { useDismissMenu } from './hooks/useDismissMenu';
 
-/** items whose icon file is not named after the item itself */
-const ITEM_ICON: Partial<Record<string, IconType.IconName>> = {
-  deletePermanently: 'delete',
-  deleteFromTrash: 'delete',
-  emptyTrash: 'delete',
-  moveToTrash: 'trash',
-};
+const ContextMenuModal = ({ top, left }: ContextMenuModalProps) => {
+  const { setShow, sourcePathsToCopy } = useContext(ContextMenu);
+  const items = useVisibleItems();
+  const actions = useMenuActions();
+  const { menuRef, position } = useMenuPosition(top, left, items.length);
 
-const ContextMenuModal = (props: ContextMenuModalProps) => {
-  const { currentPath, navigate } = useContext(NavigationContext);
-  const { fetch, dirs, trashPath, bookmarks, selectedPaths, setSelectedPaths } =
-    useContext(DirContext);
-  const { setIsFetchingFunc } = useContext(DirectorySizeContext);
-  const {
-    addBookmark,
-    deleteFile,
-    deletePermanently,
-    restoreFromTrash,
-    deleteFromTrash,
-    emptyTrash,
-    showFileProperties,
-    openFile,
-  } = useContextMenu();
-  const { mode } = useAppTheme();
-  const theme = useTheme() as Color;
-
-  const {
-    top,
-    left,
-    setShow,
-    targetPath,
-    setSourcePathsToCopy,
-    sourcePathsToCopy,
-    setIsCut,
-    isCut,
-    isTargetPathFile,
-    setFileRenamePath,
-  } = props;
-
-  type CreateFolderResponse = {
-    folder_path: string;
-    success: string;
-  };
-
-  const isInTrash =
-    Boolean(trashPath) && (currentPath === trashPath || currentPath.startsWith(`${trashPath}/`));
-
-  const bookmarkTarget = targetPath ?? currentPath;
-  const stripTrailingSlash = (path: string) => path.replace(/\/+$/, '') || '/';
-
-  const items = useMemo(() => {
-    const state: ContextMenuState = {
-      hasTarget: targetPath !== undefined,
-      isTargetFile: isTargetPathFile,
-      isInTrash,
-      isTargetBookmarked: bookmarks.some(
-        (bookmark) => stripTrailingSlash(bookmark.path) === stripTrailingSlash(bookmarkTarget),
-      ),
-    };
-
-    return contextMenuItems.filter((item) => item.isVisible?.(state) ?? true);
-  }, [targetPath, isTargetPathFile, isInTrash, bookmarks, bookmarkTarget]);
-
-  const { startOperation, finishOperation } = useOperations();
-
-  const onContextItemClick = async (name: string) => {
-    /** on new folder click */
-    if (name === IContextMenuItemEnum.newFolder) {
-      await invoke('create_folder', {
-        folderPath: currentPath,
-      })
-        .then((response) => {
-          if (typeof response === 'object' && (response as CreateFolderResponse)?.success) {
-            setFileRenamePath((response as CreateFolderResponse)?.folder_path);
-          }
-          fetch(currentPath, 'get_files_in_path');
-          setShow(DisplayEnum.none);
-        })
-        .catch(console.error);
-    }
-
-    /** on file/folder delete */
-    if (name === IContextMenuItemEnum.moveToTrash) {
-      deleteFile();
-    }
-
-    /** delete -> permanent delete */
-    if (name === IContextMenuItemEnum.deletePermanently) {
-      deletePermanently();
-    }
-
-    if (name === IContextMenuItemEnum.addBookmark) {
-      addBookmark(bookmarkTarget);
-    }
-
-    /** trash actions */
-    if (name === IContextMenuItemEnum.restore) {
-      restoreFromTrash();
-    }
-
-    if (name === IContextMenuItemEnum.deleteFromTrash) {
-      deleteFromTrash();
-    }
-
-    if (name === IContextMenuItemEnum.emptyTrash) {
-      emptyTrash();
-    }
-
-    /**  on file/folder copy */
-    if (name === IContextMenuItemEnum.copy) {
-      setSourcePathsToCopy(Array.from(selectedPaths));
-      setIsCut(false);
-      setShow(DisplayEnum.none);
-    }
-
-    /**  on file/folder cut */
-    if (name === IContextMenuItemEnum.cut) {
-      setSourcePathsToCopy(Array.from(selectedPaths));
-      setIsCut(true);
-      setShow(DisplayEnum.none);
-    }
-
-    /**  on file/folder rename */
-    if (name === IContextMenuItemEnum.rename) {
-      if (targetPath) {
-        setFileRenamePath(targetPath);
-        setShow(DisplayEnum.none);
-      }
-    }
-
-    /**  on properties view */
-    if (name === IContextMenuItemEnum.properties) {
-      if (targetPath || currentPath) {
-        setIsFetchingFunc(true);
-        setShow(DisplayEnum.none);
-        showFileProperties(targetPath || currentPath);
-        await invoke('calculate_directory_size', {
-          dirPath: targetPath || currentPath,
-        });
-      }
-    }
-
-    /**  on select all */
-    if (name === IContextMenuItemEnum.selectAll) {
-      setSelectedPaths(new Set(dirs.filter((d) => d.is_visible).map((d) => d.path)));
-      setShow(DisplayEnum.none);
-    }
-
-    if (name === IContextMenuItemEnum.open) {
-      setShow(DisplayEnum.none);
-      if (targetPath) {
-        if (isTargetPathFile) openFile(targetPath);
-        else navigate(targetPath);
-      }
-    }
-
-    /**  on file/folder paste */
-    if (name === IContextMenuItemEnum.paste) {
-      setShow(DisplayEnum.none);
-
-      const itemCount = sourcePathsToCopy.length;
-      const label = isCut
-        ? itemCount > 1
-          ? `Moving ${itemCount} items…`
-          : 'Moving item…'
-        : itemCount > 1
-        ? `Copying ${itemCount} items…`
-        : 'Copying item…';
-      const opId = startOperation({ label });
-
-      try {
-        setSelectedPaths(new Set());
-        await Promise.all(
-          sourcePathsToCopy.map((from) =>
-            invoke(isCut ? 'move_to_path' : 'copy_to_path', {
-              from,
-              to: currentPath,
-              operationId: opId,
-            }),
-          ),
-        );
-        if (isCut) {
-          setSourcePathsToCopy([]);
-          setIsCut(false);
-        }
-      } catch (error: any) {
-        // eslint-disable-next-line no-console
-        console.error(error);
-        finishOperation(opId, 'failed', String(error));
-      } finally {
-        setShow(DisplayEnum.none);
-      }
-    }
-  };
-
-  const menuRef = useRef<HTMLDivElement>(null);
-  const [position, setPosition] = useState({ top, left });
-
-  useLayoutEffect(() => {
-    const menu = menuRef.current;
-    if (!menu) return;
-
-    const { width, height } = menu.getBoundingClientRect();
-    const EDGE_GAP = 10;
-
-    setPosition({
-      top: Math.max(EDGE_GAP, Math.min(top, window.innerHeight - height - EDGE_GAP)),
-      left: Math.max(EDGE_GAP, Math.min(left, window.innerWidth - width - EDGE_GAP)),
-    });
-  }, [top, left, items.length]);
-
-  useEffect(() => {
-    const close = () => setShow(DisplayEnum.none);
-
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') close();
-    };
-
-    const onPointerDown = (event: MouseEvent) => {
-      if (!menuRef.current?.contains(event.target as Node)) close();
-    };
-
-    document.addEventListener('keydown', onKeyDown);
-    document.addEventListener('mousedown', onPointerDown);
-    window.addEventListener('blur', close);
-    window.addEventListener('scroll', close, true);
-
-    return () => {
-      document.removeEventListener('keydown', onKeyDown);
-      document.removeEventListener('mousedown', onPointerDown);
-      window.removeEventListener('blur', close);
-      window.removeEventListener('scroll', close, true);
-    };
-  }, [setShow]);
-
-  const iconFill = mode === 'dark' ? theme.text.onAccent : theme.text.secondary;
+  const close = useCallback(() => setShow(DisplayEnum.none), [setShow]);
+  useDismissMenu(menuRef, close);
 
   return (
     <ContextMenuWrapper
       ref={menuRef}
-      onContextMenu={(e) => e.preventDefault()}
+      onContextMenu={(event) => event.preventDefault()}
       style={{ top: position.top, left: position.left }}
     >
-      {items.map(({ name, label, shortcut }: IContextMenuItem) => {
-        const disabled = isOptionDisabled(name, sourcePathsToCopy);
-        return (
-          <ContextMenuItem
-            key={name}
-            disabled={disabled}
-            onClick={() => !disabled && onContextItemClick(name)}
-          >
-            <Item>
-              <IconContainer>
-                <Icon name={ITEM_ICON[name] ?? (name as IconType.IconName)} fill={iconFill} />
-              </IconContainer>
-              {label}
-            </Item>
-            <ContentMenuItemShortcut>{shortcut}</ContentMenuItemShortcut>
-          </ContextMenuItem>
-        );
-      })}
+      {items.map((item) => (
+        <ContextMenuItemRow
+          key={item.name}
+          item={item}
+          disabled={isOptionDisabled(item.name, sourcePathsToCopy)}
+          onSelect={actions[item.name]}
+        />
+      ))}
     </ContextMenuWrapper>
   );
 };
