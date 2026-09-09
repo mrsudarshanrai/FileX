@@ -28,10 +28,6 @@ export type ContextMenuItemElement = {
   disabled: boolean | undefined;
 };
 
-export type ContextMenuWrapperProps = ContextMenuModalProps & {
-  itemCount: number;
-};
-
 export enum IContextMenuItemEnum {
   open = 'open',
   newFolder = 'newFolder',

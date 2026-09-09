@@ -1,43 +1,24 @@
 import styled, { css } from 'styled-components';
-import { ContextMenuItemElement, ContextMenuWrapperProps } from './contextmenuModalType';
+import { ContextMenuItemElement } from './contextmenuModalType';
 import { switchContextMenuItemDisabledStyle } from './utils';
 
 const CONTEXT_MENU_ITEM_HEIGHT = 40;
 
-const ContextMenuWrapper = styled.div<
-  Omit<
-    ContextMenuWrapperProps,
-    | 'setShow'
-    | 'targetPath'
-    | 'setSorucePathToCopy'
-    | 'sorucePathToCopy'
-    | 'setIsCut'
-    | 'isCut'
-    | 'isTargetPathFile'
-    | 'setFileRenamePath'
-  >
->`
-  ${(props) => {
-    const MENU_HEIGHT = props.itemCount * CONTEXT_MENU_ITEM_HEIGHT;
-    const MENU_WIDTH = 240;
+const CONTEXT_MENU_WIDTH = 240;
 
-    const PADDING = 10;
-
-    return css`
-      background-color: ${props.theme.bg.elevated};
-      border: 1px solid ${props.theme.border.subtle};
-      border-radius: ${props.theme.radius.lg};
-      width: ${MENU_WIDTH}px;
-      height: ${MENU_HEIGHT}px;
-      position: fixed;
-      z-index: 999999999;
-      top: min(${Math.max(0, props.top + 2)}px, calc(100vh - ${MENU_HEIGHT + PADDING}px));
-      left: min(${Math.max(0, props.left + 2)}px, calc(100vw - ${MENU_WIDTH + PADDING}px));
-      overflow: hidden;
-      cursor: pointer;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
-    `;
-  }}
+const ContextMenuWrapper = styled.div`
+  ${({ theme }) => css`
+    background-color: ${theme.bg.elevated};
+    border: 1px solid ${theme.border.subtle};
+    border-radius: ${theme.radius.lg};
+    width: ${CONTEXT_MENU_WIDTH}px;
+    position: fixed;
+    z-index: 999999999;
+    max-height: calc(100vh - 20px);
+    overflow-y: auto;
+    cursor: pointer;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  `}
 `;
 
 const ContextMenuItem = styled.div<ContextMenuItemElement>`
@@ -74,4 +55,11 @@ const IconContainer = styled.div`
   align-items: center;
 `;
 
-export { ContextMenuWrapper, ContextMenuItem, Item, ContentMenuItemShortcut, IconContainer };
+export {
+  ContextMenuWrapper,
+  ContextMenuItem,
+  Item,
+  ContentMenuItemShortcut,
+  IconContainer,
+  CONTEXT_MENU_WIDTH,
+};

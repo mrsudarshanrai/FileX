@@ -5,7 +5,7 @@ import {
   Item,
   IconContainer,
 } from './contextMenuStyled';
-import { useContext } from 'react';
+import { useContext, useLayoutEffect, useRef, useState } from 'react';
 import { NavigationContext } from '@/app/context/NavigationContext';
 import { invoke } from '@tauri-apps/api/core';
 import DirContext from '@/app/context/DirectoryContext';
@@ -250,21 +250,37 @@ const ContextMenuModal = (props: ContextMenuModalProps) => {
     }
   };
 
+  const menuRef = useRef<HTMLDivElement>(null);
+  const [position, setPosition] = useState({ top, left });
+
+  useLayoutEffect(() => {
+    const menu = menuRef.current;
+    if (!menu) return;
+
+    const { width, height } = menu.getBoundingClientRect();
+    const EDGE_GAP = 10;
+
+    setPosition({
+      top: Math.max(EDGE_GAP, Math.min(top, window.innerHeight - height - EDGE_GAP)),
+      left: Math.max(EDGE_GAP, Math.min(left, window.innerWidth - width - EDGE_GAP)),
+    });
+  }, [top, left, items.length]);
+
   const iconFill = mode === 'dark' ? theme.text.onAccent : theme.text.secondary;
 
   return (
     <ContextMenuWrapper
+      ref={menuRef}
       onContextMenu={(e) => e.preventDefault()}
-      top={top}
-      left={left}
-      itemCount={items.length}
+      style={{ top: position.top, left: position.left }}
     >
-      {items.map(({ name, label, shortcut }: IContextMenuItem, index: number) => {
+      {items.map(({ name, label, shortcut }: IContextMenuItem) => {
+        const disabled = isOptionDisabled(name, sorucePathToCopy);
         return (
           <ContextMenuItem
-            key={index}
-            disabled={isOptionDisabled(name, sorucePathToCopy)}
-            onClick={() => !isOptionDisabled(name, sorucePathToCopy) && onContextItemClick(name)}
+            key={name}
+            disabled={disabled}
+            onClick={() => !disabled && onContextItemClick(name)}
           >
             <Item>
               <IconContainer>
