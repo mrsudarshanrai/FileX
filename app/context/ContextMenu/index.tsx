@@ -14,6 +14,10 @@ const ContextMenu = createContext<ContextMenuType>({
   isTargetPathFile: false,
   fileRenamePath: null,
   setFileRenamePath() {},
+  sourcePathsToCopy: [],
+  setSourcePathsToCopy() {},
+  isCut: false,
+  setIsCut() {},
 });
 
 const ContextMenuProvider = ({ children }: { children: React.ReactNode }) => {

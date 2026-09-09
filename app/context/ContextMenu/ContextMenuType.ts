@@ -10,4 +10,8 @@ export type ContextMenuType = {
   isTargetPathFile: boolean;
   fileRenamePath: string | null;
   setFileRenamePath: (path: string | null) => void;
+  sourcePathsToCopy: string[];
+  setSourcePathsToCopy: React.Dispatch<React.SetStateAction<string[]>>;
+  isCut: boolean;
+  setIsCut: React.Dispatch<React.SetStateAction<boolean>>;
 };
