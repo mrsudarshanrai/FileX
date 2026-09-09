@@ -40,7 +40,7 @@
     "thumbnail": "/extensions/word.svg"
   },
   {
-    "extensions": ["xlsx", "xls", "xlsb", "xls", "ods", "fods", "csv"],
+    "extensions": ["xlsx", "xls", "xlsb", "ods", "fods"],
     "type": "Excel Document",
     "thumbnail": "/extensions/excel.svg"
   },
@@ -50,7 +50,21 @@
     "thumbnail": "/extensions/powerpoint.svg"
   },
   {
-    "extensions": ["7z", "brotli", "bzip2", "gz", "gzip", "rar", "tgz", "xz", "zip"],
+    "extensions": [
+      "7z",
+      "brotli",
+      "bzip2",
+      "gz",
+      "gzip",
+      "rar",
+      "tgz",
+      "xz",
+      "zip",
+      "tar",
+      "bz2",
+      "zst",
+      "lz4"
+    ],
     "type": "Archive",
     "thumbnail": "/extensions/zip.svg"
   },
@@ -109,12 +123,7 @@
     "thumbnail": "/extensions/python.svg"
   },
   {
-    "extensions": ["pyc", "pylintrc", "python-version"],
-    "type": "Python Program",
-    "thumbnail": "/extensions/python-misc.svg"
-  },
-  {
-    "extensions": ["txt"],
+    "extensions": ["txt", "log", "tex"],
     "type": "Text Document",
     "thumbnail": "/extensions/txt.svg"
   },
@@ -134,7 +143,11 @@
       "tif",
       "ico",
       "svg",
-      "webp"
+      "avif",
+      "heic",
+      "raw",
+      "cr2",
+      "nef"
     ],
     "type": "Image",
     "thumbnail": "/extensions/image.svg"
@@ -156,13 +169,14 @@
       "mov",
       "qt",
       "flv",
-      "swf"
+      "swf",
+      "3gp"
     ],
     "type": "Video",
     "thumbnail": "/extensions/video.svg"
   },
   {
-    "extensions": ["mp3", "ogg", "ogm", "wav"],
+    "extensions": ["mp3", "ogg", "ogm", "wav", "opus", "aac", "m4a", "wma", "aiff", "mid", "midi"],
     "type": "Audio",
     "thumbnail": "/extensions/audio.svg"
   },
@@ -177,17 +191,17 @@
     "thumbnail": "/extensions/deb.svg"
   },
   {
-    "extensions": ["run", "AppImage"],
+    "extensions": ["run", "AppImage", "bin", "flatpakref"],
     "type": "Linux Software Package",
     "thumbnail": "/extensions/lsp.svg"
   },
   {
-    "extensions": ["snap"],
+    "extensions": ["snap", "apk"],
     "type": "Installer",
     "thumbnail": "/extensions/lsp.svg"
   },
   {
-    "extensions": ["iso", "dmg"],
+    "extensions": ["iso", "dmg", "img", "qcow2", "vdi", "vmdk"],
     "type": "Disk Image File",
     "thumbnail": "/extensions/iso.svg"
   },
@@ -304,7 +318,7 @@
       "licence.md",
       "licence.txt"
     ],
-    "extensions": ["cer", "cert", "crt"],
+    "extensions": ["cer", "cert", "crt", "gpg", "asc", "sig", "p12", "jks"],
     "type": "Certificate",
     "thumbnail": "/extensions/certificate.svg"
   },
@@ -324,7 +338,9 @@
       "prefs",
       "sln.dotsettings",
       "sln.dotsettings.user",
-      "cfg"
+      "cfg",
+      "desktop",
+      "service"
     ],
     "fileNames": [
       ".jshintignore",
@@ -367,28 +383,5 @@
     "extensions": ["psd"],
     "type": "Photoshop",
     "thumbnail": "/extensions/psd.svg"
-  },
-  {
-    "type": "Yarn Package Manager",
-    "fileNames": [
-      ".yarnrc",
-      "yarn.lock",
-      ".yarnclean",
-      ".yarn-integrity",
-      "yarn-error.log",
-      ".yarnrc.yml",
-      ".yarnrc.yaml"
-    ],
-    "thumbnail": "/extensions/yarn.svg"
-  },
-  {
-    "extensions": ["lnk"],
-    "type": "Windows Shortcut",
-    "thumbnail": "/extensions/lnk.svg"
-  },
-  {
-    "extensions": ["xtension"],
-    "type": "Xplorer's extension",
-    "thumbnail": "/extensions/xplorer.svg"
   }
 ]
