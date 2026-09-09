@@ -71,8 +71,8 @@ const ContextMenuModal = (props: ContextMenuModalProps) => {
     left,
     setShow,
     targetPath,
-    setSorucePathToCopy,
-    sorucePathToCopy,
+    setSourcePathsToCopy,
+    sourcePathsToCopy,
     setIsCut,
     isCut,
     isTargetPathFile,
@@ -165,14 +165,14 @@ const ContextMenuModal = (props: ContextMenuModalProps) => {
 
     /**  on file/folder copy */
     if (name === IContextMenuItemEnum.copy) {
-      setSorucePathToCopy(Array.from(selectedPaths));
+      setSourcePathsToCopy(Array.from(selectedPaths));
       setIsCut(false);
       setShow(DisplayEnum.none);
     }
 
     /**  on file/folder cut */
     if (name === IContextMenuItemEnum.cut) {
-      setSorucePathToCopy(Array.from(selectedPaths));
+      setSourcePathsToCopy(Array.from(selectedPaths));
       setIsCut(true);
       setShow(DisplayEnum.none);
     }
@@ -215,7 +215,7 @@ const ContextMenuModal = (props: ContextMenuModalProps) => {
     if (name === IContextMenuItemEnum.paste) {
       setShow(DisplayEnum.none);
 
-      const itemCount = sorucePathToCopy.length;
+      const itemCount = sourcePathsToCopy.length;
       const label = isCut
         ? itemCount > 1
           ? `Moving ${itemCount} items…`
@@ -228,7 +228,7 @@ const ContextMenuModal = (props: ContextMenuModalProps) => {
       try {
         setSelectedPaths(new Set());
         await Promise.all(
-          sorucePathToCopy.map((from) =>
+          sourcePathsToCopy.map((from) =>
             invoke(isCut ? 'move_to_path' : 'copy_to_path', {
               from,
               to: currentPath,
@@ -237,7 +237,7 @@ const ContextMenuModal = (props: ContextMenuModalProps) => {
           ),
         );
         if (isCut) {
-          setSorucePathToCopy([]);
+          setSourcePathsToCopy([]);
           setIsCut(false);
         }
       } catch (error: any) {
@@ -299,7 +299,7 @@ const ContextMenuModal = (props: ContextMenuModalProps) => {
       style={{ top: position.top, left: position.left }}
     >
       {items.map(({ name, label, shortcut }: IContextMenuItem) => {
-        const disabled = isOptionDisabled(name, sorucePathToCopy);
+        const disabled = isOptionDisabled(name, sourcePathsToCopy);
         return (
           <ContextMenuItem
             key={name}

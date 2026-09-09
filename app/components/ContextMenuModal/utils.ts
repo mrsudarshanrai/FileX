@@ -3,9 +3,9 @@ import { Item } from './contextMenuStyled';
 import { ContextMenuItemUnion, IContextMenuItemEnum } from './contextmenuModalType';
 import { Color } from '@/app/theme/colorsType';
 
-const isOptionDisabled = (name: ContextMenuItemUnion, sorucePathToCopy: string[]) => {
+const isOptionDisabled = (name: ContextMenuItemUnion, sourcePathsToCopy: string[]) => {
   if (name === IContextMenuItemEnum.paste) {
-    return sorucePathToCopy.length === 0;
+    return sourcePathsToCopy.length === 0;
   } else return false;
 };
 

@@ -6,8 +6,8 @@ export type ContextMenuModalProps = Pick<
 > & {
   top: number;
   left: number;
-  setSorucePathToCopy: React.Dispatch<React.SetStateAction<string[]>>;
-  sorucePathToCopy: string[];
+  setSourcePathsToCopy: React.Dispatch<React.SetStateAction<string[]>>;
+  sourcePathsToCopy: string[];
   setIsCut: React.Dispatch<React.SetStateAction<boolean>>;
   isCut: boolean;
 };
