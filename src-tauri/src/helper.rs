@@ -1,8 +1,8 @@
 use crate::utils;
+use crate::icon_theme;
 use async_recursion::async_recursion;
 use serde::{ Deserialize, Serialize };
 use std::{ env, fs::{ self }, path::{ Path, PathBuf }, process::Command, sync::OnceLock };
-
 pub fn get_home() -> String {
   let home_dir = match env::var("HOME") {
     Ok(val) => val,
@@ -72,8 +72,13 @@ pub fn resolve_file_type(folder_name: &str, extension: &str, is_dir: bool) -> (S
     return (FOLDER_THUMBNAIL.to_string(), false);
   }
 
-  match find_file_type_entry(folder_name, extension) {
-    Some(entry) => (entry.thumbnail.clone(), entry.type_name == "Image"),
+  if let Some(entry) = find_file_type_entry(folder_name, extension) {
+    return (entry.thumbnail.clone(), entry.type_name == "Image");
+  }
+
+  // Fallback to icon theme resolution from the system gtk icon theme
+  match icon_theme::resolve(extension) {
+    Some(themed) => (themed, false),
     None => (DEFAULT_FILE_THUMBNAIL.to_string(), false),
   }
 }
@@ -90,9 +95,14 @@ pub fn get_files(path: String) -> Result<Vec<Files>, String> {
   for entry in entries {
     let entry = match entry {
       Ok(entry) => entry,
-      Err(_) => continue,
+      Err(_) => {
+        continue;
+      }
     };
-    let is_dir = entry.file_type().map(|t| t.is_dir()).unwrap_or(false);
+    let is_dir = entry
+      .file_type()
+      .map(|t| t.is_dir())
+      .unwrap_or(false);
     let path = entry.path();
     let extension = utils::option_to_string(path.extension());
     let folder_name = utils::option_to_string(path.file_name()).trim().to_string();
