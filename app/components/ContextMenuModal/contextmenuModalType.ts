@@ -17,11 +17,19 @@ export enum DisplayEnum {
 }
 export type Display = keyof typeof DisplayEnum;
 
+export type ContextMenuState = {
+  hasTarget: boolean;
+  isTargetFile: boolean;
+  isInTrash: boolean;
+  isTargetBookmarked: boolean;
+};
+
 export type IContextMenuItem = {
   label: string;
   name: ContextMenuItemUnion;
   shortcut: string;
-  disabled?: boolean;
+  /** omitted means always shown */
+  isVisible?: (state: ContextMenuState) => boolean;
 };
 
 export type ContextMenuItemElement = {

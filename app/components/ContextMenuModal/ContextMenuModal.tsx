@@ -5,13 +5,14 @@ import {
   Item,
   IconContainer,
 } from './contextMenuStyled';
-import { useContext, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { NavigationContext } from '@/app/context/NavigationContext';
 import { invoke } from '@tauri-apps/api/core';
 import DirContext from '@/app/context/DirectoryContext';
 import {
   ContextMenuModalProps,
   DisplayEnum,
+  ContextMenuState,
   IContextMenuItem,
   IContextMenuItemEnum,
 } from './contextmenuModalType';
@@ -25,20 +26,6 @@ import { useOperations } from '@/app/context/OperationContext';
 import { useAppTheme } from '@/app/context/ThemeContext';
 import { useTheme } from 'styled-components';
 import { Color } from '@/app/theme/colorsType';
-
-const CONDITIONAL_ITEM = ['delete', 'deletePermanently', 'copy', 'cut', 'open', 'rename'];
-
-const TRASH_ONLY_ITEM = ['restore', 'deleteFromTrash', 'emptyTrash'];
-
-const HIDDEN_IN_TRASH = [
-  'moveToTrash',
-  'deletePermanently',
-  'rename',
-  'cut',
-  'paste',
-  'newFolder',
-  'addBookmark',
-];
 
 /** items whose icon file is not named after the item itself */
 const ITEM_ICON: Partial<Record<string, IconType.IconName>> = {
@@ -88,36 +75,21 @@ const ContextMenuModal = (props: ContextMenuModalProps) => {
     Boolean(trashPath) && (currentPath === trashPath || currentPath.startsWith(`${trashPath}/`));
 
   const bookmarkTarget = targetPath ?? currentPath;
-  const canBookmark = targetPath ? !isTargetPathFile : true;
   const stripTrailingSlash = (path: string) => path.replace(/\/+$/, '') || '/';
-  const isAlreadyBookmarked = bookmarks.some(
-    (bookmark) => stripTrailingSlash(bookmark.path) === stripTrailingSlash(bookmarkTarget),
-  );
 
-  const items = contextMenuItems.filter((item) => {
-    if (item.name === 'addBookmark' && (!canBookmark || isAlreadyBookmarked)) {
-      return false;
-    }
-    if (isInTrash && HIDDEN_IN_TRASH.includes(item.name)) {
-      return false;
-    }
-    if (!isInTrash && TRASH_ONLY_ITEM.includes(item.name)) {
-      return false;
-    }
+  const items = useMemo(() => {
+    const state: ContextMenuState = {
+      hasTarget: targetPath !== undefined,
+      isTargetFile: isTargetPathFile,
+      isInTrash,
+      isTargetBookmarked: bookmarks.some(
+        (bookmark) => stripTrailingSlash(bookmark.path) === stripTrailingSlash(bookmarkTarget),
+      ),
+    };
 
-    if (
-      (CONDITIONAL_ITEM.includes(item.name) ||
-        (TRASH_ONLY_ITEM.includes(item.name) && item.name !== 'emptyTrash')) &&
-      typeof targetPath === 'undefined'
-    ) {
-      return false;
-    }
-    if (item.name === 'newFolder' && targetPath) {
-      return false;
-    }
+    return contextMenuItems.filter((item) => item.isVisible?.(state) ?? true);
+  }, [targetPath, isTargetPathFile, isInTrash, bookmarks, bookmarkTarget]);
 
-    return true;
-  });
   const { startOperation, finishOperation } = useOperations();
 
   const onContextItemClick = async (name: string) => {
