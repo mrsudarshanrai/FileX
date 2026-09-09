@@ -42,7 +42,6 @@ export enum IContextMenuItemEnum {
   rename = 'rename',
   copy = 'copy',
   cut = 'cut',
-  name = 'name',
   paste = 'paste',
   selectAll = 'selectAll',
   addBookmark = 'addBookmark',
