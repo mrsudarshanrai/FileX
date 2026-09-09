@@ -31,7 +31,6 @@ const ContextMenuWrapper = styled.div<
       height: ${MENU_HEIGHT}px;
       position: fixed;
       z-index: 999999999;
-      display: ${props.display};
       top: min(${Math.max(0, props.top + 2)}px, calc(100vh - ${MENU_HEIGHT + PADDING}px));
       left: min(${Math.max(0, props.left + 2)}px, calc(100vw - ${MENU_WIDTH + PADDING}px));
       overflow: hidden;

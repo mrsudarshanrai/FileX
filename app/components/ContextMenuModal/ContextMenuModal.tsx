@@ -69,7 +69,6 @@ const ContextMenuModal = (props: ContextMenuModalProps) => {
   const {
     top,
     left,
-    display,
     setShow,
     targetPath,
     setSorucePathToCopy,
@@ -258,7 +257,6 @@ const ContextMenuModal = (props: ContextMenuModalProps) => {
       onContextMenu={(e) => e.preventDefault()}
       top={top}
       left={left}
-      display={display}
       itemCount={items.length}
     >
       {items.map(({ name, label, shortcut }: IContextMenuItem, index: number) => {

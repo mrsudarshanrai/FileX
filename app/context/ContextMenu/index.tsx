@@ -58,19 +58,20 @@ const ContextMenuProvider = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <ContextMenu.Provider value={contextValue}>
-      <ContextMenuModal
-        targetPath={targetPath}
-        setShow={setShow}
-        top={top}
-        left={left}
-        display={show}
-        setSorucePathToCopy={setSorucePathToCopy}
-        sorucePathToCopy={sorucePathToCopy}
-        setIsCut={setIsCut}
-        isCut={isCut}
-        isTargetPathFile={isTargetPathFile}
-        setFileRenamePath={setFileRenamePath}
-      />
+      {show === DisplayEnum.block && (
+        <ContextMenuModal
+          targetPath={targetPath}
+          setShow={setShow}
+          top={top}
+          left={left}
+          setSorucePathToCopy={setSorucePathToCopy}
+          sorucePathToCopy={sorucePathToCopy}
+          setIsCut={setIsCut}
+          isCut={isCut}
+          isTargetPathFile={isTargetPathFile}
+          setFileRenamePath={setFileRenamePath}
+        />
+      )}
       <ContextMenuRoot onContextMenu={(event) => onContextMenu(event)}>{children}</ContextMenuRoot>
     </ContextMenu.Provider>
   );
