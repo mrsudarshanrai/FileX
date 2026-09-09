@@ -5,7 +5,7 @@ import {
   Item,
   IconContainer,
 } from './contextMenuStyled';
-import { useContext, useLayoutEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { NavigationContext } from '@/app/context/NavigationContext';
 import { invoke } from '@tauri-apps/api/core';
 import DirContext from '@/app/context/DirectoryContext';
@@ -265,6 +265,30 @@ const ContextMenuModal = (props: ContextMenuModalProps) => {
       left: Math.max(EDGE_GAP, Math.min(left, window.innerWidth - width - EDGE_GAP)),
     });
   }, [top, left, items.length]);
+
+  useEffect(() => {
+    const close = () => setShow(DisplayEnum.none);
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') close();
+    };
+
+    const onPointerDown = (event: MouseEvent) => {
+      if (!menuRef.current?.contains(event.target as Node)) close();
+    };
+
+    document.addEventListener('keydown', onKeyDown);
+    document.addEventListener('mousedown', onPointerDown);
+    window.addEventListener('blur', close);
+    window.addEventListener('scroll', close, true);
+
+    return () => {
+      document.removeEventListener('keydown', onKeyDown);
+      document.removeEventListener('mousedown', onPointerDown);
+      window.removeEventListener('blur', close);
+      window.removeEventListener('scroll', close, true);
+    };
+  }, [setShow]);
 
   const iconFill = mode === 'dark' ? theme.text.onAccent : theme.text.secondary;
 

@@ -26,8 +26,15 @@ const ContextMenuProvider = ({ children }: { children: React.ReactNode }) => {
   const [sorucePathToCopy, setSorucePathToCopy] = useState<string[]>([]);
   const [isCut, setIsCut] = useState(false);
 
+
   const onContextMenu = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     event.preventDefault();
+
+    if (!(event.target as HTMLElement).closest('[data-path]')) {
+      setTargetPath(undefined);
+      setIsTargetPathFile(false);
+    }
+
     setShow(DisplayEnum.block);
     const { clientX, clientY } = event;
     setTop(clientY);
