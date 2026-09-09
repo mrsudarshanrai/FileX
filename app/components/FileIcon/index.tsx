@@ -3,6 +3,13 @@ import { invoke, convertFileSrc } from '@tauri-apps/api/core';
 import { FileIconType } from './fileIconType';
 import { FileIconWrapper } from './fileIconStyled';
 
+/** custom icon theme -> /extensions and /assets
+ * convertFileSrc -> path borrowed from the desktop icon theme, which the webview cannot load directly. */
+const BUNDLED_ICON = /^\/(extensions|assets)\//;
+
+const iconSrc = (thumbnail: string) =>
+  BUNDLED_ICON.test(thumbnail) ? thumbnail : convertFileSrc(thumbnail);
+
 const FileIcon = (props: FileIconType.Props) => {
   const { thumbnail, path, isImage, disableHover = false, size = 80 } = props;
   const [previewSrc, setPreviewSrc] = useState<string | null>(null);
@@ -47,7 +54,7 @@ const FileIcon = (props: FileIconType.Props) => {
   }, [path, isImage]);
 
   const showPreview = Boolean(isImage && previewSrc);
-  const src = showPreview ? (previewSrc as string) : thumbnail;
+  const src = showPreview ? (previewSrc as string) : iconSrc(thumbnail);
 
   return (
     <FileIconWrapper

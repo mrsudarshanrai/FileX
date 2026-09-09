@@ -5,6 +5,7 @@ mod entry;
 mod file_manager;
 mod folder_manager;
 mod helper;
+mod icon_theme;
 mod thumbnail;
 mod trash;
 mod utils;
