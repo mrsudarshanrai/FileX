@@ -50,7 +50,6 @@ const Paths = styled.div`
       padding: 3px 4px;
       font-size: 13px;
       color: ${theme.text.secondary};
-      transition: color 0.15s ease;
     }
 
     span:hover {

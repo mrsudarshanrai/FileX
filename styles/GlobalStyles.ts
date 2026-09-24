@@ -19,6 +19,18 @@ const SYSTEM_FONT_STACK =
 const GlobalStyles = createGlobalStyle<Theme>`
 ${({ theme }) =>
   css`
+    :root {
+      --bg-surface-hover: ${theme.bg.surfaceHover};
+      --bg-elevated: ${theme.bg.elevated};
+      --text-primary: ${theme.text.primary};
+      --accent-default: ${theme.accent.default};
+      --accent-muted: ${theme.accent.muted};
+      --accent-border: ${theme.accent.border};
+      --radius-sm: ${theme.radius.sm};
+      --radius-md: ${theme.radius.md};
+      --spacing-sm: ${theme.spacing.sm};
+    }
+
     * {
       margin: 0;
       padding: 0;

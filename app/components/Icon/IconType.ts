@@ -7,6 +7,7 @@ export namespace IconType {
   };
 
   export type IconName =
+    | 'bookmark'
     | 'chevron-left'
     | 'chevron-right'
     | 'close'
@@ -32,5 +33,6 @@ export namespace IconType {
     | 'settings'
     | 'storage'
     | 'sun'
+    | 'trash'
     | 'videos';
 }

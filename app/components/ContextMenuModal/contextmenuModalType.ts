@@ -1,16 +1,7 @@
-import { ContextMenuType } from '@/app/context/ContextMenu/ContextMenuType';
-
-export type ContextMenuModalProps = Pick<
-  ContextMenuType,
-  'targetPath' | 'setShow' | 'isTargetPathFile' | 'setFileRenamePath'
-> & {
+/** Everything else the menu needs it reads from ContextMenu itself */
+export type ContextMenuModalProps = {
   top: number;
   left: number;
-  display: Display;
-  setSorucePathToCopy: React.Dispatch<React.SetStateAction<string | undefined>>;
-  sorucePathToCopy: string | undefined;
-  setIsCut: React.Dispatch<React.SetStateAction<boolean>>;
-  isCut: boolean;
 };
 export enum DisplayEnum {
   none = 'none',
@@ -18,19 +9,23 @@ export enum DisplayEnum {
 }
 export type Display = keyof typeof DisplayEnum;
 
+export type ContextMenuState = {
+  hasTarget: boolean;
+  isTargetFile: boolean;
+  isInTrash: boolean;
+  isTargetBookmarked: boolean;
+};
+
 export type IContextMenuItem = {
   label: string;
   name: ContextMenuItemUnion;
   shortcut: string;
-  disabled?: boolean;
+  /** omitted means always shown */
+  isVisible?: (state: ContextMenuState) => boolean;
 };
 
 export type ContextMenuItemElement = {
   disabled: boolean | undefined;
-};
-
-export type ContextMenuWrapperProps = ContextMenuModalProps & {
-  itemCount: number;
 };
 
 export enum IContextMenuItemEnum {
@@ -39,11 +34,15 @@ export enum IContextMenuItemEnum {
   rename = 'rename',
   copy = 'copy',
   cut = 'cut',
-  name = 'name',
   paste = 'paste',
   selectAll = 'selectAll',
+  addBookmark = 'addBookmark',
   properties = 'properties',
-  delete = 'delete',
+  moveToTrash = 'moveToTrash',
+  deletePermanently = 'deletePermanently',
+  restore = 'restore',
+  deleteFromTrash = 'deleteFromTrash',
+  emptyTrash = 'emptyTrash',
 }
 
 export type ContextMenuItemUnion = keyof typeof IContextMenuItemEnum;

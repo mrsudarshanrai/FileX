@@ -1,8 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
-import Image from 'next/image';
 import { invoke, convertFileSrc } from '@tauri-apps/api/core';
 import { FileIconType } from './fileIconType';
 import { FileIconWrapper } from './fileIconStyled';
+
+/** custom icon theme -> /extensions and /assets
+ * convertFileSrc -> path borrowed from the desktop icon theme, which the webview cannot load directly. */
+const BUNDLED_ICON = /^\/(extensions|assets)\//;
+
+const iconSrc = (thumbnail: string) =>
+  BUNDLED_ICON.test(thumbnail) ? thumbnail : convertFileSrc(thumbnail);
 
 const FileIcon = (props: FileIconType.Props) => {
   const { thumbnail, path, isImage, disableHover = false, size = 80 } = props;
@@ -48,20 +54,25 @@ const FileIcon = (props: FileIconType.Props) => {
   }, [path, isImage]);
 
   const showPreview = Boolean(isImage && previewSrc);
-  const src = showPreview ? (previewSrc as string) : thumbnail;
+  const src = showPreview ? (previewSrc as string) : iconSrc(thumbnail);
 
   return (
-    <FileIconWrapper ref={wrapperRef} disableHover={disableHover} isImage={showPreview} size={size}>
-      <Image
+    <FileIconWrapper
+      ref={wrapperRef}
+      data-preview={showPreview}
+      data-hover-disabled={disableHover}
+      style={showPreview ? { width: size, height: size } : undefined}
+    >
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
         key={src}
         alt='file icon'
         src={src}
         width={size}
         height={size}
-        onError={(error) => {
-          console.error('thumbnail image failed to load', src, error);
-          setPreviewSrc(null);
-        }}
+        decoding='async'
+        draggable={false}
+        onError={() => setPreviewSrc(null)}
       />
     </FileIconWrapper>
   );

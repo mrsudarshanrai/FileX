@@ -43,6 +43,9 @@ const SidebarItems = styled.div`
     flex-direction: column;
     gap: 2px;
     padding: ${theme.spacing.md} ${theme.spacing.sm} ${theme.spacing.sm};
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
   `}
 `;
 
@@ -56,7 +59,6 @@ const SidebarItem = styled.div<ISidebarItem>`
     cursor: pointer;
     border-radius: ${theme.radius.lg};
     background-color: ${isActive ? theme.accent.muted : 'transparent'};
-    transition: background-color 0.15s ease;
 
     &:hover {
       background-color: ${isActive ? theme.accent.muted : theme.bg.surfaceHover};
@@ -66,6 +68,41 @@ const SidebarItem = styled.div<ISidebarItem>`
       font-size: 13px;
       font-weight: ${isActive ? 650 : 500};
       color: ${isActive ? theme.text.primary : theme.text.secondary};
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  `}
+`;
+
+const SidebarItemAction = styled.button`
+  ${({ theme }) => css`
+    margin-left: auto;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    border-radius: ${theme.radius.sm};
+    cursor: pointer;
+    opacity: 0;
+    visibility: hidden;
+
+    &:hover {
+      background-color: ${theme.bg.surfaceHover};
+      svg,
+      path {
+        fill: ${theme.text.primary};
+      }
+    }
+
+    ${SidebarItem}:hover & {
+      opacity: 1;
+      visibility: visible;
     }
   `}
 `;
@@ -80,7 +117,6 @@ const IconChip = styled.div<ISidebarItem>`
     flex-shrink: 0;
     border-radius: ${theme.radius.md};
     background-color: ${isActive ? theme.accent.default : 'transparent'};
-    transition: background-color 0.5s ease;
   `}
 `;
 
@@ -162,6 +198,7 @@ export {
   SidebarHeader,
   SidebarItems,
   SidebarItem,
+  SidebarItemAction,
   IconChip,
   SidebarTitle,
   SidebarFooter,

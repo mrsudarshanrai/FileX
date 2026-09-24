@@ -1,10 +1,13 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
+mod bookmarks;
 mod entry;
 mod file_manager;
 mod folder_manager;
 mod helper;
+mod icon_theme;
 mod thumbnail;
+mod trash;
 mod utils;
 
 fn main() {
@@ -14,6 +17,13 @@ fn main() {
             entry::get_initial_data,
             entry::get_files_in_path,
             entry::delete_path,
+            entry::list_bookmarks,
+            entry::add_bookmark,
+            entry::remove_bookmark,
+            entry::move_to_trash,
+            entry::restore_from_trash,
+            entry::purge_trash,
+            entry::empty_trash,
             entry::copy_to_path,
             entry::move_to_path,
             entry::open_file,

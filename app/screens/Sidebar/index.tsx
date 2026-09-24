@@ -2,6 +2,7 @@ import {
   SidebarContainer,
   SidebarHeader,
   SidebarItem,
+  SidebarItemAction,
   SidebarItems,
   IconChip,
   SidebarTitle,
@@ -12,6 +13,7 @@ import {
   StorageDetail,
 } from './SidebarStyled';
 import { useContext } from 'react';
+import { invoke } from '@tauri-apps/api/core';
 import DirContext from '@/app/context/DirectoryContext';
 import { IDir } from '@/app/lib/types/dir';
 import { NavigationContext } from '@/app/context/NavigationContext';
@@ -24,13 +26,22 @@ import Image from 'next/image';
 import { useTheme } from 'styled-components';
 
 const Sidebar = () => {
-  const { places, homePath } = useContext(DirContext);
+  const { places, homePath, trashPath, bookmarks, refreshBookmarks } = useContext(DirContext);
   const { navigate, currentPath } = useContext(NavigationContext);
   const theme = useTheme() as Color;
   const diskUsage = useDiskUsage();
 
   const onDirClick = (path: string) => {
     navigate(path);
+  };
+
+  const onRemoveBookmark = async (path: string) => {
+    try {
+      await invoke('remove_bookmark', { path });
+      await refreshBookmarks();
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const iconFill = (isActive: boolean) => (isActive ? theme.text.onAccent : theme.text.secondary);
@@ -61,6 +72,39 @@ const Sidebar = () => {
             </SidebarItem>
           );
         })}
+        {trashPath && (
+          <SidebarItem onClick={() => onDirClick(trashPath)} isActive={trashPath === currentPath}>
+            <IconChip isActive={trashPath === currentPath}>
+              <Icon name='trash' fill={iconFill(trashPath === currentPath)} />
+            </IconChip>
+            <p>Trash</p>
+          </SidebarItem>
+        )}
+        {bookmarks.length > 0 && (
+          <>
+            <SidebarTitle>Bookmarks</SidebarTitle>
+            {bookmarks.map(({ name, path }: IDir.Place) => {
+              const isActive = path === currentPath;
+              return (
+                <SidebarItem key={path} onClick={() => onDirClick(path)} isActive={isActive}>
+                  <IconChip isActive={isActive}>
+                    <Icon name='bookmark' fill={iconFill(isActive)} />
+                  </IconChip>
+                  <p title={path}>{name}</p>
+                  <SidebarItemAction
+                    title='Remove bookmark'
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      onRemoveBookmark(path);
+                    }}
+                  >
+                    <Icon name='close' fill={theme.text.muted} width='10px' height='10px' />
+                  </SidebarItemAction>
+                </SidebarItem>
+              );
+            })}
+          </>
+        )}
       </SidebarItems>
       {diskUsage && (
         <SidebarFooter>

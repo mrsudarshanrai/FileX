@@ -14,6 +14,10 @@ const ContextMenu = createContext<ContextMenuType>({
   isTargetPathFile: false,
   fileRenamePath: null,
   setFileRenamePath() {},
+  sourcePathsToCopy: [],
+  setSourcePathsToCopy() {},
+  isCut: false,
+  setIsCut() {},
 });
 
 const ContextMenuProvider = ({ children }: { children: React.ReactNode }) => {
@@ -23,11 +27,17 @@ const ContextMenuProvider = ({ children }: { children: React.ReactNode }) => {
   const [targetPath, setTargetPath] = useState<undefined | string>(undefined);
   const [isTargetPathFile, setIsTargetPathFile] = useState(false);
   const [fileRenamePath, setFileRenamePath] = useState<string | null>(null);
-  const [sorucePathToCopy, setSorucePathToCopy] = useState<undefined | string>(undefined);
+  const [sourcePathsToCopy, setSourcePathsToCopy] = useState<string[]>([]);
   const [isCut, setIsCut] = useState(false);
 
   const onContextMenu = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     event.preventDefault();
+
+    if (!(event.target as HTMLElement).closest('[data-path]')) {
+      setTargetPath(undefined);
+      setIsTargetPathFile(false);
+    }
+
     setShow(DisplayEnum.block);
     const { clientX, clientY } = event;
     setTop(clientY);
@@ -46,8 +56,8 @@ const ContextMenuProvider = ({ children }: { children: React.ReactNode }) => {
     setShow,
     targetPath,
     setTargetPath,
-    sorucePathToCopy,
-    setSorucePathToCopy,
+    sourcePathsToCopy,
+    setSourcePathsToCopy,
     isCut,
     setIsCut,
     isTargetPathFile,
@@ -58,19 +68,7 @@ const ContextMenuProvider = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <ContextMenu.Provider value={contextValue}>
-      <ContextMenuModal
-        targetPath={targetPath}
-        setShow={setShow}
-        top={top}
-        left={left}
-        display={show}
-        setSorucePathToCopy={setSorucePathToCopy}
-        sorucePathToCopy={sorucePathToCopy}
-        setIsCut={setIsCut}
-        isCut={isCut}
-        isTargetPathFile={isTargetPathFile}
-        setFileRenamePath={setFileRenamePath}
-      />
+      {show === DisplayEnum.block && <ContextMenuModal top={top} left={left} />}
       <ContextMenuRoot onContextMenu={(event) => onContextMenu(event)}>{children}</ContextMenuRoot>
     </ContextMenu.Provider>
   );

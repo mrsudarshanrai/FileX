@@ -7,6 +7,8 @@ export namespace IDir {
     is_visible: boolean;
     thumbnail: string;
     is_image: boolean;
+    original_path?: string;
+    deleted_at?: string;
   };
 
   export type Place = {
